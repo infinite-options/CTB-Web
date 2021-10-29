@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {findAllProducts} from "../services/ProductService";
 import {CREATE_BOM_API_URL} from "../common/constants";
+import { useHistory } from 'react-router';
+import {withRouter} from "react-router";
 
-export default class DisplayProductsComponent extends React.Component {
+class DisplayProductsComponent extends React.Component {
+
+    // const history = useHistory();
 
     state = {
         products: null,
@@ -69,6 +73,7 @@ export default class DisplayProductsComponent extends React.Component {
     };
 
     render() {
+
         return(
             <div>
                 <h1>Product List</h1>
@@ -87,7 +92,15 @@ export default class DisplayProductsComponent extends React.Component {
                     {
                         this.state.products && this.state.products.map((row, index) =>
                             <tr key={index}>
-                                <th scope="row">{row['product_uid']}</th>
+                                <th onClick={() => {
+                                    this.props.history.push({
+                                        pathname: '/product',
+                                        state: {
+                                            product_uid: row['product_uid']
+                                        },
+                                    });
+
+                                }} scope="row">{row['product_uid']}</th>
                                 <td>{row['product_created']}</td>
                                 <td>{row['product_desc']}</td>
                                 <td>Todo</td>
@@ -109,3 +122,5 @@ export default class DisplayProductsComponent extends React.Component {
         )
     }
 }
+
+export default withRouter(DisplayProductsComponent);

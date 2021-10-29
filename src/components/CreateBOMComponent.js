@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {CREATE_BOM_API_URL, GET_PRODUCT_API_URL} from "../common/constants";
 import {DisplayBOMComponent} from "./DisplayBOMComponent";
+import { useHistory } from 'react-router';
 
 export default class CreateBOMComponent extends React.Component {
 
