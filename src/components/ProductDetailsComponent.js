@@ -8,7 +8,7 @@ export default function ProductDetailsComponent (props)  {
 
 
     const location = useLocation();
-    console.log(location)
+    // console.log(location)
 
     useEffect(() => {
         getProductDetails(location.state.product_uid)
@@ -22,12 +22,12 @@ export default function ProductDetailsComponent (props)  {
     const getProductDetails = (productId) => {
         axios.get(`${GET_PRODUCT_API_URL}/${productId}`)
             .then((response) =>{
-                console.log('***')
-                console.log(response);
+                // console.log('***')
+                // console.log(response);
                 let bom_json = JSON.parse(response.data[0].product_BOM)
-                bom_json.map(row => {
-                    console.log(row)
-                })
+                // bom_json.map(row => {
+                //     console.log(row)
+                // })
                 setProductDetails(response.data[0])
                 setBom(bom_json)
                 // this.setState({

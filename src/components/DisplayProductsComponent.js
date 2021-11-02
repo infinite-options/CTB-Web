@@ -55,13 +55,13 @@ class DisplayProductsComponent extends React.Component {
         // Send formData object
         axios.post(CREATE_BOM_API_URL, formData)
             .then((response) => {
-                console.log('###')
-                console.log(response);
-                console.log(response.data);
-                console.log(response.status);
-                console.log(response.statusText);
-                console.log(response.headers);
-                console.log(response.config);
+                // console.log('###')
+                // console.log(response);
+                // console.log(response.data);
+                // console.log(response.status);
+                // console.log(response.statusText);
+                // console.log(response.headers);
+                // console.log(response.config);
                 findAllProducts().then(response => {
                     this.setState({
                         products: response
@@ -103,7 +103,16 @@ class DisplayProductsComponent extends React.Component {
                                 }} scope="row">{row['product_uid']}</th>
                                 <td>{row['product_created']}</td>
                                 <td>{row['product_desc']}</td>
-                                <td>Todo</td>
+                                {/*<td>Todo</td>*/}
+                                <th onClick={() => {
+                                    this.props.history.push({
+                                        pathname: '/ctb',
+                                        state: {
+                                            product_uid: row['product_uid']
+                                        },
+                                    });
+
+                                }} scope="row">CTB</th>
                             </tr>
                         )}
 
