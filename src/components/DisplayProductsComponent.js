@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {findAllProducts} from "../services/ProductService";
-import {CREATE_BOM_API_URL} from "../common/constants";
+import {CREATE_BOM_API_URL, DELETE_PRODUCT_API_URL} from "../common/constants";
 import { useHistory } from 'react-router';
 import {withRouter} from "react-router";
 
@@ -49,7 +49,7 @@ class DisplayProductsComponent extends React.Component {
         );
 
         // Details of the uploaded file
-        console.log(this.state.selectedFile);
+        // console.log(this.state.selectedFile);
 
         // Request made to the backend api
         // Send formData object
@@ -71,6 +71,22 @@ class DisplayProductsComponent extends React.Component {
                 console.log(error);
             });
     };
+
+    deleteProduct = (productId) => {
+        axios.post(`${DELETE_PRODUCT_API_URL}`, {
+            product_uid: productId
+        }).then((response) =>{
+            // console.log('***')
+            // console.log(response.data);
+            findAllProducts().then(response => {
+                this.setState({
+                    products: response
+                })
+            })
+        }, (error) => {
+            console.log(error);
+        })
+    }
 
     render() {
 
@@ -103,16 +119,49 @@ class DisplayProductsComponent extends React.Component {
                                 }} scope="row">{row['product_uid']}</th>
                                 <td>{row['product_created']}</td>
                                 <td>{row['product_desc']}</td>
-                                {/*<td>Todo</td>*/}
-                                <th onClick={() => {
-                                    this.props.history.push({
-                                        pathname: '/ctb',
-                                        state: {
-                                            product_uid: row['product_uid']
-                                        },
-                                    });
+                                {/*<th onClick={() => {*/}
+                                {/*    this.props.history.push({*/}
+                                {/*        pathname: '/ctb',*/}
+                                {/*        state: {*/}
+                                {/*            product_uid: row['product_uid']*/}
+                                {/*        },*/}
+                                {/*    });*/}
 
-                                }} scope="row">CTB</th>
+                                {/*}} scope="row">CTB</th>*/}
+                                <td>
+                                    <span>
+                                        <button className="btn btn-info" type="button" id="ctbBtn"
+                                                onClick={() => {
+                                                    this.props.history.push({
+                                                        pathname: '/ctb',
+                                                        state: {
+                                                            product_uid: row['product_uid']
+                                                        },
+                                                    });
+
+                                                }}>
+                                            CTB
+                                        </button>
+                                        <button className="btn btn-warning" type="button" id="runOrderListBtn"
+                                                onClick={() => {
+                                                    this.props.history.push({
+                                                        pathname: '/run_order_list',
+                                                        state: {
+                                                            product_uid: row['product_uid']
+                                                        },
+                                                    });
+
+                                                }}>
+                                            Run Order List
+                                        </button>
+                                        <button className="btn btn-danger" type="button" id="deleteProductBtn"
+                                                onClick={() => {
+                                                    this.deleteProduct(row['product_uid'])
+                                                }}>
+                                            Delete
+                                        </button>
+                                    </span>
+                                </td>
                             </tr>
                         )}
 
@@ -132,4 +181,4 @@ class DisplayProductsComponent extends React.Component {
     }
 }
 
-export default withRouter(DisplayProductsComponent);
+export default withRouter(DisplayProductsComponent)

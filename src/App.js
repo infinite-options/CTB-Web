@@ -15,7 +15,8 @@ import { useHistory } from 'react-router';
 import { createBrowserHistory } from "history";
 import ProductDetailsComponent from "./components/ProductDetailsComponent";
 import {DisplayBOMComponent} from "./components/DisplayBOMComponent";
-import CTBComponent from "./components/CTBComponent";
+import RunOrderListComponent from "./components/RunOrderListComponent";
+import DisplayCTBComponent from "./components/DisplayCTBComponent";
 export const history = createBrowserHistory();
 
 const App = () =>{
@@ -33,7 +34,10 @@ const App = () =>{
                 <ProductDetailsComponent/>
             </Route>
             <Route exact path="/ctb">
-                <CTBComponent/>
+                <DisplayCTBComponent/>
+            </Route>
+            <Route exact path="/run_order_list">
+                <RunOrderListComponent/>
             </Route>
             {/*<AppliedRoute path='*' component={NotFound} />*/}
 

@@ -4,21 +4,21 @@ import axios from "axios";
 import {RUN_ORDER_LIST_API_URL} from "../common/constants";
 import { useEffect, useState } from "react";
 
-export default function CTBComponent (props) {
+export default function RunOrderListComponent (props) {
 
     const location = useLocation();
     // console.log(location)
 
     useEffect(() => {
-        getBOM(location.state.product_uid)
+        runOrderList(location.state.product_uid)
     }, []);
 
-    const [CTB, setCTB] = useState(null);
+    const [orderList, setOrderList] = useState(null);
     // const [bom, setBom] = useState(null);
 
 
 
-    const getBOM = (productId) => {
+    const runOrderList = (productId) => {
         // const config = {
         //     method: 'post',
         //     url: `${RUN_CTB}`,
@@ -33,7 +33,7 @@ export default function CTBComponent (props) {
         }).then((response) =>{
                 // console.log('***')
                 // console.log(response.data);
-                setCTB(response.data)
+                setOrderList(response.data)
                 // console.log(CTB);
             }, (error) => {
                 console.log(error);
@@ -42,8 +42,8 @@ export default function CTBComponent (props) {
 
     return(
         <div>
-            <h1>CTB: {location.state.product_uid}</h1>
-            {CTB && <table className="table">
+            <h1>Order List: {location.state.product_uid}</h1>
+            {orderList && <table className="table">
                 <thead className="thead-dark">
                 <tr>
                     <th scope="col">BOM_Level</th>
@@ -56,7 +56,7 @@ export default function CTBComponent (props) {
                 <tbody>
 
                 {
-                    CTB.map((row, index) =>
+                    orderList.map((row, index) =>
                         <tr key={index}>
                             {/*<th scope="row">{row['Level']}</th>*/}
                             <td>{row['BOM_level']}</td>

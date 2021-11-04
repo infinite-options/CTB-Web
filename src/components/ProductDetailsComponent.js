@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import {GET_PRODUCT_API_URL} from "../common/constants";
+import {GET_PRODUCT_API_URL, GET_BOM_API_URL} from "../common/constants";
 import { useEffect, useState } from "react";
 
 export default function ProductDetailsComponent (props)  {
@@ -19,8 +19,30 @@ export default function ProductDetailsComponent (props)  {
 
 
 
+    // const getProductDetails = (productId) => {
+    //     axios.get(`${GET_BOM_API_URL}/${productId}`)
+    //         .then((response) =>{
+    //             // console.log('***')
+    //             // console.log(response);
+    //             let bom_json = JSON.parse(response.data[0].product_BOM)
+    //             // bom_json.map(row => {
+    //             //     console.log(row)
+    //             // })
+    //             setProductDetails(response.data[0])
+    //             setBom(bom_json)
+    //             // this.setState({
+    //             //     productDetails: response.data[0],
+    //             //     bom: bom_json
+    //             // })
+    //         }, (error) => {
+    //             console.log(error);
+    //         })
+    // }
+
     const getProductDetails = (productId) => {
-        axios.get(`${GET_PRODUCT_API_URL}/${productId}`)
+        axios.post(`${GET_BOM_API_URL}`, {
+            product_uid: productId
+        })
             .then((response) =>{
                 // console.log('***')
                 // console.log(response);
@@ -42,7 +64,6 @@ export default function ProductDetailsComponent (props)  {
 
     return (
         <div>
-            {location.state.product_uid}
 
             { productDetails && bom && <div>
                 <h1>BOM: { productDetails.product_uid}</h1>
