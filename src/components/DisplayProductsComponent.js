@@ -154,6 +154,30 @@ class DisplayProductsComponent extends React.Component {
                                                 }}>
                                             Run Order List
                                         </button>
+                                        <button className="btn btn-secondary" type="button" id="newCtbButton"
+                                                onClick={() => {
+                                                    this.props.history.push({
+                                                        pathname: '/ctb_new',
+                                                        state: {
+                                                            product_uid: row['product_uid']
+                                                        },
+                                                    });
+
+                                                }}>
+                                            CTB New
+                                        </button>
+                                        <button className="btn btn-success" type="button" id="newOrderListBtn"
+                                                onClick={() => {
+                                                    this.props.history.push({
+                                                        pathname: '/run_order_list_new',
+                                                        state: {
+                                                            product_uid: row['product_uid']
+                                                        },
+                                                    });
+
+                                                }}>
+                                            Run Order List New
+                                        </button>
                                         <button className="btn btn-danger" type="button" id="deleteProductBtn"
                                                 onClick={() => {
                                                     this.deleteProduct(row['product_uid'])
@@ -170,7 +194,7 @@ class DisplayProductsComponent extends React.Component {
 
                 <div>
                     <input type="file" onChange={this.onFileChange} />
-                    <button onClick={this.onFileUpload}>
+                    <button type="button" class="btn btn-primary" onClick={this.onFileUpload}>
                         Upload!
                     </button>
                 </div>

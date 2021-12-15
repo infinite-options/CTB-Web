@@ -4,4 +4,6 @@ export const CREATE_BOM_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amaz
 export const GET_BOM_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetBOM"
 export const RUN_CTB_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunCTB"
 export const RUN_ORDER_LIST_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunOrderList"
+export const RUN_CTB_NEW_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunCTBVishal"
+export const RUN_ORDER_LIST_NEW_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunOrderListVishal"
 export const DELETE_PRODUCT_API_URL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Delete"

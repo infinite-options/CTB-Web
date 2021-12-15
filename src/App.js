@@ -17,6 +17,8 @@ import ProductDetailsComponent from "./components/ProductDetailsComponent";
 import {DisplayBOMComponent} from "./components/DisplayBOMComponent";
 import RunOrderListComponent from "./components/RunOrderListComponent";
 import DisplayCTBComponent from "./components/DisplayCTBComponent";
+import DisplayNewCTBComponent from "./components/DisplayNewCTBComponent";
+import RunNewOrderListComponent from "./components/RunNewOrderListComponent";
 export const history = createBrowserHistory();
 
 const App = () =>{
@@ -39,6 +41,15 @@ const App = () =>{
             <Route exact path="/run_order_list">
                 <RunOrderListComponent/>
             </Route>
+            <Route exact path="/ctb_new">
+                <DisplayNewCTBComponent/>
+            </Route>
+            <Route exact path="/run_order_list_new">
+                <RunNewOrderListComponent/>
+            </Route>
+            {/*<Route exact path="/run_order_list_new">*/}
+            {/*    <DisplayNewCTBComponent/>*/}
+            {/*</Route>*/}
             {/*<AppliedRoute path='*' component={NotFound} />*/}
 
         </Router>
