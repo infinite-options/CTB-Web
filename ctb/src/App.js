@@ -119,7 +119,7 @@ function App() {
         <br/>
 
         <table>
-            <caption class="table-title">Product A Qty 10</caption>
+            <caption class="table-title">Product {Top_Level} Qty {Desired_Qty}</caption>
             <tr>
                 <th>Part</th>
                 <th>Qty Per</th>
