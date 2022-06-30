@@ -13,12 +13,36 @@ function updateTable(){
   let x = 0;
   let sum = 0;
   let rows = [];
+  let data = [];
 
-  for(let i = 0; bom[i].GrandParent_BOM_pn == "A"; i++){
-    rows.push(new RowData(bom[i].Child_pn, bom[i].Qty_per, bom[i].Qty_per));
-    // console.log(bom[x].Qty_per);
-    // sum += bom[x].Qty_per;
-    // x++;
+//   for(let i = 0; bom[i].GrandParent_BOM_pn == "A"; i++){
+//     rows.push(new RowData(bom[i].Child_pn, bom[i].Qty_per, bom[i].Qty_per));
+//     // console.log(bom[x].Qty_per);
+//     // sum += bom[x].Qty_per;
+//     // x++;
+//   }
+
+  
+  //Create a list of bom object that has GP == A
+  for(let i in bom){
+    if (bom[i].GrandParent_BOM_pn == "A") {
+        data.push(bom[i])
+    }
+  }
+
+  var list = [];//Define the list of seen children
+  var sth = [];//Define the list of ouput rows
+  for(let i in data){
+    if (!list.includes(data[i].Child_pn)) {
+        list.push(data[i].Child_pn);
+        var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty);
+        rows.push(row);
+    }   
+    else{
+        //update the value of reqQty
+        rows.find(r => r.part === data[i].Child_pn).qty_per += data[i].RequiredQty
+
+    }
   }
 
   console.log(rows);
