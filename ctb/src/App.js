@@ -4,50 +4,7 @@ import bom from './bom';
 import New from './new';
 import { useState } from 'react';
 
-function updateTable(){
-  // console.log(bom);
-  // for (let key in bom) {
-  //   console.log(key, bom[key]);
 
-  // }
-  let x = 0;
-  let sum = 0;
-  let rows = [];
-  let data = [];
-
-//   for(let i = 0; bom[i].GrandParent_BOM_pn == "A"; i++){
-//     rows.push(new RowData(bom[i].Child_pn, bom[i].Qty_per, bom[i].Qty_per));
-//     // console.log(bom[x].Qty_per);
-//     // sum += bom[x].Qty_per;
-//     // x++;
-//   }
-
-  
-  //Create a list of bom object that has GP == A
-  for(let i in bom){
-    if (bom[i].GrandParent_BOM_pn == "A") {
-        data.push(bom[i])
-    }
-  }
-
-  var list = [];//Define the list of seen children
-  var sth = [];//Define the list of ouput rows
-  for(let i in data){
-    if (!list.includes(data[i].Child_pn)) {
-        list.push(data[i].Child_pn);
-        var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty);
-        rows.push(row);
-    }   
-    else{
-        //update the value of reqQty
-        rows.find(r => r.part === data[i].Child_pn).qty_per += data[i].RequiredQty
-
-    }
-  }
-
-  console.log(rows);
-
-}
 
 class RowData{
     constructor(part, qty_per, order_qty){
@@ -64,7 +21,57 @@ function App() {
     let sum = 0;
     //let rows = [];
 
-    const [rows, setRows] = useState([]);
+    const [Rows, setRows] = useState([]);
+    const [Top_Level, setTop_Level] = useState();
+    const [Desired_Qty, setDesired_Qty] = useState();
+
+    let changeTop_Level = (e) =>{
+        setTop_Level(e.target.value);
+        console.log(e.target.value);
+    }
+
+    let changeDesired_Qty = (e) =>{
+        setDesired_Qty(e.target.value);
+        console.log(e.target.value);
+    }
+
+
+
+    function updateTable(){
+        let x = 0;
+        let sum = 0;
+        let rows = [];
+        let data = [];
+      
+        
+        //Create a list of bom object that has GP == A
+        for(let i in bom){
+          if (bom[i].GrandParent_BOM_pn == Top_Level) {
+              data.push(bom[i])
+          }
+        }
+      
+        var list = [];//Define the list of seen children
+        var sth = [];//Define the list of ouput rows
+        for(let i in data){
+          if (!list.includes(data[i].Child_pn)) {
+              list.push(data[i].Child_pn);
+              var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty);
+              rows.push(row);
+          }   
+          else{
+              //update the value of reqQty
+              rows.find(r => r.part === data[i].Child_pn).qty_per += data[i].RequiredQty
+          }
+        }
+
+        for(let i in rows){
+            rows[i].order_qty = rows[i].qty_per * Desired_Qty;
+        }
+        setRows(rows);
+        console.log(rows);
+    }
+
 
 
   //console.log(bom);
@@ -96,7 +103,7 @@ function App() {
         <form action="#">
             <div class="text">Enter Top Level Assy</div>
             <button class="small-button">Save</button>
-            <input class="input-field" type="text" placeholder="Top Level Assy" required/>
+            <input value={Top_Level} onChange={changeTop_Level} class="input-field" type="text" placeholder="Top Level Assy" required/>
         </form>
         <br/>
         <br/>
@@ -104,7 +111,7 @@ function App() {
         <form action="#">
             <div class="text">Enter Desired Qty</div>
             <button class="small-button">Save</button>
-            <input class="input-field" type="text" placeholder="Desired Qty" required/>
+            <input value={Desired_Qty} onChange={changeDesired_Qty} class="input-field" type="text" placeholder="Desired Qty" required/>
         </form>
         <br/>
         <br/>
@@ -118,31 +125,21 @@ function App() {
                 <th>Qty Per</th>
                 <th>Order Qty</th>
             </tr>
-            <tr>
-                <td>J</td>
-                <td>5.0</td>
-                <td>50</td>
-            </tr>
-            <tr>
-                <td>K</td>
-                <td>9.0</td>
-                <td>90</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>...</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+
+            {
+                Rows.map(row => (
+                    <tr>
+                    <td>{row.part}</td>
+                    <td>{row.qty_per}</td>
+                    <td>{row.order_qty}</td>
+                    </tr>
+                ))
+            }
 
             
         </table>
 
-        <New>z</New>
+        
         
         </div>
     );
