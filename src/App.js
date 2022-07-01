@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import './App.css';
 import axios from "axios";
 import ImageUploading from 'react-images-uploading';
+import DisplayProductsComponent from './DisplayProductsComponent';
 
 function App() {
   const [images,setImages] = useState();
@@ -38,13 +39,14 @@ function App() {
     const updateData = (index) => {
 
         let formData = new FormData();
-
+        console.log("in update data 1");
         console.log("File",  images[index].file)
         formData.append('image_title',  images[index].file.name);
         formData.append('image_description', "upload from app");
         formData.append('image_cost', "");
         formData.append('image_file', images[index].file);
-
+        console.log("in update data 2");
+        console.log(formData);
         axios.post("https://bmarz6chil.execute-api.us-west-1.amazonaws.com/dev/api/v2/uploadImage", formData)
             .then((response) => {
                 console.log("image",response.data)
@@ -64,7 +66,7 @@ function App() {
         // Background image
         <div class="backgroundimg"
              style={{
-                 maxWidth: "375px",
+                 maxWidth: "915px",
                  height: "812px",
                  //backgroundImage: `url(${background})`,
              }}
@@ -74,57 +76,17 @@ function App() {
                 
                 <div class="message">
 
-                    <ImageUploading
-                        multiple
-                        value={images}
-                        onChange={onChange}
-                        maxNumber={maxNumber}
-                        dataURLKey="data_url"
-                    >
-                        {({
-                              imageList,
-                              onImageUpload,
-                              onImageRemoveAll,
-                              onImageUpdate,
-                              onImageRemove,
-                              isDragging,
-                              dragProps,
-                          }) => (
-                            // write your building UI
-                            <div className="upload__image-wrapper">
-                                <button
-                                    style={isDragging ? { color: 'red' } : undefined}
-                                    onClick={onImageUpload}
-                                    {...dragProps}
-                                >
-                                    Click or Drop here
-                                </button>
-                                &nbsp;
-                                {imageList.map((image, index) => (
-                                    <div key={index} className="image-item">
-                                        <img src={image['data_url']} alt="" width="100" />
-                                        <div className="image-item__btn-wrapper">
-                                            <button onClick={() => updateData(index)}>Upload</button>
-                                            {/*<button onClick={() => onImageUpdate(index)}>Update</button>*/}
-                                            <button onClick={() => onImageRemove(index)}>Remove</button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </ImageUploading>
+                    
 
                     {/*<button onClick={upload} children="upload to database" />*/}
 
                 </div>
             </div>
             <div>
-              <input type="text" onChange={(e) => {
-                setProductID(e.target.value)
-              }}/>
-              <button onClick={() => getJSONobject()}>Submit</button>
+              
               <h4>{data}</h4>
             </div>
+            <DisplayProductsComponent/>
 
         </div>
     )
