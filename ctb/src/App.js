@@ -3,6 +3,8 @@ import './App.css';
 import bom from './bom';
 import New from './new';
 import { useState } from 'react';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 
 
