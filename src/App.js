@@ -2,7 +2,6 @@ import logo from './logo.svg';
 import './App.css';
 //import bom from './bom';
 import axios from 'axios';
-import { CREATE_BOM_API_URL } from './backendAPIs';
 //import New from './new';
 import { useState } from 'react';
 import React from 'react'
@@ -111,6 +110,7 @@ function App() {
     function onFileUpload(){
 
       // Create an object of formData
+      const payload = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/ImportFile"
       const formData = new FormData();
 
       // Update the formData object
@@ -125,7 +125,7 @@ function App() {
 
       // Request made to the backend api
       // Send formData object
-      axios.post(CREATE_BOM_API_URL, formData)
+      axios.post(payload, formData)
           .then((response) => {
               // console.log('###')
               console.log(response);
@@ -186,6 +186,7 @@ function App() {
         <h1>Clear to Build</h1>
         <br/>
         <div class="text">Upload Your BOM</div>
+        <br/>
         <input type="file" onChange={onFileChange} />
         <button type="button" class="big-button" onClick={onFileUpload}>Upload BOM</button>
         <br/>
@@ -214,7 +215,8 @@ function App() {
             <input value={Desired_Qty} onChange={changeDesired_Qty} class="input-field" type="text" placeholder="Desired Qty" required/>
         </form>
         <br/>
-
+        <br/>
+        <br/>
         <form action="#">
             <div class="text">Run Clear To Build</div>
             <button class="big-button" onClick={updateTable}>Run Clear To Build</button>
