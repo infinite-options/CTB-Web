@@ -6,18 +6,9 @@ import {CREATE_BOM_API_URL, DELETE_PRODUCT_API_URL, PRODUCTS_API_URL} from "./ba
 //import { useHistory } from 'react-router';
 //import {withRouter} from "react-router";
 
-class RowData{
-    constructor(part, qty_per, order_qty){
-        this.part = part;
-        this.qty_per = qty_per;
-        this.order_qty = order_qty;
-    }
-}
-
-class DisplayProductsComponent extends React.Component {
+class TempProducts extends React.Component {
 
     // const history = useHistory();
-    
 
     state = {
         products: null,
@@ -28,12 +19,8 @@ class DisplayProductsComponent extends React.Component {
         bom: null,
         tempUID: null,
         productId: null,
-        dataBOM: null,
-        Rows: [],
-        Top_Level: "A",
-        Desired_Qty: 1
+        data: null
     }
-    
 
     // componentDidMount() {
     //     fetch(PRODUCTS_API_URL)
@@ -45,59 +32,6 @@ class DisplayProductsComponent extends React.Component {
     // }
 
     // On file select (from the pop up)
-    changeTop_Level = (e) =>{
-        //setTop_Level(e.target.value);
-        this.setState({
-            Top_Level: e.target.value
-        })
-        console.log(e.target.value);
-    }
-
-    changeDesired_Qty = (e) =>{
-        //setDesired_Qty(e.target.value);
-        this.setState({
-            Desired_Qty: e.target.value
-        })
-        console.log(e.target.value);
-    }
-    updateTable = () =>{
-        let x = 0;
-        let sum = 0;
-        let rows = [];
-        let data = [];
-      
-        
-        //Create a list of bom object that has GP == A
-        for(let i in this.state.dataBOM){
-          if (this.state.dataBOM[i].GrandParent_BOM_pn == this.state.Top_Level) {
-              data.push(this.state.dataBOM[i])
-          }
-        }
-      
-        var list = [];//Define the list of seen children
-        var sth = [];//Define the list of ouput rows
-        for(let i in data){
-          if (!list.includes(data[i].Child_pn)) {
-              list.push(data[i].Child_pn);
-              var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty);
-              rows.push(row);
-          }   
-          else{
-              //update the value of reqQty
-              rows.find(r => r.part === data[i].Child_pn).qty_per += data[i].RequiredQty
-          }
-        }
-
-        for(let i in rows){
-            rows[i].order_qty = rows[i].qty_per * this.state.Desired_Qty;
-        }
-        //setRows(rows);
-        this.setState({
-            Rows: rows
-        })
-        console.log(rows);
-    }
-
     onFileChange = event => {
 
         // Update the state
@@ -117,7 +51,7 @@ class DisplayProductsComponent extends React.Component {
           console.log(res);
           console.log(res.data[0]);
           if(res.data[0]!=null) {
-            this.setState({ dataBOM: res.data,
+            this.setState({ data: res.data,
                 productID: stateTempUID
              });
             //setData(res.data);
@@ -125,7 +59,7 @@ class DisplayProductsComponent extends React.Component {
           }
           else {
             console.log("bad");
-            this.setState({ dataBOM: "Please enter a valid Product UID" });
+            this.setState({ data: "Please enter a valid Product UID" });
             //setData("Please enter a valid Product UID")
           }
           
@@ -171,13 +105,13 @@ class DisplayProductsComponent extends React.Component {
                     console.log(res);
                     console.log(res.data[0]);
                     if(res.data[0]!=null) {
-                        this.setState({ dataBOM: res.data });
+                        this.setState({ data: res.data });
                         //setData(res.data);
                         
                     }
                     else {
                         console.log("bad");
-                        this.setState({ dataBOM: "Please enter a valid Product UID" });
+                        this.setState({ data: "Please enter a valid Product UID" });
                         //setData("Please enter a valid Product UID")
                     }
                 
@@ -225,76 +159,40 @@ class DisplayProductsComponent extends React.Component {
 
         return(
             <div>
-    
-                <div class="box">
-                    <h1>Clear to Build</h1>
-                    <br/>
-                    <div class="text">Upload Your BOM</div>
-                    <button class="big-button" >Upload Your BOM</button>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <form action="#">
-                        <div class="text">Enter Product ID</div>
-                        <button class="small-button">Save</button>
-                        <input class="input-field" type="text" placeholder="Product ID" required/>
-                    </form>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <form action="#">
-                        <div class="text">Run Clear To Build</div>
-                        <button class="big-button" onClick={this.updateTable()}>Run Clear To Build</button>
+                <h1>Product List</h1>
+                <table className="table">
+                    <thead className="thead-dark">
+                    <tr>
                         
-                    </form>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <form action="#">
-                        <div class="text">Enter Top Level Assy</div>
-                        <button class="small-button">Save</button>
-                        <input value={this.state.Top_Level} onChange={this.changeTop_Level()} class="input-field" type="text" placeholder="Top Level Assy" required/>
-                    </form>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <form action="#">
-                        <div class="text">Enter Desired Qty</div>
-                        <button class="small-button">Save</button>
-                        <input value={this.state.Desired_Qty} onChange={this.changeDesired_Qty()} class="input-field" type="text" placeholder="Desired Qty" required/>
-                    </form>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-
-                    <table>
-                        <caption class="table-title">Product {this.state.Top_Level} Qty {this.state.Desired_Qty}</caption>
-                        <tr>
-                            <th>Part</th>
-                            <th>Qty Per</th>
-                            <th>Order Qty</th>
-                        </tr>
-
-                        {
-                            this.state.Rows.map(row => (
-                                <tr>
-                                <td>{row.part}</td>
-                                <td>{row.qty_per}</td>
-                                <td>{row.order_qty}</td>
-                                </tr>
-                            ))
-                        }
-
+                    </tr>
+                    </thead>
+                    <tbody>
                         
-                    </table>
 
-        
-        
+                    </tbody>
+                </table>
+
+                <div>
+                    <input type="text" onChange={(e) => {
+                        this.setState({
+                            tempUID: e.target.value
+                        })
+                        //setProductID(e.target.value)
+                    }}/>
+                    <button onClick={() => this.getJSONobject()}>Submit</button>
+                    <input type="file" onChange={this.onFileChange} />
+                    <button type="button" class="btn btn-primary" onClick={this.onFileUpload}>
+                        Upload!
+                    </button>
+                    <h6>{this.state.productId}</h6>
+                    <h6>{String(this.state.data)}</h6>
+                    <h6>{this.state.tempUID}</h6>
                 </div>
+
+                <br/><br/>
             </div>
         )
     }
 }
 
-export default DisplayProductsComponent;
+export default TempProducts;

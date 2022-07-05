@@ -4,6 +4,7 @@ import './App.css';
 import axios from "axios";
 import ImageUploading from 'react-images-uploading';
 import DisplayProductsComponent from './DisplayProductsComponent';
+import TempProducts from './TempProducts';
 
 function App() {
   const [images,setImages] = useState();
@@ -65,11 +66,11 @@ function App() {
     return (
         // Background image
         <div class="backgroundimg"
-             style={{
-                 maxWidth: "915px",
-                 height: "812px",
-                 //backgroundImage: `url(${background})`,
-             }}
+            //  style={{
+            //      maxWidth: "915px",
+            //      height: "812px",
+            //      //backgroundImage: `url(${background})`,
+            //  }}
         >
             
             <div>
@@ -82,11 +83,15 @@ function App() {
 
                 </div>
             </div>
+            <DisplayProductsComponent/>
             <div>
               
-              <h4>{data}</h4>
+              <h4>Hi{data}</h4>
+              
             </div>
-            <DisplayProductsComponent/>
+            {/* <DisplayProductsComponent/> */}
+            {/* <tempProducts/> */}
+            
 
         </div>
     )
