@@ -5,6 +5,8 @@ import New from './new';
 import { useState } from 'react';
 import React from 'react'
 import ReactDOM from 'react-dom'
+import axios from "axios";
+const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 
 
 
@@ -26,6 +28,15 @@ function App() {
     const [Rows, setRows] = useState([]);
     const [Top_Level, setTop_Level] = useState();
     const [Desired_Qty, setDesired_Qty] = useState();
+    const [Info, setInfo] = React.useState([]);
+
+    React.useEffect(() => {
+        axios.get(baseURL).then((response) => {
+            setInfo(response.data);
+        });
+      }, []);
+
+
 
     let changeTop_Level = (e) =>{
         setTop_Level(e.target.value);
@@ -74,7 +85,7 @@ function App() {
         console.log(rows);
     }
 
-
+    console.log(Info);
 
   //console.log(bom);
     return (
@@ -91,6 +102,30 @@ function App() {
             <button class="small-button">Save</button>
             <input class="input-field" type="text" placeholder="Product ID" required/>
         </form>
+        <br/>
+        <br/>
+        <br/>
+        <label>Choose a product_uid: </label>
+        <select >
+            {
+                Info.map(info => (
+                    
+                    <option value={info.product_uid}>{info.product_uid}</option>
+                ))
+            }
+        </select>
+        <br/>
+        <br/>
+        <br/>
+        <label>Choose a product_desc: </label>
+        <select >
+            {
+                Info.map(info => (
+                    
+                    <option value={info.product_desc}>{info.product_desc}</option>
+                ))
+            }
+        </select>
         <br/>
         <br/>
         <br/>
