@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import React from 'react'
 import ReactDOM from 'react-dom'
+const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 
 
 
@@ -30,6 +31,26 @@ function App() {
     const [selectedFile, setSelectedFile] = useState();
     const [productId, setProductId] = useState();
     const [bom, setBom] = useState([]);
+    const [Info, setInfo] = React.useState([]);
+    // const [value1, setValue1] = useState(document.getElementById('box1').value);
+    // const [value2, setValue2] = useState(document.getElementById('box2'));
+
+
+
+
+    const changeBox2 = () => {
+        document.getElementById('box2').selectedIndex = document.getElementById('box1').selectedIndex;
+    }
+
+    const changeBox1 = () => {
+        document.getElementById('box1').selectedIndex = document.getElementById('box2').selectedIndex;
+    }
+
+    React.useEffect(() => {
+        axios.get(baseURL).then((response) => {
+            setInfo(response.data);
+        });
+      }, []);
 
     let changeTop_Level = (e) =>{
         setTop_Level(e.target.value);
@@ -180,6 +201,7 @@ function App() {
 
 
 
+
   //console.log(bom);
     return (
         <div class="box">
@@ -189,6 +211,30 @@ function App() {
         <br/>
         <input type="file" onChange={onFileChange} />
         <button type="button" class="big-button" onClick={onFileUpload}>Upload BOM</button>
+        <br/>
+        <br/>
+        <br/>
+        <label>Choose a product_uid: </label>
+        <select id="box1" onChange={changeBox2}>
+            {
+                Info.map(info => (
+                    
+                    <option value={info.product_uid}>{info.product_uid}</option>
+                ))
+            }
+        </select>
+        <br/>
+        <br/>
+        <br/>
+        <label>Choose a product_desc: </label>
+        <select id="box2" onChange={changeBox1}>
+            {
+                Info.map(info => (
+                    
+                    <option value={info.product_desc}>{info.product_desc}</option>
+                ))
+            }
+        </select>
         <br/>
         <br/>
         <br/>
