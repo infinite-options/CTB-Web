@@ -132,7 +132,8 @@ function App() {
 
 
 
-    function updateTable(){
+        function updateTable(event){
+        event.preventDefault();
         let x = 0;
         let sum = 0;
         let rows = [];
