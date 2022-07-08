@@ -3,7 +3,7 @@ import './App.css';
 //import bom from './bom';
 import axios from 'axios';
 //import New from './new';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react'
 import ReactDOM from 'react-dom'
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
@@ -24,6 +24,7 @@ function App() {
     let x = 0;
     let sum = 0;
     //let rows = [];
+    let options = null;
 
     const [Rows, setRows] = useState([]);
     const [Top_Level, setTop_Level] = useState();
@@ -32,18 +33,78 @@ function App() {
     const [productId, setProductId] = useState();
     const [bom, setBom] = useState([]);
     const [Info, setInfo] = React.useState([]);
-    // const [value1, setValue1] = useState(document.getElementById('box1').value);
-    // const [value2, setValue2] = useState(document.getElementById('box2'));
+    const [index, setIndex] = useState();
+    const [parent, setParent] = useState([]);
 
+    if (index) {
+        
+        // options = () =>{for (let i = 0; i < parent.length; i++) {
+        //     <option value={parent[i]}>{parent[i]}</option>
+        // }};
+        // options = parent.map((i) => <option value={parent[i]}>{parent[i]}</option>);
+        console.log(index);
 
+    }
+
+    function splitString(string) {
+        let wordArray = []
+        let incompleteWord = ""
+        let quotePos = 0;
+        for(let i = 0; i < string.length; i++) {
+          if(string.charAt(i) === '"'){
+            if(quotePos === 0)
+              quotePos = 1
+            else {
+              wordArray.push(incompleteWord.trim())
+              incompleteWord = ""
+              quotePos = 0
+              continue
+            }
+          } else {
+            if(quotePos === 1)
+             incompleteWord += string.charAt(i)
+          }
+        }
+        return wordArray
+      }
 
 
     const changeBox2 = () => {
         document.getElementById('box2').selectedIndex = document.getElementById('box1').selectedIndex;
+        
+        var temp = document.getElementById('box1').selectedIndex;
+        setIndex(temp);
+
+        let parents = Info.map(a => a.product_parents);
+        setParent(parents[document.getElementById('box1').selectedIndex]);
+
+            // setIndex(document.getElementById('box1').selectedIndex);
+            
+
+        // useEffect(() => console.log("re-render because x changed:", index), []);
+            // setIndex(temp);
+            // console.log(temp);
+
+
+        // setIndex(document.getElementById('box1').selectedIndex);
+        // var temp = document.getElementById('box1').selectedIndex;
+        // this.setIndex({value: temp}, function () {
+        //     console.log(this);
+        // });
+         
+        // useIndex(() => console.log(index));
+        // console.log(this.index);
     }
 
     const changeBox1 = () => {
         document.getElementById('box1').selectedIndex = document.getElementById('box2').selectedIndex;
+        setIndex(document.getElementById('box2').selectedIndex);
+        console.log(index);
+
+        let parents = Info.map(a => a.product_parents);
+        setParent(parents[document.getElementById('box1').selectedIndex]);
+        let string3 = '"this is a question"random omitted "answer one" text between quotes "answer two" zzz "answer three"'
+        console.log(splitString(parents[0]));
     }
 
     React.useEffect(() => {
@@ -234,6 +295,20 @@ function App() {
                     <option value={info.product_desc}>{info.product_desc}</option>
                 ))
             }
+        </select>
+        <br/>
+        <br/>
+        <br/>
+        <label>Choose a product_parents: </label>
+        <select id="box3" >
+            {
+                splitString(parent).map(p => (
+                    
+                    <option value={p}>{p}</option>
+                ))
+            }
+            {/* {<option value={parent}>{parent}</option>}
+            {console.log(parent[1])} */}
         </select>
         <br/>
         <br/>
