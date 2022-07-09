@@ -250,6 +250,10 @@ function App() {
                     var len = response.data.length-1;
                      document.getElementById('box1').selectedIndex = len;
                      document.getElementById('box2').selectedIndex = len;
+
+                    let parents = response.data.map(a => a.product_parents);
+                    setParent(parents[document.getElementById('box1').selectedIndex]);
+
                      //let parents = Info.map(a => a.product_parents);
                      //setParent(parents[document.getElementById('box1').selectedIndex]);
                 });
