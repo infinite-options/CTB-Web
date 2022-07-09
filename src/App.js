@@ -50,6 +50,7 @@ function App() {
         let wordArray = []
         let incompleteWord = ""
         let quotePos = 0;
+        //console.log(string);
         for(let i = 0; i < string.length; i++) {
           if(string.charAt(i) === '"'){
             if(quotePos === 0)
@@ -71,7 +72,7 @@ function App() {
 
     const changeBox2 = () => {
         document.getElementById('box2').selectedIndex = document.getElementById('box1').selectedIndex;
-        
+        console.log(document.getElementById('box1').selectedIndex)
         var temp = document.getElementById('box1').selectedIndex;
         setIndex(temp);
 
@@ -112,6 +113,7 @@ function App() {
             setInfo(response.data);
         });
       }, []);
+    
 
     let changeTop_Level = (e) =>{
         setTop_Level(e.target.value);
@@ -132,12 +134,13 @@ function App() {
 
 
 
-        function updateTable(event){
+    function updateTable(event){
         event.preventDefault();
         let x = 0;
         let sum = 0;
         let rows = [];
         let data = [];
+        console.log(Info.length);
       
         const postURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunCTB"
               const payload = {
@@ -190,7 +193,7 @@ function App() {
 
     }
 
-    function onFileUpload(){
+    async function onFileUpload(){
 
       // Create an object of formData
       const payload = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/ImportFile"
@@ -208,7 +211,7 @@ function App() {
 
       // Request made to the backend api
       // Send formData object
-      axios.post(payload, formData)
+      await axios.post(payload, formData)
           .then((response) => {
               // console.log('###')
               console.log(response);
@@ -239,6 +242,29 @@ function App() {
               //     }
               
               })
+            await axios.get(baseURL).then((response) => {
+                setInfo(response.data);
+                console.log("hi");
+                //document.getElementById('box1').selectedIndex = response.data.length -1;
+                setTimeout(() => {
+                    var len = response.data.length-1;
+                     document.getElementById('box1').selectedIndex = len;
+                     document.getElementById('box2').selectedIndex = len;
+                     //let parents = Info.map(a => a.product_parents);
+                     //setParent(parents[document.getElementById('box1').selectedIndex]);
+                });
+                //var len = response.data.length;
+                // while(len>Info.length) {
+                //      len -= 0.1;
+                //      //console.log(len + "  " + Info.length);
+                //  }
+                
+            });
+            console.log("reached set info");
+            console.log(Info);
+            console.log(Info.length);
+            //document.getElementById('box2').selectedIndex = -1;
+            
               // console.log(response.data);
               // console.log(response.status);
               // console.log(response.statusText);
@@ -339,11 +365,11 @@ function App() {
         <br/>
         <br/>
         <br/>
-        <form action="#">
+        
             <div class="text">Run Clear To Build</div>
             <button class="big-button" onClick={updateTable}>Run Clear To Build</button>
-            
-        </form>
+        
+
         <br/>
         <br/>
         <br/>
