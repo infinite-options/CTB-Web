@@ -253,6 +253,7 @@ function App() {
 
                     let parents = response.data.map(a => a.product_parents);
                     setParent(parents[document.getElementById('box1').selectedIndex]);
+                    setTop_Level("A")
 
                      //let parents = Info.map(a => a.product_parents);
                      //setParent(parents[document.getElementById('box1').selectedIndex]);
@@ -331,7 +332,7 @@ function App() {
         <br/>
         <br/>
         <label>Choose a product_parents: </label>
-        <select id="box3" >
+        <select id="box3" onChange={changeTop_Level}>
             {
                 splitString(parent).map(p => (
                     
@@ -344,23 +345,7 @@ function App() {
         <br/>
         <br/>
         <br/>
-        <form action="#">
-            <div class="text">Enter Product ID</div>
-            {/* <button class="small-button">Save</button> */}
-            <input class="input-field" value={productId} onChange={(e)=>setProductId(e.target.value)} type="text" placeholder="Product ID" required/>
-        </form>
-        <br/>
-        <br/>
-        <br/>
-
-        <form action="#">
-            <div class="text">Enter Top Level Assy</div>
-            {/* <button class="small-button">Save</button> */}
-            <input value={Top_Level} onChange={changeTop_Level} class="input-field" type="text" placeholder="Top Level Assy" required/>
-        </form>
-        <br/>
-        <br/>
-        <br/>
+        
         <form action="#">
             <div class="text">Enter Desired Qty</div>
             {/* <button class="small-button">Save</button> */}
