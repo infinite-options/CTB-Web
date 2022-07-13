@@ -25,6 +25,8 @@ float: right;
 .small-button{
 
 float: right;
+background-color: lightcyan;
+border-radius: 4px;
 
 }
 
