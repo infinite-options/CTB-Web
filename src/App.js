@@ -7,14 +7,17 @@ import { useState, useEffect } from 'react';
 import React from 'react'
 import ReactDOM from 'react-dom'
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
+const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
 
 
 
 class RowData{
-    constructor(part, qty_per, order_qty){
+    constructor(part, qty_per, need_qty, inventory, order_qty){
         this.part = part;
         this.qty_per = qty_per;
-        this.order_qty = order_qty;
+        this.need_qty = need_qty;
+        this.inventory = inventory;
+        this.order_qty = order_qty
     }
 }
 
@@ -35,6 +38,8 @@ function App() {
     const [Info, setInfo] = React.useState([]);
     const [index, setIndex] = useState();
     const [parent, setParent] = useState([]);
+    const [inventory, setInventory] = useState();
+    const [country, setCountry] = useState("US");
 
     if (index) {
         
@@ -70,7 +75,9 @@ function App() {
       }
 
 
-    const changeBox2 = () => {
+    const changeBox2 = (event) => {
+        console.log(document.getElementById('box1').value);
+        setProductId(event.target.value);
         document.getElementById('box2').selectedIndex = document.getElementById('box1').selectedIndex;
         console.log(document.getElementById('box1').selectedIndex)
         var temp = document.getElementById('box1').selectedIndex;
@@ -78,7 +85,7 @@ function App() {
 
         let parents = Info.map(a => a.product_parents);
         setParent(parents[document.getElementById('box1').selectedIndex]);
-
+        setTop_Level("A");
             // setIndex(document.getElementById('box1').selectedIndex);
             
 
@@ -97,26 +104,35 @@ function App() {
         // console.log(this.index);
     }
 
-    const changeBox1 = () => {
+    const changeBox1 = (event) => {
+        console.log(event.target.value);
         document.getElementById('box1').selectedIndex = document.getElementById('box2').selectedIndex;
         setIndex(document.getElementById('box2').selectedIndex);
         console.log(index);
-
+        setProductId(document.getElementById('box1').value);
         let parents = Info.map(a => a.product_parents);
         setParent(parents[document.getElementById('box1').selectedIndex]);
         let string3 = '"this is a question"random omitted "answer one" text between quotes "answer two" zzz "answer three"'
         console.log(splitString(parents[0]));
+        setTop_Level("A");
     }
 
     React.useEffect(() => {
         axios.get(baseURL).then((response) => {
             setInfo(response.data);
         });
+        axios.get(inventoryURL).then((response) => {
+            setInventory(response.data);
+        });
       }, []);
     
 
     let changeTop_Level = (e) =>{
         setTop_Level(e.target.value);
+        console.log(e.target.value);
+    }
+    let changeCountry = (e) =>{
+        setCountry(e.target.value);
         console.log(e.target.value);
     }
 
@@ -154,17 +170,27 @@ function App() {
                       setBom(res.data);
                       //setData(res.data);
                       for(let i in res.data){
-                        if (res.data[i].GrandParent_BOM_pn == Top_Level) {
+                        console.log(i);
+                        console.log(res.data[i].GrandParent_BOM_pn);
+                        console.log(Top_Level);
+                        if (res.data[i].GrandParent_BOM_pn === Top_Level) {
                             data.push(res.data[i])
                         }
                       }
-                    
+                      console.log(data);
                       var list = [];//Define the list of seen children
                       var sth = [];//Define the list of ouput rows
                       for(let i in data){
                         if (!list.includes(data[i].Child_pn)) {
                             list.push(data[i].Child_pn);
-                            var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty);
+                            var tempInv = 0;
+                            for(let j in inventory) {
+                                if(inventory[j].inv_pn===data[i].Child_pn && inventory[j].inv_loc==country) {
+                                    tempInv += inventory[j].inv_qty;
+                                }
+                            }
+                            var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty*Desired_Qty, tempInv,
+                                Math.max(data[i].RequiredQty*Desired_Qty- tempInv, 0));
                             rows.push(row);
                         }   
                         else{
@@ -174,7 +200,8 @@ function App() {
                       }
               
                       for(let i in rows){
-                          rows[i].order_qty = rows[i].qty_per * Desired_Qty;
+                          rows[i].need_qty = rows[i].qty_per * Desired_Qty;
+                          rows[i].order_qty = Math.max(0,rows[i].need_qty - rows[i].inventory);
                       }
                       setRows(rows);
                       console.log(rows);
@@ -354,6 +381,15 @@ function App() {
         <br/>
         <br/>
         <br/>
+        <label>Choose a Location: </label>
+        <select id="box4" onChange={changeCountry}>
+                    <option value="US">US</option>
+                    <option value="France">France</option>
+                    <option value="Germany">Germany</option>
+        </select>
+        <br/>
+        <br/>
+        <br/>
         
             <div class="text">Run Clear To Build</div>
             <button class="big-button" onClick={updateTable}>Run Clear To Build</button>
@@ -368,6 +404,8 @@ function App() {
             <tr>
                 <th>Part</th>
                 <th>Qty Per</th>
+                <th>Need Qty</th>
+                <th>Inventory</th>
                 <th>Order Qty</th>
             </tr>
 
@@ -376,6 +414,8 @@ function App() {
                     <tr>
                     <td>{row.part}</td>
                     <td>{row.qty_per}</td>
+                    <td>{row.need_qty}</td>
+                    <td>{row.inventory}</td>
                     <td>{row.order_qty}</td>
                     </tr>
                 ))
