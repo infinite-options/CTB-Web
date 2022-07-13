@@ -306,6 +306,16 @@ function App() {
     return (
         <div class="box">
         <h1>Clear to Build</h1>
+        <nav
+        style={{
+        
+          borderTop: "solid 1px",
+          paddingTop: "1rem",
+        }}>
+        <Link to="/" >CTB</Link>
+        <Link to="/add" style={{float: "right"}}>Add Parts</Link>
+        </nav>
+        <br/>
         <br/>
         <br/>
         <div class="text">Upload Your BOM</div>

@@ -7,6 +7,15 @@ const AddPart = () => {
 
         <div class="box">
             <h1>Add Parts</h1>
+            <nav
+        style={{
+        
+          borderTop: "solid 1px",
+          paddingTop: "1rem",
+        }}>
+        <Link to="/" >CTB</Link>
+        <Link to="/add" style={{float: "right"}}>Add Parts</Link>
+        </nav>
             <br/>
             <br/>
             <br/>
@@ -41,6 +50,9 @@ const AddPart = () => {
             <br/>
             <br/>
             <button class="big-button" >Submit</button>
+            <br/>
+            <br/>
+            <br/>
         </div>
 
 

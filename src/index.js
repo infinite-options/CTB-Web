@@ -13,8 +13,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
     <Routes>
-      <Route path='/1' element={<App/>}/>
-      <Route path='/2' element={<AddPart/>}/>
+      <Route path='/' element={<App/>}/>
+      <Route path='/add' element={<AddPart/>}/>
       
   
     </Routes>
