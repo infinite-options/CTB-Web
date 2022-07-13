@@ -1,32 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import '../App.css';
 //import bom from './bom';
 import axios from 'axios';
 //import New from './new';
-import { useState, useEffect, Component } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react'
-import { useNavigate } from "react-router-dom";
 import ReactDOM from 'react-dom'
-import AddPart from './Components/AddPart';
-import { Button} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-
-
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 
 
 
-
-class RowData{
-    constructor(part, qty_per, order_qty){
-        this.part = part;
-        this.qty_per = qty_per;
-        this.order_qty = order_qty;
+const CTB = () => {
+    class RowData{
+        constructor(part, qty_per, order_qty){
+            this.part = part;
+            this.qty_per = qty_per;
+            this.order_qty = order_qty;
+        }
     }
-}
-
-function App() {
-    
 
     let x = 0;
     let sum = 0;
@@ -307,7 +297,6 @@ function App() {
         <div class="box">
         <h1>Clear to Build</h1>
         <br/>
-        <br/>
         <div class="text">Upload Your BOM</div>
         <br/>
         <input type="file" onChange={onFileChange} />
@@ -398,4 +387,4 @@ function App() {
     );
 }
 
-export default App;
+export default CTB;
