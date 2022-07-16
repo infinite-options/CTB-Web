@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Link } from 'react-router-dom';
+import AddPart from './AddPart';
 //import {useHistory} from "react-router-dom";
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
@@ -328,7 +330,10 @@ function Landing() {
         <div class="box">
             <div>
                 <h1>Clear to Build</h1>
-                <button type="button" class="small-button">Add Part</button>
+                <Link to="/addparts">
+                    <button type="button" class="small-button">Add Part</button>
+                </Link>
+                
             </div>
 
         <br/>

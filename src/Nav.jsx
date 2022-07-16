@@ -2,6 +2,8 @@ import React, {useContext, useState, useEffect} from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import {Route, Routes, } from "react-router-dom";
 import Landing from "./Landing";
+import AddPart from "./AddPart";
+//import temp1 from "./Temp";
 
 //import Ably from 'ably/promises';
 
@@ -31,6 +33,7 @@ export default function Nav() {
         <Router>
                   <Routes>
                         <Route path="/" element={<Landing />} />
+                        <Route path="/addparts" element={<AddPart />} />
                     </Routes>
         </Router>
     );
