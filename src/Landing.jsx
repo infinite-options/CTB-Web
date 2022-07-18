@@ -15,12 +15,14 @@ const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev
 
 
 class RowData{
-    constructor(part, qty_per, need_qty, inventory, order_qty){
+    constructor(part, qty_per, need_qty, inventory, order_qty, unit_price, total_price){
         this.part = part;
         this.qty_per = qty_per;
         this.need_qty = need_qty;
         this.inventory = inventory;
-        this.order_qty = order_qty
+        this.order_qty = order_qty;
+        this.unit_price = unit_price;
+        this.total_price = total_price
     }
 }
 
@@ -166,10 +168,14 @@ function Landing() {
                   "product_uid": productId
               }
               axios.post(postURL, payload).then((res) => {
-                  console.log("in get Json object");
+                const postURL2 = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts";
+                axios.get(postURL2).then((response) => {
+                    
+                    console.log("in get Json object");
                   console.log(res);
                   console.log(res.data[0]);
                   if(res.data[0]!=null) {
+                    var allParts = response.data;
                       setBom(res.data);
                       //setData(res.data);
                       for(let i in res.data){
@@ -187,13 +193,19 @@ function Landing() {
                         if (!list.includes(data[i].Child_pn)) {
                             list.push(data[i].Child_pn);
                             var tempInv = 0;
+                            var unitCost = 0;
                             for(let j in inventory) {
                                 if(inventory[j].inv_pn===data[i].Child_pn && inventory[j].inv_loc==country) {
                                     tempInv += inventory[j].inv_qty;
                                 }
                             }
+                            for(let j in allParts) {
+                                if(allParts[j].PN===data[i].Child_pn) {
+                                    unitCost = allParts[j].Unit_Cost
+                                }
+                            }
                             var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty*Desired_Qty, tempInv,
-                                Math.max(data[i].RequiredQty*Desired_Qty- tempInv, 0));
+                                Math.max(data[i].RequiredQty*Desired_Qty- tempInv, 0),  unitCost, 10);
                             rows.push(row);
                         }   
                         else{
@@ -205,6 +217,7 @@ function Landing() {
                       for(let i in rows){
                           rows[i].need_qty = rows[i].qty_per * Desired_Qty;
                           rows[i].order_qty = Math.max(0,rows[i].need_qty - rows[i].inventory);
+                          rows[i].total_price = rows[i].unit_price * rows[i].order_qty
                       }
                       setRows(rows);
                       console.log(rows);
@@ -216,6 +229,8 @@ function Landing() {
                       
                       //setData("Please enter a valid Product UID")
                   }
+                })
+                  
               
               })
         
@@ -417,6 +432,8 @@ function Landing() {
                 <th>Need Qty</th>
                 <th>Inventory</th>
                 <th>Order Qty</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
             </tr>
 
             {
@@ -427,6 +444,8 @@ function Landing() {
                     <td>{row.need_qty}</td>
                     <td>{row.inventory}</td>
                     <td>{row.order_qty}</td>
+                    <td>{row.unit_price}</td>
+                    <td>{row.total_price}</td>
                     </tr>
                 ))
             }
