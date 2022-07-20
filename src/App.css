@@ -1,10 +1,10 @@
 .box {
-  width: 80%;
+  width: 100%;
   background-color: burlywood;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
-  max-width: 500px;
+  max-width: 700px;
   font-family: sans-serif;
 }
 
