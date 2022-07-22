@@ -343,14 +343,21 @@ function Landing() {
 
   //console.log(bom);
     return (
+        
         <div class="box">
-            <div>
-                <h1>Clear to Build</h1>
-                <Link to="/addparts">
-                    <button type="button" class="small-button">Add Part</button>
-                </Link>
-                
-            </div>
+
+
+
+        <h1>Clear to Build</h1>
+
+        <nav style={{
+          borderTop: "solid 1px",
+          paddingTop: "1rem",
+        }}>
+        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
+        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
+        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
+        </nav>
 
         <br/>
         <div class="text">Upload Your BOM</div>

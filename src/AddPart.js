@@ -80,14 +80,17 @@ const AddPart = (useEffect) => {
 
 
         <div class="box">
+        
         <h1>Add Parts</h1>
         <nav style={{
           borderTop: "solid 1px",
           paddingTop: "1rem",
         }}>
-        <Link to="/" >CTB</Link>
-        <Link to="/add" style={{float: "right"}}>Add Parts</Link>
+        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
+        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
+        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
         </nav>
+        
 
 
             <br/>
