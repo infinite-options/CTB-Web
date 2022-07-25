@@ -21,8 +21,8 @@ class RowData{
         this.need_qty = need_qty;
         this.inventory = inventory;
         this.order_qty = order_qty;
-        this.unit_price = unit_price;
-        this.total_price = total_price
+        this.unit_price = unit_price.toFixed(2);
+        this.total_price = total_price.toFixed(2)
     }
 }
 
@@ -91,6 +91,13 @@ function Landing() {
         let parents = Info.map(a => a.product_parents);
         setParent(parents[document.getElementById('box1').selectedIndex]);
         setTop_Level("A");
+        let parentString = parents[document.getElementById('box1').selectedIndex]
+        setParent(parentString);
+        console.log(parentString)
+        const split_string = parentString.split("\",");
+        console.log(split_string[0].substring(2));
+        setTop_Level(split_string[0].substring(2))
+
             // setIndex(document.getElementById('box1').selectedIndex);
             
 
@@ -120,6 +127,13 @@ function Landing() {
         let string3 = '"this is a question"random omitted "answer one" text between quotes "answer two" zzz "answer three"'
         console.log(splitString(parents[0]));
         setTop_Level("A");
+        let parentString = parents[document.getElementById('box1').selectedIndex]
+        setParent(parentString);
+        console.log(parentString)
+        const split_string = parentString.split("\",");
+        console.log(split_string[0].substring(2));
+        setTop_Level(split_string[0].substring(2))
+
     }
 
     React.useEffect(() => {
@@ -217,7 +231,7 @@ function Landing() {
                       for(let i in rows){
                           rows[i].need_qty = rows[i].qty_per * Desired_Qty;
                           rows[i].order_qty = Math.max(0,rows[i].need_qty - rows[i].inventory);
-                          rows[i].total_price = rows[i].unit_price * rows[i].order_qty
+                          rows[i].total_price = (rows[i].unit_price * rows[i].order_qty).toFixed(2);
                       }
                       setRows(rows);
                       console.log(rows);
@@ -288,6 +302,7 @@ function Landing() {
               
               })
             await axios.get(baseURL).then((response) => {
+                console.log(response.data);
                 setInfo(response.data);
                 console.log("hi");
                 //document.getElementById('box1').selectedIndex = response.data.length -1;
@@ -297,8 +312,12 @@ function Landing() {
                      document.getElementById('box2').selectedIndex = len;
 
                     let parents = response.data.map(a => a.product_parents);
-                    setParent(parents[document.getElementById('box1').selectedIndex]);
-                    setTop_Level("A")
+                    let parentString = parents[document.getElementById('box1').selectedIndex]
+                    setParent(parentString);
+                    console.log(parentString)
+                    const split_string = parentString.split("\",");
+                    console.log(split_string[0].substring(2));
+                    setTop_Level(split_string[0].substring(2))
 
                      //let parents = Info.map(a => a.product_parents);
                      //setParent(parents[document.getElementById('box1').selectedIndex]);
