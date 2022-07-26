@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './App.css';
+import '../App.css';
 import { useState, useEffect, Component } from 'react';
 import axios from 'axios';
-const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
 
 const AddPart = (useEffect) => {
 
@@ -24,9 +23,6 @@ const AddPart = (useEffect) => {
     const [Material, setMaterial] = useState('');
     const [vendor, setvendor] = useState('');
     const [originLocation, setoriginLocation] = useState('');
-    const [CurrentInventory, setCurrentInventory] = useState('');
-    const [InventoryUnit, setInventoryUnit] = useState('');
-
 
 
 
@@ -74,23 +70,6 @@ const AddPart = (useEffect) => {
 
           });
 
-
-
-          await axios.post(inventoryURL, {
-            "PN":partNumber,
-            "Country_of_Origin":originLocation,
-            "Current_Inventory": CurrentInventory,
-            "Current_Inventory_Unit": InventoryUnit
-        })
-            .then((response) => {
-              console.log(response.data);
-              setResponse("Successfully committed SQL command");
-            })
-            .catch(function (error) {
-              console.log("error");
-              setResponse("Request failed with status code 400");
-  
-            });
     }
 
 
@@ -101,17 +80,14 @@ const AddPart = (useEffect) => {
 
 
         <div class="box">
-        
         <h1>Add Parts</h1>
         <nav style={{
           borderTop: "solid 1px",
           paddingTop: "1rem",
         }}>
-        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
-        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
-        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
+        <Link to="/" >CTB</Link>
+        <Link to="/add" style={{float: "right"}}>Add Parts</Link>
         </nav>
-        
 
 
             <br/>
@@ -168,18 +144,6 @@ const AddPart = (useEffect) => {
             <div class="text">Origin Locatons</div>
             <input  class="input-field" id="originLocation" type="text" placeholder="Origin Locatons" 
             onChange={e => setoriginLocation(e.target.value)} required/>
-            <br/>
-            <br/>
-            <br/>
-            <div class="text">Current Inventory</div>
-            <input  class="input-field" id="inventory" type="text" placeholder="Current Inventory" 
-            onChange={e => setCurrentInventory(e.target.value)} required/>
-            <br/>
-            <br/>
-            <br/>
-            <div class="text">Inventory Unit</div>
-            <input  class="input-field" id="inventory" type="text" placeholder="Inventory Unit" 
-            onChange={e => setInventoryUnit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
