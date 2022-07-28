@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './App.css';
 import { useState, useEffect, Component } from 'react';
 import axios from 'axios';
+import NavBar from './NavBar';
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
 
 const Inventory = () => {
@@ -95,12 +96,14 @@ const Inventory = () => {
         } else {
 
             return (
-                <table>
+                <table >
                     <tr>
                         <th>Part</th>
                         <th>Location</th>
                         <th>Qty</th>
                         <th>New Qty</th>
+                        <th>New Location</th>
+                        <th>Transportation Time</th>
                         <th></th>
                     </tr>
                     {
@@ -110,6 +113,8 @@ const Inventory = () => {
                                 <td>{SamePart[num].inv_loc}</td>
                                 <td>{SamePart[num].inv_qty}</td>
                                 <td><input id={num} onChange={changeNewQty} class="input-field" type="text" placeholder="New Qty" required /></td>
+                                <td><input id={num}  class="input-field" type="text" placeholder="New Location" required /></td>
+                                <td><input id={num}  class="input-field" type="text" placeholder="Transportation Time" required /></td>
                                 <td><button id={num} onClick={changeQty}>Save</button></td>
                             </tr>
                         ))
@@ -122,6 +127,8 @@ const Inventory = () => {
                         <td></td>
                         <td><input class="input-field" id="inventory" type="text" placeholder="Current Inventory"
                             onChange={e => setCurrentInventory(e.target.value)} required /></td>
+                        <td></td>
+                        <td></td>
                         <td><button onClick={addNewInventory}>Save</button></td>
                     </tr>
                 </table>
@@ -187,14 +194,7 @@ const Inventory = () => {
     return (
         <div class="box">
             <h1>Inventory</h1>
-            <nav style={{
-                borderTop: "solid 1px",
-                paddingTop: "1rem",
-            }}>
-                <Link to="/" style={{ display: 'flex', float: "left" }}>CTB</Link>
-                <Link to="/addparts" style={{ display: 'flex', float: "right" }}>Add Parts</Link>
-                <Link to="/inventory" style={{ display: 'flex', justifyContent: 'center' }}> Inventory</Link>
-            </nav>
+            <NavBar></NavBar>
             <br></br>
             <br></br>
             {renderTable(Index, Edit)}

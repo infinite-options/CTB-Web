@@ -8,6 +8,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom';
 import AddPart from './AddPart';
+import NavBar from './NavBar';
 //import {useHistory} from "react-router-dom";
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
@@ -350,14 +351,7 @@ function Landing() {
 
         <h1>Clear to Build</h1>
 
-        <nav style={{
-          borderTop: "solid 1px",
-          paddingTop: "1rem",
-        }}>
-        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
-        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
-        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
-        </nav>
+        <NavBar></NavBar>
 
         <br/>
         <div class="text">Upload Your BOM</div>

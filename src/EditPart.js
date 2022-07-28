@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './App.css';
+import NavBar from './NavBar';
 import { useState, useEffect, Component } from 'react';
 import axios from 'axios';
-import NavBar from './NavBar';
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
 
-const AddPart = (useEffect) => {
+const EditPart = (useEffect) => {
 
         //get references for text input and button fields
     // var partNumber = document.getElementById("partNumber");
@@ -103,8 +103,11 @@ const AddPart = (useEffect) => {
 
         <div class="box">
         
-        <h1>Add Parts</h1>
-        <NavBar></NavBar>
+        <h1>Edit Parts</h1>
+        <div></div>
+            <NavBar></NavBar>
+
+
             <br/>
             <br/>
             <br/>
@@ -192,4 +195,4 @@ const AddPart = (useEffect) => {
 
 };
 
-export default AddPart;
+export default EditPart;
