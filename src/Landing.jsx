@@ -16,7 +16,8 @@ const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev
 
 
 class RowData{
-    constructor(part, qty_per, need_qty, inventory, order_qty, unit_price, total_price){
+    constructor(part_uid, part, qty_per, need_qty, inventory, order_qty, unit_price, total_price){
+        this.part_uid = part_uid;
         this.part = part;
         this.qty_per = qty_per;
         this.need_qty = need_qty;
@@ -195,9 +196,11 @@ function Landing() {
                             list.push(data[i].Child_pn);
                             var tempInv = 0;
                             var unitCost = 0;
+                            var tempUID = 0;
                             for(let j in inventory) {
                                 if(inventory[j].inv_pn===data[i].Child_pn && inventory[j].inv_loc==country) {
                                     tempInv += inventory[j].inv_qty;
+                                    tempUID = inventory[j].inv_uid;
                                 }
                             }
                             for(let j in allParts) {
@@ -205,7 +208,7 @@ function Landing() {
                                     unitCost = allParts[j].Unit_Cost
                                 }
                             }
-                            var row = new RowData(data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty*Desired_Qty, tempInv,
+                            var row = new RowData(tempUID, data[i].Child_pn, data[i].RequiredQty, data[i].RequiredQty*Desired_Qty, tempInv,
                                 Math.max(data[i].RequiredQty*Desired_Qty- tempInv, 0),  unitCost, 10);
                             rows.push(row);
                         }   
@@ -348,7 +351,7 @@ function Landing() {
         <div class="box">
 
 
-
+        {console.log(inventory)}
         <h1>Clear to Build</h1>
 
         <NavBar></NavBar>
@@ -429,6 +432,7 @@ function Landing() {
         <table>
             <caption class="table-title">Product {Top_Level} Qty {Desired_Qty}</caption>
             <tr>
+                <th>Part ID</th>
                 <th>Part</th>
                 <th>Qty Per</th>
                 <th>Need Qty</th>
@@ -441,6 +445,7 @@ function Landing() {
             {
                 Rows.map(row => (
                     <tr>
+                    <td>{row.part_uid}</td>    
                     <td>{row.part}</td>
                     <td>{row.qty_per}</td>
                     <td>{row.need_qty}</td>
