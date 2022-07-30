@@ -459,8 +459,8 @@ function Landing() {
 
             
         </table>
-
-        
+        <br></br>
+        <button style={{float:"right", marginRight: "500"}}>Buy Parts</button>
         
         </div>
     );

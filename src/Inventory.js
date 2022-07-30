@@ -23,7 +23,7 @@ const Inventory = () => {
     const [NewQty, setNewQty] = useState([]);
     const [originLocation, setoriginLocation] = useState('');
     const [CurrentInventory, setCurrentInventory] = useState('');
-
+    const [available_time, setAvailable_time] = useState('');
 
 
     React.useEffect(() => {
@@ -68,12 +68,25 @@ const Inventory = () => {
 
     // document.getElementById('box2').selectedIndex = document.getElementById('box1').selectedIndex;
 
+
+    function status(date){
+        if(date <= new Date().toISOString().split('T')[0]){
+            return "Available";
+        }else{
+            return date;
+        }
+
+    }
+
+
     function renderTable(Index, Edit) {
+        //View Inventory
         if (Index == -1 || SamePart == []) {
             return (
                 <table>
                     <tr>
                         <th>Part</th>
+                        <th>Status</th>
                         <th>Location</th>
                         <th>Qty</th>
                         <th></th>
@@ -83,6 +96,7 @@ const Inventory = () => {
                         Inventory.map((row, index) => (
                             <tr>
                                 <td>{row.inv_pn}</td>
+                                <td>{status(row.inv_available_date)}</td>
                                 <td>{row.inv_loc}</td>
                                 <td>{row.inv_qty}</td>
                                 <td><button class="big-button" onClick={routeChange} id={index}>Adjust</button></td>
@@ -93,12 +107,13 @@ const Inventory = () => {
 
                 </table>
             );
+        //Edit Inventory
         } else {
-
             return (
                 <table >
                     <tr>
                         <th>Part</th>
+                        <th>Status</th>
                         <th>Location</th>
                         <th>Qty</th>
                         <th>New Qty</th>
@@ -110,6 +125,7 @@ const Inventory = () => {
                         SamePart.map((row, num) => (
                             <tr>
                                 <td>{SamePart[num].inv_pn}</td>
+                                <td>{status(SamePart[num].inv_available_date)}</td>
                                 <td>{SamePart[num].inv_loc}</td>
                                 <td>{SamePart[num].inv_qty}</td>
                                 <td><input id={num} onChange={changeNewQty} class="input-field" type="text" placeholder="New Qty" required /></td>
@@ -119,9 +135,11 @@ const Inventory = () => {
                             </tr>
                         ))
                     }
-
+    
                     <tr>
                         <td>{SamePart[0].inv_pn}</td>
+                        <td><input class="input-field" id="available_date" type="text" placeholder="Available Date"
+                            onChange={e => setAvailable_time(e.target.value)} required /></td>
                         <td><input class="input-field" id="originLocation" type="text" placeholder="Origin Locatons"
                             onChange={e => setoriginLocation(e.target.value)} required /></td>
                         <td></td>
@@ -142,7 +160,9 @@ const Inventory = () => {
             "PN": SamePart[0].inv_pn,
             "Country_of_Origin": originLocation,
             "Current_Inventory": CurrentInventory,
-            "Current_Inventory_Unit": ""
+            "Current_Inventory_Unit": "",
+            "Inventory_Available_Date": available_time
+
         })
             .then((response) => {
                 console.log(response.data);

@@ -27,8 +27,9 @@ const AddPart = (useEffect) => {
     const [originLocation, setoriginLocation] = useState('');
     const [CurrentInventory, setCurrentInventory] = useState('');
     const [InventoryUnit, setInventoryUnit] = useState('');
+    const [available_time, setAvailable_time] = useState('');
 
-
+    
 
 
 
@@ -81,7 +82,8 @@ const AddPart = (useEffect) => {
             "PN":partNumber,
             "Country_of_Origin":originLocation,
             "Current_Inventory": CurrentInventory,
-            "Current_Inventory_Unit": InventoryUnit
+            "Current_Inventory_Unit": InventoryUnit,
+            "Inventory_Available_Date": available_time
         })
             .then((response) => {
               console.log(response.data);
@@ -171,6 +173,12 @@ const AddPart = (useEffect) => {
             <div class="text">Inventory Unit</div>
             <input  class="input-field" id="inventory" type="text" placeholder="Inventory Unit" 
             onChange={e => setInventoryUnit(e.target.value)} required/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="text">Available Time</div>
+            <input  class="input-field" id="available_time" type="text" placeholder="Available Time" 
+            onChange={e => setAvailable_time(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
