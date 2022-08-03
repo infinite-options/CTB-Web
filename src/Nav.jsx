@@ -6,6 +6,8 @@ import AddPart from "./AddPart";
 import Inventory from "./Inventory";
 import SpecificPart from "./SpecificPart";
 import Edit from "./Edit";
+import Editpart from "./Editpart";
+import BuyPart from "./BuyPart";
 //import temp1 from "./Temp";
 
 //import Ably from 'ably/promises';
@@ -40,6 +42,8 @@ export default function Nav() {
                         <Route path="/inventory" element={<Inventory />} />
                         <Route path="/specificpart" element={<SpecificPart />} />
                         <Route path="/edit" element={<Edit />} />
+                        <Route path="/editpart" element={<Editpart />} />
+                        <Route path="/buypart" element={<BuyPart />} />
                     </Routes>
         </Router>
     );

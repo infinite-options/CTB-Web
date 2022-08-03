@@ -8,6 +8,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom';
 import AddPart from './AddPart';
+import { setProducts } from './helpers';
 //import {useHistory} from "react-router-dom";
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
@@ -175,6 +176,7 @@ function Landing() {
         let sum = 0;
         let rows = [];
         let data = [];
+        let hash = new Map();
         console.log(Info.length);
       
         const postURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunCTB"
@@ -232,9 +234,11 @@ function Landing() {
                           rows[i].need_qty = rows[i].qty_per * Desired_Qty;
                           rows[i].order_qty = Math.max(0,rows[i].need_qty - rows[i].inventory);
                           rows[i].total_price = (rows[i].unit_price * rows[i].order_qty).toFixed(2);
+                          hash[rows[i].part] = rows[i].order_qty;
                       }
                       setRows(rows);
                       console.log(rows);
+                      setProducts(hash);
                       
                   }
                   else {
@@ -364,9 +368,14 @@ function Landing() {
         <div class="box">
             <div>
                 <h1>Clear to Build</h1>
-                <Link to="/addparts">
-                    <button type="button" class="small-button">Add Part</button>
-                </Link>
+                <nav style={{
+          borderTop: "solid 1px",
+          paddingTop: "1rem",
+        }}>
+        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
+        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
+        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
+        </nav>
                 
             </div>
 
@@ -442,6 +451,7 @@ function Landing() {
         <br/>
         <br/>
         <br/>
+        
 
         <table>
             <caption class="table-title">Product {Top_Level} Qty {Desired_Qty}</caption>
@@ -471,6 +481,7 @@ function Landing() {
 
             
         </table>
+        <Link to="/buypart" style={{display: 'flex',  justifyContent:'center'}}> Buy Parts</Link>
 
         
         

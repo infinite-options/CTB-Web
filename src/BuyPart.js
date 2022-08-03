@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom';
 import AddPart from './AddPart';
 import { LandingContext } from './App';
-import { getPart } from './helpers';
+import { getPart, getProducts } from './helpers';
 //import {useHistory} from "react-router-dom";
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
@@ -19,7 +19,7 @@ const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev
 
 
 
-export default function Edit() {
+export default function BuyPart() {
     
 
     let x = 0;
@@ -48,7 +48,7 @@ export default function Edit() {
     
 
     React.useEffect(() => {
-        axios.get(inventoryURL).then((response) => {
+        axios.get("https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts").then((response) => {
             setInventory(response.data);
             console.log(response.data);
             //
@@ -114,38 +114,72 @@ export default function Edit() {
            
            <Link to="/inventory" >Inventory</Link>
 
-            <table>
-            <caption class="table-title">Product Qty Location</caption>
-            <tr>
-                <th>Part</th>
-                <th>Quantiy</th>
-                <th>Location</th>
-                <th>Availability</th>
-                <th>New Location</th>
-                <th>Arrival Date</th>
- 
-            </tr>
 
-            {
+
+           {
                 inventory.map(row => {
-                    if(row.inv_pn===getPart()) {
+                    var type = row.PN;
+                    var mapping = getProducts();
+                    console.log(mapping);
+                    if(row.PN in mapping) {
                         var temp = row.inv_qty;
                         var temp1 = row.inv_loc;
                         var temp2 =row.inv_available_date;
-                        return (<><tr>
-                        <td>{row.inv_pn}</td>
-                        <td><input  class="input-field" id="partNumber" type="text" placeholder={row.inv_qty} onChange={e => {temp = e.target.value}}/></td>
-                        <td>{row.inv_loc}</td>
-                        <td>{row.inv_available_date}</td>
-                        <td><input  class="input-field" id="partNumber" type="text" placeholder="" onChange={e => {temp1 = e.target.value}}/></td>
-                        <td><input  class="input-field" id="partNumber" type="text" placeholder="" onChange={e => {temp2 = e.target.value}}/></td>
-                        
-                        <td><button class="big-button" id="submit" onClick={
-                            () => patch(row.inv_uid, temp, temp1, temp2)                     
-                            }>Save</button></td>
+                        return (<div>
+                            <table>
+                            <tr>
+                                <th>Part Number</th>
+                                <th>Part Description</th>
+                                <th>Order Quantity</th>
+                 
+                            </tr>
+                        <><tr>
+                        <td>{row.PN}</td>
+                        <td>{row.Description}</td>
+                        <td>{mapping[row.PN]}</td>
+
                     </tr>
 
-                    </>)
+                    </>
+                    </table>
+                    <br/>
+                    <table>
+                            <tr>
+                                <th>Select</th>
+                                <th>Vendor</th>
+                                <th>Location</th>
+                                <th>Unit Cost</th>
+                                <th>Shipping</th>
+                                <th>Total Cost</th>
+                            </tr>
+                        
+                        {inventory.map(slice => {
+                            if(slice.PN===type) {
+                                var mapped = mapping[row.PN];
+                                mapping.delete(row.PN);
+                                console.log(mapping);
+                                return(<><tr>
+                                    <td><input type="checkbox" id="myCheck"/></td>
+                                    <td>{slice.Vendor}</td>
+                                    <td>{slice.Country_of_Origin}</td>
+                                    <td>{slice.Unit_Cost.toFixed(2)}</td>
+                                    <td>20</td>
+                                    <td>{(slice.Unit_Cost * mapped).toFixed(2)}</td>
+  
+                                </tr>
+            
+                                </>)
+                            }
+                            else {
+                                return null
+                            }
+                        })}
+
+                    
+                    </table>
+                    <br/>
+                    <br/>
+                    </div>)
                 }
                 else {
                     return null
@@ -155,21 +189,10 @@ export default function Edit() {
                     
                 )
                 }
-                <><tr>
-                    <td>{getPart()}</td>
-                    <td><input  class="input-field" id="partNumber" type="text" placeholder="Enter Quantity" onChange={(event) => setDesired_Qty(event.target.value)}/></td>
-                    <td><input  class="input-field" id="partNumber" type="text" placeholder="Enter Location" onChange={(event) => setCountry(event.target.value)}/></td>
-                    <td></td>
-                    <td></td>
-                    <td><button class="big-button" id="submit" onClick={
-                        () => poster()                    
-                        }>Save</button></td>
-                </tr>
 
-                </>
+
 
             
-            </table>
             
             
 

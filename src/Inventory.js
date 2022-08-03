@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-//import './App.css';
+import './App.css';
 //import bom from './bom';
 import axios from 'axios';
 //import New from './new';
@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom'
 import { Link } from 'react-router-dom';
 import AddPart from './AddPart';
 import { LandingContext } from './App';
+import { setPart } from './helpers';
 //import {useHistory} from "react-router-dom";
 const baseURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
@@ -18,7 +19,7 @@ const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev
 
 
 
-export default function Inventory({setPart}) {
+export default function Inventory() {
     
 
     let x = 0;
@@ -37,7 +38,6 @@ export default function Inventory({setPart}) {
     const [parent, setParent] = useState([]);
     const [inventory, setInventory] = useState([]);
     const [country, setCountry] = useState("US");
-    const {part} = useContext(LandingContext);
 
     
 
@@ -54,6 +54,10 @@ export default function Inventory({setPart}) {
         });
         
       }, []);
+      function changePart(a) {
+        console.log(a);
+        setPart(a);
+      }
     
 
     
@@ -70,8 +74,15 @@ export default function Inventory({setPart}) {
 
   //console.log(bom);
     return (
-        <div>
-           
+        <div class="box">
+           <nav style={{
+          borderTop: "solid 1px",
+          paddingTop: "1rem",
+        }}>
+        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
+        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
+        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
+        </nav>
             <table>
             <caption class="table-title">Product Qty Location</caption>
             <tr>
@@ -81,22 +92,34 @@ export default function Inventory({setPart}) {
  
             </tr>
 
-            {
-                inventory.map(row => (
-                    <><tr>
-                        <td>{row.inv_pn}</td>
-                        <td>{row.inv_qty}</td>
-                        <td>{row.inv_loc}</td>
-                        <td>
-                        <Link to="/edit">
-                            <button type="button" class="small-button">Adjust</button>
-                        </Link>
-                            </td>
-                    </tr>
-                        
-                    </>
-                ))
-            }
+            
+
+
+{
+                inventory.map(row => {
+                    if(true) {
+                        var temp = row.inv_pn
+                        return (<><tr>
+                            <td>{row.inv_pn}</td>
+                            <td>{row.inv_qty}</td>
+                            <td>{row.inv_loc}</td>
+                            <td>
+                            <Link to="/edit">
+                                <button type="button" class="small-button" onClick={() =>changePart(temp)}>Adjust</button>
+                            </Link>
+                                </td>
+                        </tr>
+                            
+                        </>)
+                }
+                else {
+                    return null
+                }
+                    
+                }
+                    
+                )
+                }
 
             
             </table>

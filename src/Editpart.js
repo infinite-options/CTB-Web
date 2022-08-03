@@ -4,7 +4,7 @@ import './App.css';
 import { useState, useEffect, Component } from 'react';
 import axios from 'axios';
 
-const AddPart = (useEffect) => {
+const Editpart = (useEffect) => {
 
         //get references for text input and button fields
     // var partNumber = document.getElementById("partNumber");
@@ -62,8 +62,7 @@ const AddPart = (useEffect) => {
           "Lead_Time": 2,
           "Lead_Time_Units": "days",
           "Current_Inventory": currInventory,
-        "Current_Inventory_Unit": currInventoryUnit,
-        "Current_Inventory_Status": "Available"
+        "Current_Inventory_Unit": currInventoryUnit
       })
           .then((response) => {
             console.log(response.data);
@@ -75,6 +74,25 @@ const AddPart = (useEffect) => {
 
           });
 
+    }
+
+    function savePart() {
+        axios.get("https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts").then((response) => {
+            console.log(response);
+            for(let i in response.data){
+                if(response.data[i].PN===partNumber) {
+                    setdescription(response.data[i].Description)
+                    setunitCost(response.data[i].Unit_Cost)
+                    setcostUnit(response.data[i].Cost_Unit)
+                    setWeight(response.data[i].Weight)
+                    setWeight_Unit(response.data[i].Weight_Unit)
+                    setMaterial(response.data[i].Material)
+                    setvendor(response.data[i].Vendor)
+                    setoriginLocation(response.data[i].Country_of_Origin)
+                    
+                }
+            }
+          })
     }
 
 
@@ -100,72 +118,76 @@ const AddPart = (useEffect) => {
             <br/>
             <br/>
             <div class="text">Part Number</div>
-            <input  class="input-field" id="partNumber" type="text" placeholder="Part Number" 
+            <input  class="input-field" id="partNumber" type="text" placeholder={partNumber}
             onChange={e => setpartNumber(e.target.value)} required/>
             <br/>
             <br/>
+            <button class="big-button" id="submit" onClick={savePart}>Submit</button>
             <br/>
+            <br/>
+            <br/>
+            <h1 style={{display: 'flex',  justifyContent:'center'}}>Information about Parts</h1>
             <div class="text">Description</div>
-            <input  class="input-field" id="description" type="text" placeholder="Description" 
+            <input  class="input-field" id="description" type="text" placeholder={description}
             onChange={e => setdescription(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Unit Cost</div>
-            <input  class="input-field" id="unitCost" type="text" placeholder="Unit Cost" 
+            <input  class="input-field" id="unitCost" type="text" placeholder={unitCost}
             onChange={e => setunitCost(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Cost Unit</div>
-            <input  class="input-field" id="costUnit" type="text" placeholder="Cost Unit" 
+            <input  class="input-field" id="costUnit" type="text" placeholder={costUnit} 
             onChange={e => setcostUnit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Weight</div>
-            <input  class="input-field" id="Weight" type="text" placeholder="Weight" 
+            <input  class="input-field" id="Weight" type="text" placeholder={Weight}
             onChange={e => setWeight(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Weight Unit</div>
-            <input  class="input-field" id="Weight_Unit" type="text" placeholder="Weight_Unit" 
+            <input  class="input-field" id="Weight_Unit" type="text" placeholder={Weight_Unit} 
             onChange={e => setWeight_Unit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Material</div>
-            <input  class="input-field" id="Material" type="text" placeholder="Material" 
+            <input  class="input-field" id="Material" type="text" placeholder={Material} 
             onChange={e => setMaterial(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Vendor</div>
-            <input  class="input-field" id="vendor"  type="text" placeholder="Vendor" 
+            <input  class="input-field" id="vendor"  type="text" placeholder={vendor}
             onChange={e => setvendor(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Origin Locatons</div>
-            <input  class="input-field" id="originLocation" type="text" placeholder="Origin Locatons" 
+            <input  class="input-field" id="originLocation" type="text" placeholder={originLocation}
             onChange={e => setoriginLocation(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Current Inventory</div>
-            <input  class="input-field" id="originLocation" type="text" placeholder="Current Inventory" 
+            <input  class="input-field" id="originLocation" type="text" placeholder={currInventory} 
             onChange={e => setCurrInventory(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
             <div class="text">Current Inventory Units</div>
-            <input  class="input-field" id="originLocation" type="text" placeholder="Current Inventory Units" 
+            <input  class="input-field" id="originLocation" type="text" placeholder={currInventoryUnit}
             onChange={e => setCurrInventoryUnit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <button class="big-button" id="submit" onClick={sendJSON}>Submit</button>
+            <button class="big-button" id="submit" onClick={sendJSON}>Change</button>
             <br/>
             <br/>
             <br/>
@@ -183,4 +205,4 @@ const AddPart = (useEffect) => {
 
 };
 
-export default AddPart;
+export default Editpart;
