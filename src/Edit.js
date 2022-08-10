@@ -37,7 +37,10 @@ export default function Edit() {
     const [index, setIndex] = useState();
     const [parent, setParent] = useState([]);
     const [inventory, setInventory] = useState([]);
+    const [inventorySort, setInventorySort] = useState([]);
+    const [inventoryunSort, setInventoryunSort] = useState([]);
     const [country, setCountry] = useState("");
+    const [mode, setMode] = useState(0);
     //const {partuse, setPartuse} = useState([]);
 
     
@@ -50,7 +53,15 @@ export default function Edit() {
     React.useEffect(() => {
         axios.get(inventoryURL).then((response) => {
             setInventory(response.data);
+            setInventoryunSort(response.data);
             console.log(response.data);
+            //
+        });
+        axios.get(inventoryURL).then((response) => {
+            var temp = response.data;
+            temp.sort((a,b) => (a.inv_loc > b.inv_loc) ? 1 : ((b.inv_loc > a.inv_loc) ? -1 : 0))
+            setInventorySort(temp);
+            console.log(temp);
             //
         });
         
@@ -94,6 +105,17 @@ export default function Edit() {
             })
         
       }
+      function sort() {
+        if(mode===0) {
+            setInventory(inventorySort);
+        }
+        else {
+            setInventory(inventoryunSort);
+        }
+        var temp = mode;
+        setMode(1-temp);
+      }
+      
     
 
     
@@ -119,7 +141,7 @@ export default function Edit() {
             <tr>
                 <th>Part</th>
                 <th>Quantiy</th>
-                <th>Location</th>
+                <th>Location <button onClick={e => sort()}>sort</button></th>
                 <th>Availability</th>
                 <th>New Location</th>
                 <th>Arrival Date</th>
@@ -138,7 +160,7 @@ export default function Edit() {
                         <td>{row.inv_loc}</td>
                         <td>{row.inv_available_date}</td>
                         <td><input  class="input-field" id="partNumber" type="text" placeholder="" onChange={e => {temp1 = e.target.value}}/></td>
-                        <td><input  class="input-field" id="partNumber" type="text" placeholder="" onChange={e => {temp2 = e.target.value}}/></td>
+                        <td><input  class="input-field" id="partNumber" type="text" placeholder="yyyy-mm-dd" onChange={e => {temp2 = e.target.value}}/></td>
                         
                         <td><button class="big-button" id="submit" onClick={
                             () => patch(row.inv_uid, temp, temp1, temp2)                     

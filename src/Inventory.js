@@ -76,13 +76,16 @@ export default function Inventory() {
     return (
         <div class="box">
            <nav style={{
-          borderTop: "solid 1px",
-          paddingTop: "1rem",
-        }}>
-        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
-        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
-        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
-        </nav>
+        borderTop: "solid 1px",
+        paddingTop: "1rem",
+      }}>
+      <div id="outer">
+      <Link to="/" style={{display: 'inline-block',  padding: "10px", paddingLeft: "0px"}}>CTB</Link>
+      <Link to="/addparts" style={{display: 'inline-block',  padding: "10px"}}>Add Parts</Link>
+      <Link to="/inventory" style={{display: 'inline-block',  justifyContent:'center', padding: "10px"}}> Inventory</Link>
+      <Link to="/editpart" style={{display: 'inline-block',  padding: "10px"}}>Edit Parts</Link>
+      </div>
+    </nav>
             <table>
             <caption class="table-title">Product Qty Location</caption>
             <tr>

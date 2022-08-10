@@ -25,6 +25,17 @@ const Editpart = (useEffect) => {
     const [originLocation, setoriginLocation] = useState('');
     const [currInventory, setCurrInventory] = useState('');
     const [currInventoryUnit, setCurrInventoryUnit] = useState('');
+    const [available, setAvailable] = useState('');
+    const[allParts, setAllParts] = useState([]);
+    React.useEffect(() => {
+      axios.get("https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts").then((response) => {
+          setAllParts(response.data);
+          console.log();
+          
+          //
+      });
+      
+    }, []);
 
 
 
@@ -62,7 +73,8 @@ const Editpart = (useEffect) => {
           "Lead_Time": 2,
           "Lead_Time_Units": "days",
           "Current_Inventory": currInventory,
-        "Current_Inventory_Unit": currInventoryUnit
+        "Current_Inventory_Unit": currInventoryUnit,
+        "Inventory_Available_Date": available
       })
           .then((response) => {
             console.log(response.data);
@@ -78,6 +90,7 @@ const Editpart = (useEffect) => {
 
     function savePart() {
         axios.get("https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts").then((response) => {
+          console.log(partNumber);
             console.log(response);
             for(let i in response.data){
                 if(response.data[i].PN===partNumber) {
@@ -89,7 +102,8 @@ const Editpart = (useEffect) => {
                     setMaterial(response.data[i].Material)
                     setvendor(response.data[i].Vendor)
                     setoriginLocation(response.data[i].Country_of_Origin)
-                    
+                    setCurrInventory(response.data[i].Current_Inventory)
+                    setCurrInventoryUnit(response.data[i].Current_Inventory_Unit)
                 }
             }
           })
@@ -105,21 +119,31 @@ const Editpart = (useEffect) => {
         <div class="box">
         <h1>Add Parts</h1>
         <nav style={{
-          borderTop: "solid 1px",
-          paddingTop: "1rem",
-        }}>
-        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
-        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
-        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
-        </nav>
+        borderTop: "solid 1px",
+        paddingTop: "1rem",
+      }}>
+      <div id="outer">
+      <Link to="/" style={{display: 'inline-block',  padding: "10px", paddingLeft: "0px"}}>CTB</Link>
+      <Link to="/addparts" style={{display: 'inline-block',  padding: "10px"}}>Add Parts</Link>
+      <Link to="/inventory" style={{display: 'inline-block',  justifyContent:'center', padding: "10px"}}> Inventory</Link>
+      <Link to="/editpart" style={{display: 'inline-block',  padding: "10px"}}>Edit Parts</Link>
+      </div>
+    </nav>
 
 
             <br/>
             <br/>
             <br/>
             <div class="text">Part Number</div>
-            <input  class="input-field" id="partNumber" type="text" placeholder={partNumber}
-            onChange={e => setpartNumber(e.target.value)} required/>
+            <select id="box1" onChange={e => setpartNumber(e.target.value)} required>
+              <option value="select">Select Part</option>
+            {
+                allParts.map(info => (
+                    
+                    <option value={info.PN}>{info.PN}</option>
+                ))
+            }
+        </select>
             <br/>
             <br/>
             <button class="big-button" id="submit" onClick={savePart}>Submit</button>
@@ -184,6 +208,12 @@ const Editpart = (useEffect) => {
             <div class="text">Current Inventory Units</div>
             <input  class="input-field" id="originLocation" type="text" placeholder={currInventoryUnit}
             onChange={e => setCurrInventoryUnit(e.target.value)} required/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="text">Available</div>
+            <input  class="input-field" id="originLocation" type="text" placeholder={available}
+            onChange={e => setAvailable(e.target.value)} required/>
             <br/>
             <br/>
             <br/>

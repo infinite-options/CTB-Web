@@ -25,6 +25,7 @@ const AddPart = (useEffect) => {
     const [originLocation, setoriginLocation] = useState('');
     const [currInventory, setCurrInventory] = useState('');
     const [currInventoryUnit, setCurrInventoryUnit] = useState('');
+    const[available, setAvailable] = useState('');;
 
 
 
@@ -63,7 +64,7 @@ const AddPart = (useEffect) => {
           "Lead_Time_Units": "days",
           "Current_Inventory": currInventory,
         "Current_Inventory_Unit": currInventoryUnit,
-        "Current_Inventory_Status": "Available"
+        "Current_Inventory_Status": available
       })
           .then((response) => {
             console.log(response.data);
@@ -87,13 +88,16 @@ const AddPart = (useEffect) => {
         <div class="box">
         <h1>Add Parts</h1>
         <nav style={{
-          borderTop: "solid 1px",
-          paddingTop: "1rem",
-        }}>
-        <Link to="/" style={{display: 'flex', float: "left"}}>CTB</Link>
-        <Link to="/addparts" style={{display: 'flex', float: "right"}}>Add Parts</Link>
-        <Link to="/inventory" style={{display: 'flex',  justifyContent:'center'}}> Inventory</Link>
-        </nav>
+        borderTop: "solid 1px",
+        paddingTop: "1rem",
+      }}>
+      <div id="outer">
+      <Link to="/" style={{display: 'inline-block',  padding: "10px", paddingLeft: "0px"}}>CTB</Link>
+      <Link to="/addparts" style={{display: 'inline-block',  padding: "10px"}}>Add Parts</Link>
+      <Link to="/inventory" style={{display: 'inline-block',  justifyContent:'center', padding: "10px"}}> Inventory</Link>
+      <Link to="/editpart" style={{display: 'inline-block',  padding: "10px"}}>Edit Parts</Link>
+      </div>
+    </nav>
 
 
             <br/>
@@ -162,6 +166,12 @@ const AddPart = (useEffect) => {
             <div class="text">Current Inventory Units</div>
             <input  class="input-field" id="originLocation" type="text" placeholder="Current Inventory Units" 
             onChange={e => setCurrInventoryUnit(e.target.value)} required/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="text">Availability</div>
+            <input  class="input-field" id="originLocation" type="text" placeholder="Available Date" 
+            onChange={e => setAvailable(e.target.value)} required/>
             <br/>
             <br/>
             <br/>

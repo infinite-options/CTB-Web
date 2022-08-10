@@ -38,6 +38,7 @@ export default function BuyPart() {
     const [parent, setParent] = useState([]);
     const [inventory, setInventory] = useState([]);
     const [country, setCountry] = useState("");
+    var used = [];
     //const {partuse, setPartuse} = useState([]);
 
     
@@ -120,11 +121,12 @@ export default function BuyPart() {
                 inventory.map(row => {
                     var type = row.PN;
                     var mapping = getProducts();
-                    console.log(mapping);
-                    if(row.PN in mapping) {
+                   
+                    if(row.PN in mapping && !used.includes(row.PN)) {
                         var temp = row.inv_qty;
                         var temp1 = row.inv_loc;
                         var temp2 =row.inv_available_date;
+                        used.push(row.PN);
                         return (<div>
                             <table>
                             <tr>
