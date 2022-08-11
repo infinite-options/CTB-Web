@@ -130,6 +130,11 @@ function Landing() {
   React.useEffect(() => {
     axios.get(baseURL).then((response) => {
       setInfo(response.data);
+
+      let parents = response.data.map((a) => a.product_parents);
+      console.log(parents);
+      setParent(parents[0]);
+      setTop_Level("A");
     });
     axios.get(inventoryURL).then((response) => {
       setInventory(response.data);
