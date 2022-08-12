@@ -169,11 +169,12 @@ function Landing() {
     console.log(Info.length);
 
     const postURL =
-      "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunCTB";
+      "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/RunOrderList";
     const payload = {
       product_uid: productId,
       product: Top_Level,
       qty: Desired_Qty,
+      location: country,
     };
     axios.post(postURL, payload).then((res) => {
       const postURL2 =
