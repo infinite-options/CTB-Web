@@ -20,20 +20,22 @@ class RowData {
     part_uid,
     part,
     qty_per,
-    sub_qty,
     need_qty,
+    sub_qty,
     inventory,
     order_qty,
+    order_qty2,
     unit_price,
     total_price
   ) {
     this.part_uid = part_uid;
     this.part = part;
     this.qty_per = qty_per;
-    this.sub_qty = sub_qty;
     this.need_qty = need_qty;
+    this.sub_qty = sub_qty;
     this.inventory = inventory;
     this.order_qty = order_qty;
+    this.order_qty2 = order_qty2;
     this.unit_price = unit_price;
     this.total_price = total_price;
   }
@@ -134,7 +136,7 @@ function Landing() {
       setInfo(response.data);
 
       let parents = response.data.map((a) => a.product_parents);
-      console.log(parents);
+      //   console.log(parents);
       setParent(parents[0]);
       setTop_Level("A");
     });
@@ -206,6 +208,7 @@ function Landing() {
               var tempInv = 0;
               var unitCost = 0;
               var tempUID = 0;
+              var order_Qty = 0;
               for (let j in inventory) {
                 if (
                   inventory[j].inv_pn === data[i].child_pn &&
@@ -220,17 +223,22 @@ function Landing() {
                   unitCost = allParts[j].Unit_Cost;
                 }
               }
+              order_Qty =
+                data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
+              console.log(order_Qty);
               var row = new RowData(
                 tempUID,
                 data[i].child_pn,
                 data[i].QtyPerAssembly,
-                data[i].subAssemblyQty,
                 data[i].RequiredQty,
+                data[i].subAssemblyQty,
                 data[i].rawInv,
                 data[i].orderQty,
+                order_Qty,
                 unitCost,
                 10
               );
+              console.log(row);
               rows.push(row);
             } else {
               //update the value of reqQty
@@ -243,7 +251,7 @@ function Landing() {
             rows[i].need_qty = rows[i].qty_per * Desired_Qty;
             rows[i].order_qty = Math.max(
               0,
-              rows[i].need_qty - rows[i].inventory
+              data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv
             );
             rows[i].total_price = rows[i].unit_price * rows[i].order_qty;
             rows[i].total_price = rows[i].total_price.toFixed(2);
@@ -356,7 +364,6 @@ function Landing() {
   //console.log(bom);
   return (
     <div class="box">
-      {console.log(inventory)}
       <h1>Clear to Build</h1>
 
       <NavBar></NavBar>
@@ -443,9 +450,10 @@ function Landing() {
           <th>Part ID</th>
           <th>Part</th>
           <th>Qty Per Assembly</th>
-          <th>Sub Assembly Qty</th>
           <th>Required Qty</th>
-          <th>Inventory</th>
+          <th>Sub Assembly Qty</th>
+          <th>Raw Inventory</th>
+          <th>Delta Qty</th>
           <th>Order Qty</th>
           <th>Unit Price</th>
           <th>Total Price</th>
@@ -456,9 +464,10 @@ function Landing() {
             <td>{row.part_uid}</td>
             <td>{row.part}</td>
             <td>{row.qty_per}</td>
-            <td>{row.sub_qty}</td>
             <td>{row.need_qty}</td>
+            <td>{row.sub_qty}</td>
             <td>{row.inventory}</td>
+            <td>{row.order_qty2}</td>
             <td>{row.order_qty}</td>
             <td>{row.unit_price}</td>
             <td>{row.total_price}</td>
