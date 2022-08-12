@@ -20,6 +20,7 @@ class RowData {
     part_uid,
     part,
     qty_per,
+    sub_qty,
     need_qty,
     inventory,
     order_qty,
@@ -29,6 +30,7 @@ class RowData {
     this.part_uid = part_uid;
     this.part = part;
     this.qty_per = qty_per;
+    this.sub_qty = sub_qty;
     this.need_qty = need_qty;
     this.inventory = inventory;
     this.order_qty = order_qty;
@@ -182,7 +184,7 @@ function Landing() {
       axios.get(postURL2).then((response) => {
         console.log("in get Json object");
         console.log(res);
-        console.log(res.data[0]);
+        console.log(res.data);
         if (res.data[0] != null) {
           var allParts = response.data;
           setBom(res.data);
@@ -199,14 +201,14 @@ function Landing() {
           var list = []; //Define the list of seen children
           var sth = []; //Define the list of ouput rows
           for (let i in data) {
-            if (!list.includes(data[i].Child_pn)) {
-              list.push(data[i].Child_pn);
+            if (!list.includes(data[i].child_pn)) {
+              list.push(data[i].child_pn);
               var tempInv = 0;
               var unitCost = 0;
               var tempUID = 0;
               for (let j in inventory) {
                 if (
-                  inventory[j].inv_pn === data[i].Child_pn &&
+                  inventory[j].inv_pn === data[i].child_pn &&
                   inventory[j].inv_loc == country
                 ) {
                   tempInv += inventory[j].inv_qty;
@@ -214,24 +216,25 @@ function Landing() {
                 }
               }
               for (let j in allParts) {
-                if (allParts[j].PN === data[i].Child_pn) {
+                if (allParts[j].PN === data[i].child_pn) {
                   unitCost = allParts[j].Unit_Cost;
                 }
               }
               var row = new RowData(
                 tempUID,
-                data[i].Child_pn,
+                data[i].child_pn,
+                data[i].QtyPerAssembly,
+                data[i].subAssemblyQty,
                 data[i].RequiredQty,
-                data[i].RequiredQty * Desired_Qty,
-                tempInv,
-                Math.max(data[i].RequiredQty * Desired_Qty - tempInv, 0),
+                data[i].rawInv,
+                data[i].orderQty,
                 unitCost,
                 10
               );
               rows.push(row);
             } else {
               //update the value of reqQty
-              rows.find((r) => r.part === data[i].Child_pn).qty_per +=
+              rows.find((r) => r.part === data[i].child_pn).qty_per +=
                 data[i].RequiredQty;
             }
           }
@@ -439,8 +442,9 @@ function Landing() {
         <tr>
           <th>Part ID</th>
           <th>Part</th>
-          <th>Qty Per</th>
-          <th>Need Qty</th>
+          <th>Qty Per Assembly</th>
+          <th>Sub Assembly Qty</th>
+          <th>Required Qty</th>
           <th>Inventory</th>
           <th>Order Qty</th>
           <th>Unit Price</th>
@@ -452,6 +456,7 @@ function Landing() {
             <td>{row.part_uid}</td>
             <td>{row.part}</td>
             <td>{row.qty_per}</td>
+            <td>{row.sub_qty}</td>
             <td>{row.need_qty}</td>
             <td>{row.inventory}</td>
             <td>{row.order_qty}</td>
