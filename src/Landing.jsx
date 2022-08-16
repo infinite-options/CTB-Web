@@ -22,22 +22,22 @@ class RowData {
     qty_per,
     need_qty,
     sub_qty,
-    inventory,
-    order_qty,
     order_qty2,
     unit_price,
-    total_price
+    total_price,
+    inventory,
+    order_qty
   ) {
     this.part_uid = part_uid;
     this.part = part;
     this.qty_per = qty_per;
     this.need_qty = need_qty;
     this.sub_qty = sub_qty;
-    this.inventory = inventory;
-    this.order_qty = order_qty;
     this.order_qty2 = order_qty2;
     this.unit_price = unit_price;
     this.total_price = total_price;
+    this.inventory = inventory;
+    this.order_qty = order_qty;
   }
 }
 
@@ -203,55 +203,61 @@ function Landing() {
           var list = []; //Define the list of seen children
           var sth = []; //Define the list of ouput rows
           for (let i in data) {
-            if (!list.includes(data[i].child_pn)) {
-              list.push(data[i].child_pn);
-              var tempInv = 0;
-              var unitCost = 0;
-              var tempUID = 0;
-              var order_Qty = 0;
-              for (let j in inventory) {
-                if (
-                  inventory[j].inv_pn === data[i].child_pn &&
-                  inventory[j].inv_loc == country
-                ) {
-                  tempInv += inventory[j].inv_qty;
-                  tempUID = inventory[j].inv_uid;
-                }
+            // if (list.includes(data[i].child_pn)) {
+            list.push(data[i].child_pn);
+            var tempInv = 0;
+            var unitCost = 0;
+            var tempUID = 0;
+            var order_Qty = 0;
+            for (let j in inventory) {
+              if (
+                inventory[j].inv_pn === data[i].child_pn &&
+                inventory[j].inv_loc == country
+              ) {
+                tempInv += inventory[j].inv_qty;
+                tempUID = inventory[j].inv_uid;
               }
-              for (let j in allParts) {
-                if (allParts[j].PN === data[i].child_pn) {
-                  unitCost = allParts[j].Unit_Cost;
-                }
-              }
-              order_Qty =
-                data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
-              console.log(order_Qty);
-              var row = new RowData(
-                tempUID,
-                data[i].child_pn,
-                data[i].QtyPerAssembly,
-                data[i].RequiredQty,
-                data[i].subAssemblyQty,
-                data[i].rawInv,
-                data[i].orderQty,
-                order_Qty,
-                unitCost,
-                10
-              );
-              console.log(row);
-              rows.push(row);
-            } else {
-              //update the value of reqQty
-              rows.find((r) => r.part === data[i].child_pn).qty_per +=
-                data[i].RequiredQty;
             }
+            for (let j in allParts) {
+              if (allParts[j].PN === data[i].child_pn) {
+                unitCost = allParts[j].Unit_Cost;
+              }
+            }
+            // order_Qty =
+            //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
+            order_Qty = data[i].RequiredQty - data[i].child_inv;
+            console.log(order_Qty);
+            console.log(data[i].child_pn, String(data[i].child_lft));
+            var row = new RowData(
+              tempUID,
+              data[i].child_pn + "-" + String(data[i].child_lft),
+              data[i].QtyPerAssembly,
+              data[i].RequiredQty,
+              data[i].child_inv,
+              order_Qty,
+              unitCost,
+              10,
+              data[i].rawInv,
+              data[i].orderQty
+            );
+            console.log(row);
+            rows.push(row);
+            // } else {
+            //   //update the value of reqQty
+            //   rows.find((r) => r.part === data[i].child_pn).qty_per +=
+            //     data[i].RequiredQty;
+            // }
           }
 
           for (let i in rows) {
             rows[i].need_qty = rows[i].qty_per * Desired_Qty;
+            // rows[i].order_qty = Math.max(
+            //   0,
+            //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv
+            // );
             rows[i].order_qty = Math.max(
               0,
-              data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv
+              data[i].RequiredQty - data[i].child_inv
             );
             rows[i].total_price = rows[i].unit_price * rows[i].order_qty;
             rows[i].total_price = rows[i].total_price.toFixed(2);
@@ -452,11 +458,11 @@ function Landing() {
           <th>Qty Per Assembly</th>
           <th>Required Qty</th>
           <th>Sub Assembly Qty</th>
-          <th>Raw Inventory</th>
           <th>Delta Qty</th>
-          <th>Order Qty</th>
           <th>Unit Price</th>
           <th>Total Price</th>
+          <th>Raw Inventory</th>
+          <th>Order Qty</th>
         </tr>
 
         {Rows.map((row) => (
@@ -466,11 +472,11 @@ function Landing() {
             <td>{row.qty_per}</td>
             <td>{row.need_qty}</td>
             <td>{row.sub_qty}</td>
-            <td>{row.inventory}</td>
             <td>{row.order_qty2}</td>
-            <td>{row.order_qty}</td>
             <td>{row.unit_price}</td>
             <td>{row.total_price}</td>
+            <td>{row.inventory}</td>
+            <td>{row.order_qty}</td>
           </tr>
         ))}
       </table>
