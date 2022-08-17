@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Row, Col, Container } from "react-bootstrap";
-import landingVideo from "./Images/Landing1Video.mov";
+// import landingVideo from "./Images/Landing1Video.mov";
 import Landing1 from "./Images/Landing1.png";
 import Landing2 from "./Images/Landing2.png";
 import Landing3 from "./Images/Landing3.png";
@@ -39,7 +39,10 @@ export default function Home() {
           type="video/mp4"
         /> */}
           <HomepageNavbar />
-          <img src={Landing1} id="video" />
+          <div class="boxS">
+            <img src={Landing1} id="video" />
+          </div>
+
           <div
             class="header-on-image"
             style={{
@@ -78,6 +81,7 @@ export default function Home() {
             display: "flex",
             backgroundColor: "black",
             color: "white",
+            boxShadow: "0px 0px 10px 10px #000",
           }}
         >
           <Col
