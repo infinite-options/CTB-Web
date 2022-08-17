@@ -186,17 +186,17 @@ function Landing() {
       axios.get(postURL2).then((response) => {
         console.log("in get Json object");
         console.log(res);
-        console.log(res.data);
-        if (res.data[0] != null) {
+        console.log(res.data.ctb);
+        if (res.data.ctb[0] != null) {
           var allParts = response.data;
-          setBom(res.data);
+          setBom(res.data.ctb);
           //setData(res.data);
-          for (let i in res.data) {
+          for (let i in res.data.ctb) {
             console.log(i);
-            console.log(res.data[i].GrandParent_BOM_pn);
+            console.log(res.data.ctb[i].GrandParent_BOM_pn);
             console.log(Top_Level);
-            if (res.data[i].GrandParent_BOM_pn === Top_Level) {
-              data.push(res.data[i]);
+            if (res.data.ctb[i].GrandParent_BOM_pn === Top_Level) {
+              data.push(res.data.ctb[i]);
             }
           }
           console.log(data);
@@ -225,7 +225,7 @@ function Landing() {
             }
             // order_Qty =
             //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
-            order_Qty = data[i].RequiredQty - data[i].child_inv;
+            order_Qty = data[i].RequiredQty - data[i].childInv;
             console.log(order_Qty);
             console.log(data[i].child_pn, String(data[i].child_lft));
             var row = new RowData(
@@ -233,7 +233,7 @@ function Landing() {
               data[i].child_pn + "-" + String(data[i].child_lft),
               data[i].QtyPerAssembly,
               data[i].RequiredQty,
-              data[i].child_inv,
+              data[i].childInv,
               order_Qty,
               unitCost,
               10,
@@ -257,7 +257,7 @@ function Landing() {
             // );
             rows[i].order_qty = Math.max(
               0,
-              data[i].RequiredQty - data[i].child_inv
+              data[i].RequiredQty - data[i].childInv
             );
             rows[i].total_price = rows[i].unit_price * rows[i].order_qty;
             rows[i].total_price = rows[i].total_price.toFixed(2);
@@ -448,21 +448,21 @@ function Landing() {
       <br />
       <br />
 
-      <table>
+      <table style={{ width: "100%" }}>
         <caption class="table-title">
           Product {Top_Level} Qty {Desired_Qty}
         </caption>
         <tr>
-          <th>Part ID</th>
-          <th>Part</th>
-          <th>Qty Per Assembly</th>
-          <th>Required Qty</th>
-          <th>Sub Assembly Qty</th>
-          <th>Delta Qty</th>
-          <th>Unit Price</th>
-          <th>Total Price</th>
-          <th>Raw Inventory</th>
-          <th>Order Qty</th>
+          <th style={{ width: "10%" }}>Part ID</th>
+          <th style={{ width: "10%" }}>Part</th>
+          <th style={{ width: "10%" }}>Qty Per Assembly</th>
+          <th style={{ width: "10%" }}>Required Qty</th>
+          <th style={{ width: "10%" }}>Sub Assembly Qty</th>
+          <th style={{ width: "10%" }}>Delta Qty</th>
+          <th style={{ width: "10%" }}>Unit Price</th>
+          <th style={{ width: "10%" }}>Total Price</th>
+          <th style={{ width: "10%" }}>Raw Inventory</th>
+          <th style={{ width: "10%" }}>Order Qty</th>
         </tr>
 
         {Rows.map((row) => (
