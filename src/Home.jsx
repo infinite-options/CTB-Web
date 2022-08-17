@@ -72,7 +72,7 @@ export default function Home() {
             >
               {" "}
               SIMPLIFYING BUILD READINESS <br /> ORGANIZING QUALITY DATA
-              <br /> ROVIDING REAL TIME METRICs
+              <br /> PROVIDING REAL TIME METRICS
             </div>
           </div>
         </Row>
