@@ -1,15 +1,10 @@
-import logo from "./logo.svg";
-import "./App.css";
-//import bom from './bom';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-//import New from './new';
-import { useState, useEffect } from "react";
-import React from "react";
-import ReactDOM from "react-dom";
-import { Link } from "react-router-dom";
-import AddPart from "./AddPart";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import NavBar from "./NavBar";
-//import {useHistory} from "react-router-dom";
+import "./App.css";
+
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL =
@@ -45,26 +40,34 @@ function Landing() {
   let x = 0;
   let sum = 0;
   //let rows = [];
-  let options = null;
+  // let options = null;
   //const history = useHistory();
   const [Rows, setRows] = useState([]);
   const [Top_Level, setTop_Level] = useState();
   const [Desired_Qty, setDesired_Qty] = useState();
+  const [Desired_Date, setDesired_Date] = useState();
   const [selectedFile, setSelectedFile] = useState();
   const [productId, setProductId] = useState();
   const [bom, setBom] = useState([]);
+  const [allocate, setAllocate] = useState([]);
   const [Info, setInfo] = React.useState([]);
   const [index, setIndex] = useState();
   const [parent, setParent] = useState([]);
   const [inventory, setInventory] = useState();
   const [country, setCountry] = useState("US");
+  const [options, setOptions] = useState([]);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   if (index) {
     // options = () =>{for (let i = 0; i < parent.length; i++) {
     //     <option value={parent[i]}>{parent[i]}</option>
     // }};
     // options = parent.map((i) => <option value={parent[i]}>{parent[i]}</option>);
-    console.log(index);
+    // console.log(index);
   }
 
   function splitString(string) {
@@ -87,7 +90,19 @@ function Landing() {
     }
     return wordArray;
   }
-
+  const getAllocate = (part) => {
+    console.log(part);
+    console.log(allocate);
+    let option = [];
+    for (let i in allocate) {
+      if (allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"] === part) {
+        console.log(allocate[i]["child_pn"]);
+        option.push(allocate[i]);
+      }
+    }
+    setOptions(option);
+    handleShow();
+  };
   const changeBox2 = (event) => {
     console.log(document.getElementById("box1").value);
     setProductId(event.target.value);
@@ -158,6 +173,10 @@ function Landing() {
     setDesired_Qty(e.target.value);
     console.log(e.target.value);
   };
+  let changeDesired_Date = (e) => {
+    setDesired_Date(e.target.value);
+    console.log(e.target.value);
+  };
   let onFileChange = (event) => {
     // Update the state
     //this.setState({ selectedFile: event.target.files[0] });
@@ -190,6 +209,7 @@ function Landing() {
         if (res.data.ctb[0] != null) {
           var allParts = response.data;
           setBom(res.data.ctb);
+          setAllocate(res.data.allocation);
           //setData(res.data);
           for (let i in res.data.ctb) {
             console.log(i);
@@ -429,6 +449,21 @@ function Landing() {
       <br />
       <br />
       <br />
+      <form action="#">
+        <div class="text">Enter Desired Date</div>
+        {/* <button class="small-button">Save</button> */}
+        <input
+          value={Desired_Date}
+          onChange={changeDesired_Date}
+          class="input-field"
+          type="date"
+          placeholder="Desired Qty"
+          required
+        />
+      </form>
+      <br />
+      <br />
+      <br />
       <label>Choose a Location: </label>
       <select id="box4" onChange={changeCountry}>
         <option value="US">US</option>
@@ -475,13 +510,56 @@ function Landing() {
             <td>{row.order_qty2}</td>
             <td>{row.unit_price}</td>
             <td>{row.total_price}</td>
-            <td>{row.inventory}</td>
+            <td>
+              <button onClick={() => getAllocate(row.part)}>
+                Get Allocation
+              </button>
+            </td>
             <td>{row.order_qty}</td>
           </tr>
         ))}
       </table>
       <br></br>
       <button style={{ float: "right", marginRight: "500" }}>Buy Parts</button>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        animation={false}
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <tr>
+            <th>Invoice ID</th>
+            <th>Parent</th>
+            <th>Qty Per Assembly</th>
+            <th>Required Qty</th>
+            <th>Sub Assembly Qty</th>
+          </tr>
+
+          {options.map((option) => (
+            <tr>
+              <td>{option.inv_uid}</td>
+              <td>{option.parent_pn}</td>
+              <td>{option.Qty_per}</td>
+              <td>{option.RequiredQty}</td>
+              <td>{option.SubAssyQty}</td>
+            </tr>
+          ))}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

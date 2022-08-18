@@ -8,6 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Nav from "./Nav";
 import Home from "./Home";
+
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL =
