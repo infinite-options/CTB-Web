@@ -92,11 +92,20 @@ function Landing() {
   }
   const getAllocate = (part) => {
     console.log(part);
+    console.log(Desired_Date);
     console.log(allocate);
     let option = [];
     for (let i in allocate) {
-      if (allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"] === part) {
-        console.log(allocate[i]["child_pn"]);
+      if (
+        allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"] === part &&
+        allocate[i]["inv_available_date"] < Desired_Date
+      ) {
+        console.log(
+          allocate[i]["child_pn"],
+          allocate[i]["inv_available_date"],
+          Desired_Date,
+          allocate[i]["inv_available_date"] < Desired_Date
+        );
         option.push(allocate[i]);
       }
     }
