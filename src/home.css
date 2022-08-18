@@ -110,19 +110,25 @@
 .font22{
     font: normal normal normal 22px Montserrat-Regular;
     line-height: 1.6;
+    margin-top: 2rem;
 }
 .font28 {
     font: normal normal normal 28px Montserrat-Medium;
+    margin-bottom: 2rem;
+}
+.font30 {
+    font: normal normal normal 30px Montserrat-Medium;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 .font34 {
     font: normal normal normal 34px Montserrat-Medium;
-    line-height: 1.2;
+    margin-top: 1rem;
 }
-
-
 .font44{
     font:normal normal normal 44px Montserrat-Medium;
     line-height: 2;  
+    margin-top: 2rem;
 }
 .font80 {
     margin-top: 2rem;
@@ -151,23 +157,30 @@
     .font22 {
         font: normal normal normal 14px Montserrat-Regular;
         line-height: 1.6;
+        margin-top: 1rem;
     }
     .font28 {
-        font: normal normal normal 18px Montserrat-Medium;
-        padding: 2rem;
+        font: normal normal normal 16px Montserrat-Medium;
+        margin-bottom: 1rem;
+    }
+
+    .font30 {
+        font: normal normal normal 16px Montserrat-Medium;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
     .font34 {
         font: normal normal normal 18px Montserrat-Medium;
         line-height: 1.2;
-        padding: 2rem;
+        margin-top: 1rem;
     }
     .font44 {
         font: normal normal normal 22px Montserrat-Medium;
         line-height: 2;
-        padding: 2rem;
+        margin-top: 1rem;
     }
     .font80 {
-        margin-top: 3rem;
+        margin-top: 1rem;
         font: normal normal normal 24px Montserrat-Medium;
     }
     .navButtons {

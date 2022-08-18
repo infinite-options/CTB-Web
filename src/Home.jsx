@@ -56,12 +56,10 @@ export default function Home() {
           <Col xs={12} sm={12} md={12} lg={4} xl={6} className="colStyle">
             <div className="font28">VISION</div>
 
-            <div className="font34">
+            <div className="font30">
               We’re Changing the Way the World Thinks About Manufacturing{" "}
             </div>
-            <br />
-            <br />
-            <br />
+
             <div className="font22">
               Planning a build doesn't need to be complicated or time consuming.
               We simplified the process so you can find out what you need to
@@ -80,18 +78,14 @@ export default function Home() {
               We Deliver Exceptional Web-Based Software Products and Services
               Around the World
             </div>
-            <br />
-            <br />
 
             <div className="font44">BUILD PLANNING</div>
-            <br />
+
             <div className="font22">
               Save time and money by ordering only what you need given existing
               inventory and current orders. Use simulations to identify problem
               areas, order buffer stock, and mitigate risks.
             </div>
-            <br />
-            <br />
           </Col>
           <Col xs={12} sm={12} md={12} lg={8} xl={6}>
             <img src={Landing3} id="colImg" />
@@ -113,7 +107,7 @@ export default function Home() {
         <Row className="whtBg">
           <Col xs={12} sm={12} md={12} lg={4} xl={6} className="colStyle">
             <div className="font44">INTEGRATED QUALITY</div>
-            <br />{" "}
+
             <div className="font22">
               Put Quality First by integrating inspection results and quality
               checks throughout the ordering and manufacturing process.
@@ -127,19 +121,14 @@ export default function Home() {
         </Row>
         <Row id="parallax">
           <div className="text-on-image">
-            <div className="font34">WHY BUILD SUCCESS</div>
-            <br />
-            <br />
-            <br />
-            <div className="font34">
+            <div className="font30">WHY BUILD SUCCESS</div>
+
+            <div className="font30">
               A different approach.
               <br />A different thought process.
               <br /> A better result.
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
+
             <div className="font22">
               Why waste resources planning and executing a build? Track
               everything in one location from ordering to shipping
