@@ -58,6 +58,7 @@ function Landing() {
   const [country, setCountry] = useState("US");
   const [options, setOptions] = useState([]);
   const [selectedPartID, setSelectedPartID] = useState([]);
+  const [selectedInvUID, setSelectedInvUID] = useState([]);
   const [allocationQty, setAllocationQty] = useState(0);
   const [show, setShow] = useState(false);
 
@@ -188,19 +189,21 @@ function Landing() {
     setDesired_Qty(e.target.value);
     console.log(e.target.value);
   };
-  let changeAllocationQty = (id, e) => {
+  let changeAllocationQty = (id, invID, e) => {
     const { value } = e.target;
     console.log(value);
     for (let x = 0; x <= options.length; x++) {
       if (id === x) {
         console.log(id);
         setAllocationQty(value);
+        setSelectedInvUID(options[x]["inv_uid"]);
         setOptions((option) =>
           option?.map((list, index) =>
-            index === id ? { ...list, allocate: value } : list
+            index === id || list["inv_uid"] === invID
+              ? { ...list, allocate: value }
+              : list
           )
         );
-        // setOptions({ ...options, allocate: value });
       }
     }
   };
@@ -598,7 +601,7 @@ function Landing() {
                     max={option.inv_qty}
                     value={option.allocate}
                     onChange={(val) => {
-                      changeAllocationQty(i, val);
+                      changeAllocationQty(i, option.inv_uid, val);
                     }}
                   />
                 ) : (
@@ -608,7 +611,17 @@ function Landing() {
               <td>{option.child_pn}</td>
               <td>{option.Qty_per}</td>
               <td>{option.allocate * option.Qty_per}</td>
-              <td>{option.order - option.allocate * option.Qty_per}</td>
+              {/* <td>
+                {option.inv_uid === selectedInvUID
+                  ? option.allocate * option.Qty_per
+                  : 0}
+              </td> */}
+              {/* <td>{option.order - option.allocate * option.Qty_per}</td> */}
+              <td>
+                {option.inv_uid === selectedInvUID
+                  ? option.order - option.allocate * option.Qty_per
+                  : option.order}
+              </td>
             </tr>
           ))}
         </Modal.Body>
