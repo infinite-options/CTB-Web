@@ -145,6 +145,9 @@
     font-size: 2rem;
     cursor: pointer;
 }
+.modalSize{
+    min-width:1200px !important
+}
 
 @media screen and (min-width: 500px) and (max-width: 900px) {
     .colStyle {

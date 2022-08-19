@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import NavBar from "./NavBar";
 import "./App.css";
-
+import "./home.css";
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL =
@@ -39,6 +39,7 @@ class RowData {
 function Landing() {
   let x = 0;
   let sum = 0;
+  let inputRef = React.useRef();
   //let rows = [];
   // let options = null;
   //const history = useHistory();
@@ -56,10 +57,14 @@ function Landing() {
   const [inventory, setInventory] = useState();
   const [country, setCountry] = useState("US");
   const [options, setOptions] = useState([]);
-
+  const [selectedPartID, setSelectedPartID] = useState([]);
+  const [allocationQty, setAllocationQty] = useState(0);
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setAllocationQty(0);
+  };
   const handleShow = () => setShow(true);
 
   if (index) {
@@ -97,21 +102,29 @@ function Landing() {
     let option = [];
     for (let i in allocate) {
       if (
-        allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"] === part &&
+        allocate[i]["gp_lft"] < parseInt(part.split("-")[1]) &&
+        parseInt(part.split("-")[1]) < allocate[i]["gp_rgt"] &&
         allocate[i]["inv_available_date"] < Desired_Date
       ) {
-        console.log(
-          allocate[i]["child_pn"],
-          allocate[i]["inv_available_date"],
-          Desired_Date,
-          allocate[i]["inv_available_date"] < Desired_Date
-        );
+        for (let j in Rows) {
+          if (
+            Rows[j]["part"] ===
+            allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"]
+          ) {
+            allocate[i]["order"] = Rows[j]["order_qty"];
+          }
+        }
         option.push(allocate[i]);
       }
     }
+    option.sort((a, b) =>
+      a.inv_uid > b.inv_uid ? 1 : b.inv_uid > a.inv_uid ? -1 : 0
+    );
+
     setOptions(option);
     handleShow();
   };
+
   const changeBox2 = (event) => {
     console.log(document.getElementById("box1").value);
     setProductId(event.target.value);
@@ -182,6 +195,12 @@ function Landing() {
     setDesired_Qty(e.target.value);
     console.log(e.target.value);
   };
+  let changeAllocationQty = (i, id, e) => {
+    setAllocationQty(e.target.value);
+
+    console.log(e.target.value);
+  };
+
   let changeDesired_Date = (e) => {
     setDesired_Date(e.target.value);
     console.log(e.target.value);
@@ -520,7 +539,12 @@ function Landing() {
             <td>{row.unit_price}</td>
             <td>{row.total_price}</td>
             <td>
-              <button onClick={() => getAllocate(row.part)}>
+              <button
+                onClick={() => {
+                  getAllocate(row.part);
+                  setSelectedPartID(row.part);
+                }}
+              >
                 Get Allocation
               </button>
             </td>
@@ -534,29 +558,53 @@ function Landing() {
       <Modal
         show={show}
         onHide={handleClose}
-        backdrop="static"
         animation={false}
-        size="lg"
+        dialogClassName="modalSize"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>{selectedPartID}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <tr>
             <th>Invoice ID</th>
-            <th>Parent</th>
+            <th>Assembly</th>
+            <th>Date Available</th>
+            <th>Inventory Qty</th>
+            <th>Allocate</th>
+            <th>Child</th>
             <th>Qty Per Assembly</th>
-            <th>Required Qty</th>
-            <th>Sub Assembly Qty</th>
+            <th>Allocated</th>
+            <th>Order Qty</th>
           </tr>
 
-          {options.map((option) => (
-            <tr>
+          {options.map((option, i) => (
+            <tr key={i}>
               <td>{option.inv_uid}</td>
-              <td>{option.parent_pn}</td>
+              <td>
+                {option.parent_pn}-{option.gp_lft}
+              </td>
+              <td>{option.inv_available_date}</td>
+              <td>{option.inv_qty}</td>
+              <td>
+                {option.child_pn === selectedPartID.split("-")[0] ? (
+                  <input
+                    id={option.inv_uid}
+                    type="number"
+                    min="0"
+                    max={option.inv_qty}
+                    value={allocationQty}
+                    onChange={(val) => {
+                      changeAllocationQty(i, option.inv_uid, val);
+                    }}
+                  />
+                ) : (
+                  ""
+                )}
+              </td>
+              <td>{option.child_pn}</td>
               <td>{option.Qty_per}</td>
-              <td>{option.RequiredQty}</td>
-              <td>{option.SubAssyQty}</td>
+              <td>{allocationQty * option.Qty_per}</td>
+              <td>{option.order - allocationQty * option.Qty_per}</td>
             </tr>
           ))}
         </Modal.Body>
