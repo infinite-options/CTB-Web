@@ -89,9 +89,9 @@ function Landing() {
     return wordArray;
   }
   const getAllocate = (part) => {
-    console.log(part);
-    console.log(Desired_Date);
-    console.log(allocate);
+    // console.log(part);
+    // console.log(Desired_Date);
+    // console.log(allocate);
     let option = [];
     for (let i in allocate) {
       if (
@@ -191,10 +191,8 @@ function Landing() {
   };
   let changeAllocationQty = (id, invID, e) => {
     const { value } = e.target;
-    console.log(value);
     for (let x = 0; x <= options.length; x++) {
       if (id === x) {
-        console.log(id);
         setAllocationQty(value);
         setSelectedInvUID(options[x]["inv_uid"]);
         setOptions((option) =>
@@ -239,7 +237,7 @@ function Landing() {
         "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts";
       axios.get(postURL2).then((response) => {
         console.log("in get Json object");
-        console.log(res);
+        // console.log(res);
         console.log(res.data.ctb);
         if (res.data.ctb[0] != null) {
           var allParts = response.data;
@@ -247,9 +245,9 @@ function Landing() {
           setAllocate(res.data.allocation);
           //setData(res.data);
           for (let i in res.data.ctb) {
-            console.log(i);
-            console.log(res.data.ctb[i].GrandParent_BOM_pn);
-            console.log(Top_Level);
+            // console.log(i);
+            // console.log(res.data.ctb[i].GrandParent_BOM_pn);
+            // console.log(Top_Level);
             if (res.data.ctb[i].GrandParent_BOM_pn === Top_Level) {
               data.push(res.data.ctb[i]);
             }
@@ -281,8 +279,8 @@ function Landing() {
             // order_Qty =
             //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
             order_Qty = data[i].RequiredQty - data[i].childInv;
-            console.log(order_Qty);
-            console.log(data[i].child_pn, String(data[i].child_lft));
+            // console.log(order_Qty);
+            // console.log(data[i].child_pn, String(data[i].child_lft));
             var row = new RowData(
               tempUID,
               data[i].child_pn + "-" + String(data[i].child_lft),
