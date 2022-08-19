@@ -67,14 +67,6 @@ function Landing() {
   };
   const handleShow = () => setShow(true);
 
-  if (index) {
-    // options = () =>{for (let i = 0; i < parent.length; i++) {
-    //     <option value={parent[i]}>{parent[i]}</option>
-    // }};
-    // options = parent.map((i) => <option value={parent[i]}>{parent[i]}</option>);
-    // console.log(index);
-  }
-
   function splitString(string) {
     let wordArray = [];
     let incompleteWord = "";
@@ -112,6 +104,7 @@ function Landing() {
             allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"]
           ) {
             allocate[i]["order"] = Rows[j]["order_qty"];
+            allocate[i]["allocate"] = 0;
           }
         }
         option.push(allocate[i]);
@@ -120,7 +113,7 @@ function Landing() {
     option.sort((a, b) =>
       a.inv_uid > b.inv_uid ? 1 : b.inv_uid > a.inv_uid ? -1 : 0
     );
-
+    console.log(option);
     setOptions(option);
     handleShow();
   };
@@ -195,10 +188,21 @@ function Landing() {
     setDesired_Qty(e.target.value);
     console.log(e.target.value);
   };
-  let changeAllocationQty = (i, id, e) => {
-    setAllocationQty(e.target.value);
-
-    console.log(e.target.value);
+  let changeAllocationQty = (id, e) => {
+    const { value } = e.target;
+    console.log(value);
+    for (let x = 0; x <= options.length; x++) {
+      if (id === x) {
+        console.log(id);
+        setAllocationQty(value);
+        setOptions((option) =>
+          option?.map((list, index) =>
+            index === id ? { ...list, allocate: value } : list
+          )
+        );
+        // setOptions({ ...options, allocate: value });
+      }
+    }
   };
 
   let changeDesired_Date = (e) => {
@@ -588,13 +592,13 @@ function Landing() {
               <td>
                 {option.child_pn === selectedPartID.split("-")[0] ? (
                   <input
-                    id={option.inv_uid}
+                    key={i}
                     type="number"
                     min="0"
                     max={option.inv_qty}
-                    value={allocationQty}
+                    value={option.allocate}
                     onChange={(val) => {
-                      changeAllocationQty(i, option.inv_uid, val);
+                      changeAllocationQty(i, val);
                     }}
                   />
                 ) : (
@@ -603,8 +607,8 @@ function Landing() {
               </td>
               <td>{option.child_pn}</td>
               <td>{option.Qty_per}</td>
-              <td>{allocationQty * option.Qty_per}</td>
-              <td>{option.order - allocationQty * option.Qty_per}</td>
+              <td>{option.allocate * option.Qty_per}</td>
+              <td>{option.order - option.allocate * option.Qty_per}</td>
             </tr>
           ))}
         </Modal.Body>
