@@ -59,15 +59,36 @@ function Landing() {
   const [options, setOptions] = useState([]);
   const [selectedPartID, setSelectedPartID] = useState([]);
   const [selectedInvUID, setSelectedInvUID] = useState([]);
+  const [selectedPrevInvUID, setSelectedPrevInvUID] = useState("");
+  const [selectedChildrenID, setSelectedChildrenID] = useState([]);
   const [allocationQty, setAllocationQty] = useState(0);
+  const [allocationObject, setAllocationObject] = useState([]);
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     setAllocationQty(0);
+    setSelectedPrevInvUID("");
+    setSelectedInvUID([]);
+    setSelectedChildrenID([]);
+    setAllocationObject([]);
   };
   const handleShow = () => setShow(true);
-
+  const handleSave = () => {
+    const postURL =
+      "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Allocation";
+    const payload = allocationObject;
+    axios.post(postURL, payload).then((res) => {
+      console.log(res);
+    });
+    setShow(false);
+    setAllocationQty(0);
+    setSelectedInvUID("");
+    setSelectedPrevInvUID("");
+    setSelectedInvUID([]);
+    setSelectedChildrenID([]);
+    setAllocationObject([]);
+  };
   function splitString(string) {
     let wordArray = [];
     let incompleteWord = "";
@@ -189,21 +210,74 @@ function Landing() {
     setDesired_Qty(e.target.value);
     console.log(e.target.value);
   };
+  console.log("allocationObject", allocationObject);
+  const setAllocation = (invID, assembly, assy_lft, allocated) => {
+    let allocation = {
+      inv_uid: invID,
+      assembly: assembly,
+      assy_lft: assy_lft,
+      allocated: allocated,
+    };
+    allocationObject.push(allocation);
+  };
   let changeAllocationQty = (id, invID, e) => {
+    let children = [];
     const { value } = e.target;
     for (let x = 0; x <= options.length; x++) {
       if (id === x) {
-        setAllocationQty(value);
-        setSelectedInvUID(options[x]["inv_uid"]);
-        setOptions((option) =>
-          option?.map((list, index) =>
-            index === id || list["inv_uid"] === invID
-              ? { ...list, allocate: value }
-              : list
-          )
-        );
+        if (selectedPrevInvUID === "") {
+          setAllocationQty(parseInt(value));
+          setSelectedInvUID(options[x]["inv_uid"]);
+          console.log(options[x]["inv_uid"]);
+          setOptions((option) =>
+            option?.map((list, index) =>
+              index === id || list["inv_uid"] === invID
+                ? {
+                    ...list,
+                    allocate: value,
+                  }
+                : list
+            )
+          );
+          setSelectedPrevInvUID(options[x]["inv_uid"]);
+        } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
+          setAllocationQty(allocationQty + 1);
+          setSelectedInvUID(options[x]["inv_uid"]);
+          console.log(options[x]["inv_uid"]);
+          setOptions((option) =>
+            option?.map((list, index) =>
+              index === id || list["inv_uid"] === invID
+                ? {
+                    ...list,
+                    allocate: value,
+                  }
+                : list
+            )
+          );
+          setSelectedPrevInvUID(options[x]["inv_uid"]);
+        } else {
+          setAllocationQty(allocationQty + 1);
+          setSelectedInvUID(options[x]["inv_uid"]);
+          console.log(options[x]["inv_uid"]);
+          setOptions((option) =>
+            option?.map((list, index) =>
+              index === id || list["inv_uid"] === invID
+                ? {
+                    ...list,
+                    allocate: value,
+                  }
+                : list
+            )
+          );
+          setSelectedPrevInvUID(options[x]["inv_uid"]);
+        }
       }
     }
+    options.map((option) =>
+      option["inv_uid"] === invID ? children.push(option["child_pn"]) : ""
+    );
+
+    setSelectedChildrenID(children);
   };
 
   let changeDesired_Date = (e) => {
@@ -571,15 +645,16 @@ function Landing() {
         </Modal.Header>
         <Modal.Body>
           <tr>
-            <th>Invoice ID</th>
-            <th>Assembly</th>
-            <th>Date Available</th>
-            <th>Inventory Qty</th>
-            <th>Allocate</th>
-            <th>Child</th>
-            <th>Qty Per Assembly</th>
-            <th>Allocated</th>
-            <th>Order Qty</th>
+            <th style={{ width: "15%" }}>Invoice ID</th>
+            <th style={{ width: "5%" }}>Assembly</th>
+            <th style={{ width: "12%" }}>Date Available</th>
+            <th style={{ width: "10%" }}>Inventory Qty</th>
+            <th style={{ width: "10%" }}>Allocate</th>
+            <th style={{ width: "10%" }}>Child</th>
+            <th style={{ width: "10%" }}>Qty Per Assembly</th>
+            <th style={{ width: "10%" }}>Allocated</th>
+            <th style={{ width: "10%" }}>Order Qty</th>
+            <th style={{ width: "5%" }}>Set Value</th>
           </tr>
 
           {options.map((option, i) => (
@@ -590,12 +665,14 @@ function Landing() {
               </td>
               <td>{option.inv_available_date}</td>
               <td>{option.inv_qty}</td>
+              {console.log(selectedChildrenID)}
               <td>
                 {option.child_pn === selectedPartID.split("-")[0] ? (
                   <input
                     key={i}
                     type="number"
                     min="0"
+                    name={option.inv_uid}
                     max={option.inv_qty}
                     value={option.allocate}
                     onChange={(val) => {
@@ -614,11 +691,37 @@ function Landing() {
                   ? option.allocate * option.Qty_per
                   : 0}
               </td> */}
-              {/* <td>{option.order - option.allocate * option.Qty_per}</td> */}
+              {/* <td>{option.order - allocationQty * option.Qty_per}</td> */}
+              {console.log(
+                option.inv_uid,
+                selectedPrevInvUID,
+                option.child_pn,
+                option.allocate,
+                allocationQty
+              )}
               <td>
-                {option.inv_uid === selectedInvUID
-                  ? option.order - option.allocate * option.Qty_per
-                  : option.order}
+                {selectedChildrenID.some((item) => option["child_pn"] === item)
+                  ? option.order - allocationQty * option.Qty_per
+                  : option.order - option.allocate * option.Qty_per}
+              </td>
+              <td>
+                {option.child_pn === selectedPartID.split("-")[0] ? (
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      setAllocation(
+                        option.inv_uid,
+                        option.parent_pn,
+                        option.gp_lft,
+                        option.allocate
+                      )
+                    }
+                  >
+                    +
+                  </Button>
+                ) : (
+                  ""
+                )}
               </td>
             </tr>
           ))}
@@ -627,7 +730,7 @@ function Landing() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleSave}>
             Save Changes
           </Button>
         </Modal.Footer>
