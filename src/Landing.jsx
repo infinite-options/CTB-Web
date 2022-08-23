@@ -17,22 +17,32 @@ class RowData {
     qty_per,
     need_qty,
     sub_qty,
-    order_qty2,
-    unit_price,
-    total_price,
+    delta_qty,
+    allocatable_qty,
+    allocated_qty,
+    delta2_qty,
     inventory,
-    order_qty
+    available_inv,
+    allocated,
+    order_qty,
+    unit_price,
+    total_price
   ) {
     this.part_uid = part_uid;
     this.part = part;
     this.qty_per = qty_per;
     this.need_qty = need_qty;
     this.sub_qty = sub_qty;
-    this.order_qty2 = order_qty2;
+    this.delta_qty = delta_qty;
+    this.allocatable_qty = allocatable_qty;
+    this.allocated_qty = allocated_qty;
+    this.delta2_qty = delta2_qty;
+    this.inventory = inventory;
+    this.available_inv = available_inv;
+    this.allocated = allocated;
+    this.order_qty = order_qty;
     this.unit_price = unit_price;
     this.total_price = total_price;
-    this.inventory = inventory;
-    this.order_qty = order_qty;
   }
 }
 
@@ -73,9 +83,14 @@ function Landing() {
     setSelectedPrevInvUID("");
     setSelectedInvUID([]);
     setSelectedChildrenID([]);
-    setAllocationObject([]);
   };
   const handleShow = () => setShow(true);
+  useEffect(() => {
+    updateTable();
+  }, [allocationObject]);
+
+  console.log("allocationObject", allocationObject);
+  // save changes function for allocation
   const handleSave = () => {
     let payload = [];
     let tempPayload = [];
@@ -104,6 +119,27 @@ function Landing() {
     // const payload = allocationObject;
     axios.post(postURL, payload).then((res) => {
       console.log(res);
+      axios
+        .get(
+          `https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetAllocation/${productId}`
+        )
+        .then((response) => {
+          console.log(response);
+          // response.map((res) =>
+          //   setRows((row) =>
+          //     row?.map((list, index) =>
+          //       list["part"] === res["child_pn"] + "-" + res["child_left"]
+          //         ? RowData(
+          //             (this.allocated_qty = res["allocated_qty"]),
+          //             (this.delta2_qty =
+          //               list["delta_qty"] - res["allocated_qty"])
+          //           )
+          //         : list
+          //     )
+          //   )
+          // );
+          setAllocationObject(response.data);
+        });
     });
     setShow(false);
     setAllocationQty(0);
@@ -111,8 +147,10 @@ function Landing() {
     setSelectedPrevInvUID("");
     setSelectedInvUID([]);
     setSelectedChildrenID([]);
-    setAllocationObject([]);
   };
+  console.log(Rows);
+
+  // split string function
   function splitString(string) {
     let wordArray = [];
     let incompleteWord = "";
@@ -385,8 +423,8 @@ function Landing() {
     setSelectedFile(event.target.files[0]);
   };
 
-  function updateTable(event) {
-    event.preventDefault();
+  function updateTable() {
+    // event.preventDefault();
     let x = 0;
     let sum = 0;
     let rows = [];
@@ -428,6 +466,7 @@ function Landing() {
             // if (list.includes(data[i].child_pn)) {
             list.push(data[i].child_pn);
             var tempInv = 0;
+            var allocatable = 0;
             var unitCost = 0;
             var tempUID = 0;
             var order_Qty = 0;
@@ -440,6 +479,19 @@ function Landing() {
                 tempUID = inventory[j].inv_uid;
               }
             }
+            let allocate = res.data.allocation;
+            for (let j in allocate) {
+              if (
+                allocate[j].child_pn === data[i].child_pn &&
+                allocate[j].inv_loc == country &&
+                allocate[j].gp_lft < data[i].child_lft &&
+                data[i].child_lft < allocate[j].gp_rgt &&
+                allocate[j].inv_available_date < Desired_Date
+              ) {
+                allocatable += allocate[j].inv_qty;
+              }
+            }
+
             for (let j in allParts) {
               if (allParts[j].PN === data[i].child_pn) {
                 unitCost = allParts[j].Unit_Cost;
@@ -448,7 +500,7 @@ function Landing() {
             // order_Qty =
             //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
             order_Qty = data[i].RequiredQty - data[i].childInv;
-            // console.log(order_Qty);
+
             // console.log(data[i].child_pn, String(data[i].child_lft));
             var row = new RowData(
               tempUID,
@@ -457,12 +509,16 @@ function Landing() {
               data[i].RequiredQty,
               data[i].childInv,
               order_Qty,
+              allocatable,
+              0,
+              0,
+              tempInv,
+              0,
+              data[i].orderQty,
               unitCost,
-              10,
-              data[i].rawInv,
-              data[i].orderQty
+              10
             );
-            console.log(row);
+            // console.log(row);
             rows.push(row);
             // } else {
             //   //update the value of reqQty
@@ -685,27 +741,27 @@ function Landing() {
       <br />
       <br />
 
-      <table style={{ width: "100%" }}>
+      <table>
         <caption class="table-title">
           Product {Top_Level} Qty {Desired_Qty}
         </caption>
         <tr>
-          <th style={{ width: "10%" }}>Part ID</th>
-          <th style={{ width: "10%" }}>Part</th>
-          <th style={{ width: "10%" }}>Qty Per Assembly</th>
-          <th style={{ width: "10%" }}>Required Qty</th>
-          <th style={{ width: "10%" }}>Sub Assembly Qty</th>
-          <th style={{ width: "10%" }}>Delta Qty</th>
-          <th style={{ width: "10%" }}>Allocatable Sub Assy Qty</th>
-          <th style={{ width: "10%" }}>Allocated Sub Assy Qty</th>
-          <th style={{ width: "10%" }}>Delta2 Qty</th>
-          <th style={{ width: "10%" }}>Raw Inventory</th>
-          <th style={{ width: "10%" }}>Available Inventory</th>
-          <th style={{ width: "10%" }}>Allocated</th>
-          <th style={{ width: "10%" }}>Raw Inventory</th>
-          <th style={{ width: "10%" }}>Order Qty</th>
-          <th style={{ width: "10%" }}>Unit Price</th>
-          <th style={{ width: "10%" }}>Total Price</th>
+          <th>Part ID</th>
+          <th>Part</th>
+          <th>Qty Per Assembly</th>
+          <th>Required Qty</th>
+          <th>Sub Assembly Qty</th>
+          <th>Delta Qty</th>
+          <th>Allocatable Sub Assy Qty</th>
+          <th>Allocated Sub Assy Qty</th>
+          <th>Delta2 Qty</th>
+          <th>Raw Inventory</th>
+          <th>Available Inventory</th>
+          <th>Allocated</th>
+          <th>Get Allocation</th>
+          <th>Order Qty</th>
+          <th>Unit Price</th>
+          <th>Total Price</th>
         </tr>
 
         {Rows.map((row) => (
@@ -715,8 +771,32 @@ function Landing() {
             <td>{row.qty_per}</td>
             <td>{row.need_qty}</td>
             <td>{row.sub_qty}</td>
-            <td>{row.order_qty2}</td>
-
+            <td>{row.delta_qty}</td>
+            <td>{row.allocatable_qty}</td>
+            <td>
+              {allocationObject.length > 0
+                ? allocationObject.map((allocate) =>
+                    allocate.child_pn + "-" + allocate.child_lft === row.part
+                      ? allocate.allocated_qty
+                      : 0
+                  )[0]
+                : 0}
+              {console.log(allocationObject.length)}
+            </td>
+            <td>
+              {allocationObject.length > 0
+                ? allocationObject.map((allocate) =>
+                    allocate.child_pn + "-" + allocate.child_lft === row.part
+                      ? row.delta_qty - allocate.allocated_qty
+                      : 0
+                  )[0]
+                : 0}
+            </td>
+            <td>{row.inventory}</td>
+            <td>{row.available_inv}</td>
+            <td>
+              <input type="number" />
+            </td>
             <td>
               <button
                 onClick={() => {
@@ -727,7 +807,15 @@ function Landing() {
                 Get Allocation
               </button>
             </td>
-            <td>{row.order_qty}</td>
+            <td>
+              {allocationObject.length > 0
+                ? allocationObject.map((allocate) =>
+                    allocate.child_pn + "-" + allocate.child_lft === row.part
+                      ? row.delta_qty - allocate.allocated_qty
+                      : row.order_qty
+                  )[0]
+                : row.order_qty}
+            </td>
             <td>{row.unit_price}</td>
             <td>{row.total_price}</td>
           </tr>
@@ -787,7 +875,7 @@ function Landing() {
               <td>{option.child_pn}</td>
               <td>{option.Qty_per}</td>
               <td>{option.allocate * option.Qty_per}</td>
-              {console.log(
+              {/* {console.log(
                 option.inv_uid,
                 selectedInvUID,
                 option.child_pn,
@@ -796,7 +884,7 @@ function Landing() {
                 option.allocate,
                 allocationQty
                 // option.updatedOrder
-              )}
+              )} */}
 
               <td>
                 {prevValue > option.allocate &&
