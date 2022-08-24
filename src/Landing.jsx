@@ -24,7 +24,7 @@ class RowData {
     inventory,
     available_inv,
     allocated,
-    order_qty,
+    final_order_qty,
     unit_price,
     total_price
   ) {
@@ -40,7 +40,7 @@ class RowData {
     this.inventory = inventory;
     this.available_inv = available_inv;
     this.allocated = allocated;
-    this.order_qty = order_qty;
+    this.final_order_qty = final_order_qty;
     this.unit_price = unit_price;
     this.total_price = total_price;
   }
@@ -72,6 +72,8 @@ function Landing() {
   const [selectedPrevInvUID, setSelectedPrevInvUID] = useState("");
   const [selectedChildrenID, setSelectedChildrenID] = useState([]);
   const [allocationQty, setAllocationQty] = useState(0);
+
+  const [allocatedQty, setAllocatedQty] = useState(0);
   const [prevValue, setPrevValue] = useState(0);
   const [allocationObject, setAllocationObject] = useState([]);
   const [show, setShow] = useState(false);
@@ -83,26 +85,38 @@ function Landing() {
     setSelectedPrevInvUID("");
     setSelectedInvUID([]);
     setSelectedChildrenID([]);
+    setAllocatedQty(0);
   };
   const handleShow = () => setShow(true);
-  useEffect(() => {
-    updateTable();
-  }, [allocationObject]);
 
   console.log("allocationObject", allocationObject);
   // save changes function for allocation
   const handleSave = () => {
     let payload = [];
     let tempPayload = [];
+    console.log(options);
     tempPayload = options.map((option) => {
       return option.child_pn === selectedPartID.split("-")[0] &&
-        option["allocate"] !== 0
+        option["allocate"] !== 0 &&
+        option["original_allocate"] < option["allocate"]
         ? {
             product_uid: productId,
             inv_uid: option["inv_uid"],
             assembly: option["parent_pn"],
             assy_lft: option["gp_lft"],
-            allocated: option["allocate"],
+            allocated: parseInt(option["allocate"]),
+          }
+        : option.child_pn === selectedPartID.split("-")[0] &&
+          option["allocate"] !== 0 &&
+          option["original_allocate"] > option["allocate"]
+        ? {
+            product_uid: productId,
+            inv_uid: option["inv_uid"],
+            assembly: option["parent_pn"],
+            assy_lft: option["gp_lft"],
+            allocated:
+              parseInt(option["allocate"]) -
+              parseInt(option["original_allocate"]),
           }
         : "";
     });
@@ -119,27 +133,15 @@ function Landing() {
     // const payload = allocationObject;
     axios.post(postURL, payload).then((res) => {
       console.log(res);
-      axios
-        .get(
-          `https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetAllocation/${productId}`
-        )
-        .then((response) => {
-          console.log(response);
-          // response.map((res) =>
-          //   setRows((row) =>
-          //     row?.map((list, index) =>
-          //       list["part"] === res["child_pn"] + "-" + res["child_left"]
-          //         ? RowData(
-          //             (this.allocated_qty = res["allocated_qty"]),
-          //             (this.delta2_qty =
-          //               list["delta_qty"] - res["allocated_qty"])
-          //           )
-          //         : list
-          //     )
-          //   )
-          // );
-          setAllocationObject(response.data);
-        });
+      // axios
+      //   .get(
+      //     `https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetAllocation/${productId}`
+      //   )
+      //   .then((response) => {
+      //     console.log(response);
+
+      //     setAllocationObject(response.data);
+      //   });
     });
     setShow(false);
     setAllocationQty(0);
@@ -147,6 +149,7 @@ function Landing() {
     setSelectedPrevInvUID("");
     setSelectedInvUID([]);
     setSelectedChildrenID([]);
+    updateTable();
   };
   console.log(Rows);
 
@@ -187,8 +190,37 @@ function Landing() {
             Rows[j]["part"] ===
             allocate[i]["child_pn"] + "-" + allocate[i]["child_lft"]
           ) {
-            allocate[i]["order"] = Rows[j]["order_qty"];
+            allocate[i]["order"] =
+              allocationObject.length > 0
+                ? allocationObject.map((al) =>
+                    al.child_pn + "-" + al.child_lft === Rows[j]["part"]
+                      ? Rows[j]["delta2_qty"]
+                      : Rows[j]["delta2_qty"]
+                  )[0]
+                : Rows[j]["delta2_qty"];
+            console.log(allocate[i]["order"]);
             allocate[i]["allocate"] = 0;
+            allocate[i]["original_allocate"] = 0;
+            allocate[i]["allocated"] =
+              allocate[i]["allocate"] * allocate[i]["Qty_per"];
+            for (let k in allocationObject) {
+              if (
+                allocationObject[k]["Allocation_inventory_uid"] ===
+                  allocate[i]["inv_uid"] &&
+                allocate[i]["child_pn"] === allocationObject[k]["child_pn"] &&
+                allocate[i]["child_lft"] === allocationObject[k]["child_lft"]
+              ) {
+                allocate[i]["original_allocate"] +=
+                  allocationObject[k]["sum(Allocation_allocated_qty)"];
+                allocate[i]["allocate"] +=
+                  allocationObject[k]["sum(Allocation_allocated_qty)"];
+
+                allocate[i]["allocated"] +=
+                  allocationObject[k]["sum(Allocation_allocated_qty)"] *
+                  allocate[i]["Qty_per"];
+              }
+            }
+
             // allocate[i]["updatedOrder"] = Rows[j]["order_qty"];
           }
         }
@@ -283,117 +315,69 @@ function Landing() {
 
     setSelectedChildrenID(children);
     console.log("selected children", children);
+    console.log("prevvalue", value);
     for (let x = 0; x <= options.length; x++) {
       if (id === x) {
         if (selectedPrevInvUID === "") {
-          if (prevValue > value) {
-            console.log("here if if");
-            setAllocationQty(parseInt(value) - 1);
-            setSelectedInvUID(options[x]["inv_uid"]);
-            console.log(options[x]["inv_uid"]);
-            setOptions((option) =>
-              option?.map((list, index) =>
-                index === id || list["inv_uid"] === invID
-                  ? {
-                      ...list,
-                      allocate: value,
-                    }
-                  : list
-              )
-            );
-            console.log("here if if", options[x]);
-          } else {
-            console.log("here if else");
-            setAllocationQty(parseInt(value));
-            setSelectedInvUID(options[x]["inv_uid"]);
-            console.log(options[x]["inv_uid"], children);
-            setOptions((option) =>
-              option?.map((list, index) =>
-                index === id || list["inv_uid"] === invID
-                  ? {
-                      ...list,
-                      allocate: value,
-                    }
-                  : list
-              )
-            );
-            console.log("here if else", options[x]);
-          }
-
+          console.log("prevValue here if else", value, options[x]["allocate"]);
+          setAllocationQty(parseInt(value) - options[x]["allocate"]);
+          setAllocatedQty(parseInt(value) * options[x]["Qty_per"]);
+          setSelectedInvUID(options[x]["inv_uid"]);
+          console.log(options[x]["inv_uid"], children);
+          setOptions((option) =>
+            option?.map((list, index) =>
+              index === id || list["inv_uid"] === invID
+                ? {
+                    ...list,
+                    allocate: value,
+                    allocated: value * list["Qty_per"],
+                  }
+                : list
+            )
+          );
+          console.log(" prevValue here if else", options[x]);
           setSelectedPrevInvUID(options[x]["inv_uid"]);
           setPrevValue(value);
         } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
-          if (
-            prevValue > value &&
-            selectedPrevInvUID === options[x]["inv_uid"]
-          ) {
-            console.log("here else if if");
-            setAllocationQty(allocationQty - 1);
-            setSelectedInvUID(options[x]["inv_uid"]);
-            console.log(options[x]["inv_uid"]);
-            setOptions((option) =>
-              option?.map((list, index) =>
-                index === id || list["inv_uid"] === invID
-                  ? {
-                      ...list,
-                      allocate: value,
-                    }
-                  : list
-              )
-            );
-          } else {
-            console.log("here else if else");
-            setAllocationQty(allocationQty + 1);
-            setSelectedInvUID(options[x]["inv_uid"]);
-            console.log(options[x]["inv_uid"]);
-            setOptions((option) =>
-              option?.map((list, index) =>
-                index === id || list["inv_uid"] === invID
-                  ? {
-                      ...list,
-                      allocate: value,
-                    }
-                  : list
-              )
-            );
-          }
+          console.log(
+            "prevValue here else if else",
+            value,
+            options[x]["allocate"]
+          );
+          setAllocationQty(allocationQty + 1);
+          setAllocatedQty(allocationQty + 1 * options[x]["Qty_per"]);
+          setSelectedInvUID(options[x]["inv_uid"]);
+          console.log(options[x]["inv_uid"]);
+          setOptions((option) =>
+            option?.map((list, index) =>
+              index === id || list["inv_uid"] === invID
+                ? {
+                    ...list,
+                    allocate: value,
+                    allocated: value * list["Qty_per"],
+                  }
+                : list
+            )
+          );
           setSelectedPrevInvUID(options[x]["inv_uid"]);
           setPrevValue(value);
         } else {
-          if (
-            prevValue > value &&
-            selectedPrevInvUID === options[x]["inv_uid"]
-          ) {
-            console.log("here else if");
-            setAllocationQty(allocationQty - 1);
-            setSelectedInvUID(options[x]["inv_uid"]);
-            console.log(options[x]["inv_uid"]);
-            setOptions((option) =>
-              option?.map((list, index) =>
-                index === id || list["inv_uid"] === invID
-                  ? {
-                      ...list,
-                      allocate: value,
-                    }
-                  : list
-              )
-            );
-          } else {
-            console.log("here else else");
-            setAllocationQty(allocationQty + 1);
-            setSelectedInvUID(options[x]["inv_uid"]);
-            console.log(options[x]["inv_uid"]);
-            setOptions((option) =>
-              option?.map((list, index) =>
-                index === id || list["inv_uid"] === invID
-                  ? {
-                      ...list,
-                      allocate: value,
-                    }
-                  : list
-              )
-            );
-          }
+          console.log("prevValue here else else");
+          setAllocationQty(allocationQty + 1);
+          setAllocatedQty((allocationQty + 1) * options[x]["Qty_per"]);
+          setSelectedInvUID(options[x]["inv_uid"]);
+          console.log(options[x]["inv_uid"]);
+          setOptions((option) =>
+            option?.map((list, index) =>
+              index === id || list["inv_uid"] === invID
+                ? {
+                    ...list,
+                    allocate: value,
+                    allocated: value * list["Qty_per"],
+                  }
+                : list
+            )
+          );
           setSelectedPrevInvUID(options[x]["inv_uid"]);
           setPrevValue(value);
         }
@@ -439,115 +423,148 @@ function Landing() {
       qty: Desired_Qty,
       location: country,
     };
+
     axios.post(postURL, payload).then((res) => {
       const postURL2 =
         "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetParts";
+      const postURL3 =
+        "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetAllocation/";
       axios.get(postURL2).then((response) => {
-        console.log("in get Json object");
-        // console.log(res);
-        console.log(res.data.ctb);
-        if (res.data.ctb[0] != null) {
-          var allParts = response.data;
-          setBom(res.data.ctb);
-          setAllocate(res.data.allocation);
-          //setData(res.data);
-          for (let i in res.data.ctb) {
-            // console.log(i);
-            // console.log(res.data.ctb[i].GrandParent_BOM_pn);
-            // console.log(Top_Level);
-            if (res.data.ctb[i].GrandParent_BOM_pn === Top_Level) {
-              data.push(res.data.ctb[i]);
-            }
-          }
-          console.log(data);
-          var list = []; //Define the list of seen children
-          var sth = []; //Define the list of ouput rows
-          for (let i in data) {
-            // if (list.includes(data[i].child_pn)) {
-            list.push(data[i].child_pn);
-            var tempInv = 0;
-            var allocatable = 0;
-            var unitCost = 0;
-            var tempUID = 0;
-            var order_Qty = 0;
-            for (let j in inventory) {
-              if (
-                inventory[j].inv_pn === data[i].child_pn &&
-                inventory[j].inv_loc == country
-              ) {
-                tempInv += inventory[j].inv_qty;
-                tempUID = inventory[j].inv_uid;
+        axios
+          .get(
+            `https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetAllocation/${productId}`
+          )
+          .then((resp) => {
+            console.log(resp);
+            var alObj = resp.data;
+            var allParts = response.data;
+            setAllocationObject(resp.data);
+
+            console.log("in get Json object");
+            // console.log(res);
+
+            if (res.data.ctb[0] != null) {
+              setBom(res.data.ctb);
+              setAllocate(res.data.allocation);
+              //setData(res.data);
+              for (let i in res.data.ctb) {
+                // console.log(i);
+                // console.log(res.data.ctb[i].GrandParent_BOM_pn);
+                // console.log(Top_Level);
+                if (res.data.ctb[i].GrandParent_BOM_pn === Top_Level) {
+                  data.push(res.data.ctb[i]);
+                }
               }
-            }
-            let allocate = res.data.allocation;
-            for (let j in allocate) {
-              if (
-                allocate[j].child_pn === data[i].child_pn &&
-                allocate[j].inv_loc == country &&
-                allocate[j].gp_lft < data[i].child_lft &&
-                data[i].child_lft < allocate[j].gp_rgt &&
-                allocate[j].inv_available_date < Desired_Date
-              ) {
-                allocatable += allocate[j].inv_qty;
+              console.log(data);
+              var list = []; //Define the list of seen children
+              var sth = []; //Define the list of ouput rows
+              for (let i in data) {
+                // if (list.includes(data[i].child_pn)) {
+                list.push(data[i].child_pn);
+                var tempInv = 0;
+                var allocatable = 0;
+                var allocated = 0;
+                var delta2_qty = 0;
+                var final_order_qty = 0;
+                var unitCost = 0;
+                var tempUID = 0;
+                var order_Qty = 0;
+                for (let j in inventory) {
+                  if (
+                    inventory[j].inv_pn === data[i].child_pn &&
+                    inventory[j].inv_loc == country
+                  ) {
+                    tempInv += inventory[j].inv_qty;
+                    tempUID = inventory[j].inv_uid;
+                  }
+                }
+                let allocate = res.data.allocation;
+                console.log(allocate);
+                order_Qty = data[i].RequiredQty - data[i].childInv;
+                for (let j in allocate) {
+                  if (
+                    allocate[j].child_pn === data[i].child_pn &&
+                    allocate[j].child_lft === data[i].child_lft &&
+                    // allocate[j].inv_loc == country &&
+                    // allocate[j].gp_lft < data[i].child_lft &&
+                    // data[i].child_lft < allocate[j].gp_rgt &&
+                    allocate[j].inv_available_date < Desired_Date
+                  ) {
+                    allocatable += allocate[j].SubAssyQty;
+                  }
+                }
+                // let alObj = allocationObject;
+                console.log(alObj);
+                for (let j in alObj) {
+                  if (
+                    alObj[j].child_pn === data[i].child_pn &&
+                    alObj[j].child_lft === data[i].child_lft
+                  ) {
+                    allocated += alObj[j].allocated_qty;
+                  }
+                }
+                delta2_qty = order_Qty - allocated;
+                final_order_qty = delta2_qty;
+                console.log(allocated, delta2_qty, final_order_qty);
+                for (let j in allParts) {
+                  if (allParts[j].PN === data[i].child_pn) {
+                    unitCost = allParts[j].Unit_Cost;
+                  }
+                }
+                // order_Qty =
+                //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
+
+                // console.log(data[i].child_pn, String(data[i].child_lft));
+                var allocate_input = 0;
+                var avaiInv = 0;
+                var row = new RowData(
+                  tempUID,
+                  data[i].child_pn + "-" + String(data[i].child_lft),
+                  data[i].QtyPerAssembly,
+                  data[i].RequiredQty,
+                  data[i].childInv,
+                  order_Qty,
+                  allocatable,
+                  allocated,
+                  delta2_qty,
+                  tempInv,
+                  avaiInv,
+                  allocate_input,
+                  final_order_qty,
+                  unitCost,
+                  10
+                );
+                // console.log(row);
+                rows.push(row);
+                // } else {
+                //   //update the value of reqQty
+                //   rows.find((r) => r.part === data[i].child_pn).qty_per +=
+                //     data[i].RequiredQty;
+                // }
               }
-            }
 
-            for (let j in allParts) {
-              if (allParts[j].PN === data[i].child_pn) {
-                unitCost = allParts[j].Unit_Cost;
+              for (let i in rows) {
+                rows[i].need_qty = rows[i].qty_per * Desired_Qty;
+                // rows[i].order_qty = Math.max(
+                //   0,
+                //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv
+                // );
+                rows[i].order_qty = Math.max(
+                  0,
+                  data[i].RequiredQty - data[i].childInv
+                );
+                rows[i].total_price = rows[i].unit_price * rows[i].order_qty;
+                rows[i].total_price = rows[i].total_price.toFixed(2);
               }
+              setRows(rows);
+              console.log(rows);
+            } else {
+              console.log("bad");
+              //this.setState({ data: "Please enter a valid Product UID" });
+
+              //setData("Please enter a valid Product UID")
             }
-            // order_Qty =
-            //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
-            order_Qty = data[i].RequiredQty - data[i].childInv;
-
-            // console.log(data[i].child_pn, String(data[i].child_lft));
-            var row = new RowData(
-              tempUID,
-              data[i].child_pn + "-" + String(data[i].child_lft),
-              data[i].QtyPerAssembly,
-              data[i].RequiredQty,
-              data[i].childInv,
-              order_Qty,
-              allocatable,
-              0,
-              0,
-              tempInv,
-              0,
-              data[i].orderQty,
-              unitCost,
-              10
-            );
-            // console.log(row);
-            rows.push(row);
-            // } else {
-            //   //update the value of reqQty
-            //   rows.find((r) => r.part === data[i].child_pn).qty_per +=
-            //     data[i].RequiredQty;
-            // }
-          }
-
-          for (let i in rows) {
-            rows[i].need_qty = rows[i].qty_per * Desired_Qty;
-            // rows[i].order_qty = Math.max(
-            //   0,
-            //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv
-            // );
-            rows[i].order_qty = Math.max(
-              0,
-              data[i].RequiredQty - data[i].childInv
-            );
-            rows[i].total_price = rows[i].unit_price * rows[i].order_qty;
-            rows[i].total_price = rows[i].total_price.toFixed(2);
-          }
-          setRows(rows);
-          console.log(rows);
-        } else {
-          console.log("bad");
-          //this.setState({ data: "Please enter a valid Product UID" });
-
-          //setData("Please enter a valid Product UID")
-        }
+          });
       });
     });
 
@@ -758,7 +775,7 @@ function Landing() {
           <th>Raw Inventory</th>
           <th>Available Inventory</th>
           <th>Allocated</th>
-          <th>Get Allocation</th>
+          {/* <th>Get Allocation</th> */}
           <th>Order Qty</th>
           <th>Unit Price</th>
           <th>Total Price</th>
@@ -772,50 +789,41 @@ function Landing() {
             <td>{row.need_qty}</td>
             <td>{row.sub_qty}</td>
             <td>{row.delta_qty}</td>
-            <td>{row.allocatable_qty}</td>
+            <td
+              onClick={() => {
+                getAllocate(row.part);
+                setSelectedPartID(row.part);
+              }}
+            >
+              {row.allocatable_qty}
+            </td>
             <td>
-              {allocationObject.length > 0
+              {/* {allocationObject.length > 0
                 ? allocationObject.map((allocate) =>
                     allocate.child_pn + "-" + allocate.child_lft === row.part
                       ? allocate.allocated_qty
-                      : 0
-                  )[0]
-                : 0}
-              {console.log(allocationObject.length)}
+                      : null
+                  )
+                : 0} */}
+              {row.allocated_qty}
             </td>
             <td>
-              {allocationObject.length > 0
+              {/* {allocationObject.length > 0
                 ? allocationObject.map((allocate) =>
                     allocate.child_pn + "-" + allocate.child_lft === row.part
                       ? row.delta_qty - allocate.allocated_qty
-                      : 0
-                  )[0]
-                : 0}
+                      : null
+                  )
+                : 0} */}
+              {row.delta2_qty}
             </td>
             <td>{row.inventory}</td>
             <td>{row.available_inv}</td>
             <td>
               <input type="number" />
             </td>
-            <td>
-              <button
-                onClick={() => {
-                  getAllocate(row.part);
-                  setSelectedPartID(row.part);
-                }}
-              >
-                Get Allocation
-              </button>
-            </td>
-            <td>
-              {allocationObject.length > 0
-                ? allocationObject.map((allocate) =>
-                    allocate.child_pn + "-" + allocate.child_lft === row.part
-                      ? row.delta_qty - allocate.allocated_qty
-                      : row.order_qty
-                  )[0]
-                : row.order_qty}
-            </td>
+
+            <td>{row.final_order_qty}</td>
             <td>{row.unit_price}</td>
             <td>{row.total_price}</td>
           </tr>
@@ -874,19 +882,54 @@ function Landing() {
               </td>
               <td>{option.child_pn}</td>
               <td>{option.Qty_per}</td>
-              <td>{option.allocate * option.Qty_per}</td>
-              {/* {console.log(
+              <td>{option.allocated}</td>
+              {console.log(
+                "option.inv_uid,",
                 option.inv_uid,
+                " selectedInvUID,",
                 selectedInvUID,
+                "option.child_pn,",
                 option.child_pn,
+                "prevValue > option.allocate,",
                 prevValue > option.allocate,
+                "prevValue,",
                 prevValue,
+                " option.original_allocate,",
+                option.original_allocate,
+                " option.allocate,",
                 option.allocate,
-                allocationQty
-                // option.updatedOrder
-              )} */}
+                " option.allocated,",
+                option.allocated,
+                "allocationQty,",
+                allocationQty,
+                "allocatedQty,",
+                allocatedQty,
+                "option.order,",
+                option.order
+              )}
 
               <td>
+                {selectedChildrenID.some((item) => option["child_pn"] === item)
+                  ? option.order - allocationQty * option.Qty_per
+                  : option.order}
+              </td>
+              {/* <td>
+                {option.original_allocate < option.allocate
+                  ? selectedChildrenID.some(
+                      (item) => option["child_pn"] === item
+                    )
+                    ? option.order - allocationQty * option.Qty_per
+                    : option.order
+                  : option.original_allocate > option.allocate
+                  ? selectedChildrenID.some(
+                      (item) => option["child_pn"] === item
+                    )
+                    ? option.order - allocationQty * option.Qty_per
+                    : option.order
+                  : option.order}
+              </td> */}
+
+              {/* <td>
                 {prevValue > option.allocate &&
                 selectedChildrenID.some(
                   (item) => option["child_pn"] === item
@@ -905,43 +948,8 @@ function Landing() {
                     )
                   ? option.order - allocationQty * option.Qty_per
                   : option.order - option.allocate * option.Qty_per}
-              </td>
-              {/* <td>{option.updatedOrder}</td> */}
-
-              {/* <td>
-                {prevValue > option.allocate
-                  ? selectedChildrenID.some(
-                      (item) => option["child_pn"] === item
-                    )
-                    ? option.inv_uid === selectedPrevInvUID
-                      ? option.order + allocationQty * option.Qty_per
-                      : option.order + allocationQty * option.Qty_per
-                    : option.order + option.allocate * option.Qty_per
-                  : selectedChildrenID.some(
-                      (item) => option["child_pn"] === item
-                    )
-                  ? option.order - allocationQty * option.Qty_per
-                  : option.order - option.allocate * option.Qty_per}
               </td> */}
-              {/* <td>
-                {option.child_pn === selectedPartID.split("-")[0] ? (
-                  <Button
-                    size="sm"
-                    onClick={() =>
-                      setAllocation(
-                        option.inv_uid,
-                        option.parent_pn,
-                        option.gp_lft,
-                        option.allocate
-                      )
-                    }
-                  >
-                    +
-                  </Button>
-                ) : (
-                  ""
-                )}
-              </td> */}
+              {/* <td>{option.order}</td> */}
             </tr>
           ))}
         </Modal.Body>
