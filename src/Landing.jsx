@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import NavBar from "./NavBar";
 import "./App.css";
 import "./home.css";
+import { FormText } from "react-bootstrap";
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
 const inventoryURL =
@@ -73,18 +74,22 @@ function Landing() {
   const [selectedChildrenID, setSelectedChildrenID] = useState([]);
   const [allocationQty, setAllocationQty] = useState(0);
   const [allocationObject, setAllocationObject] = useState([]);
+  const [allocatedObj, setAllocatedObj] = useState({});
+  const [allocated, setAllocated] = useState({});
+  const [finalAllocated, setFinalAllocated] = useState({});
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     setAllocationQty(0);
+    setAllocated({});
+    setFinalAllocated({});
     setSelectedPrevInvUID("");
     setSelectedInvUID([]);
     setSelectedChildrenID([]);
   };
   const handleShow = () => setShow(true);
 
-  console.log("allocationObject", allocationObject);
   // save changes function for allocation
   const handleSave = () => {
     let payload = [];
@@ -138,7 +143,6 @@ function Landing() {
     setSelectedChildrenID([]);
     updateTable();
   };
-  console.log(Rows);
 
   // split string function
   function splitString(string) {
@@ -163,6 +167,12 @@ function Landing() {
   }
   const getAllocate = (part) => {
     let option = [];
+    let obj = {};
+    let obj2 = {};
+    let key = "";
+    let key2 = "";
+    let k2 = "";
+    let finalObj = {};
     for (let i in allocate) {
       if (
         allocate[i]["gp_lft"] < parseInt(part.split("-")[1]) &&
@@ -182,11 +192,18 @@ function Landing() {
                       : Rows[j]["delta2_qty"]
                   )[0]
                 : Rows[j]["delta2_qty"];
-            console.log(allocate[i]["order"]);
+            allocate[i]["original_order"] =
+              allocationObject.length > 0
+                ? allocationObject.map((al) =>
+                    al.child_pn + "-" + al.child_lft === Rows[j]["part"]
+                      ? Rows[j]["delta_qty"]
+                      : Rows[j]["delta_qty"]
+                  )[0]
+                : Rows[j]["delta_qty"];
             allocate[i]["allocate"] = 0;
             allocate[i]["original_allocate"] = 0;
             allocate[i]["allocated"] =
-              allocate[i]["allocate"] * allocate[i]["Qty_per"];
+              allocate[i]["allocate"] * allocate[i]["RequiredQty"];
             for (let k in allocationObject) {
               if (
                 allocationObject[k]["Allocation_inventory_uid"] ===
@@ -201,10 +218,16 @@ function Landing() {
 
                 allocate[i]["allocated"] +=
                   allocationObject[k]["sum(Allocation_allocated_qty)"] *
-                  allocate[i]["Qty_per"];
+                  allocate[i]["RequiredQty"];
               }
             }
           }
+          key = allocate[i]["child_pn"];
+
+          // obj = { `{key}`: allocate[i]["order"] };
+          obj[key] = allocate[i]["original_order"];
+          // finalObj[key] = allocate[i]["allocate"];
+          // finalObj[key] = 0;
         }
         option.push(allocate[i]);
       }
@@ -212,7 +235,27 @@ function Landing() {
     option.sort((a, b) =>
       a.inv_uid > b.inv_uid ? 1 : b.inv_uid > a.inv_uid ? -1 : 0
     );
+    for (let i = 0; i < option.length; i++) {
+      key2 = option[i]["child_pn"] + "-" + option[i]["child_lft"] + "-" + i;
+      obj2[key2] = option[i]["allocate"] * option[i]["RequiredQty"];
+
+      k2 = options[i]["child_pn"];
+      //  finalObj[k2] = 0;
+      finalObj[k2] = 0;
+    }
+    let y = Object.keys(obj2);
+    let k = "";
+    for (let z = 0; z < y.length; z++) {
+      k = y[z].split("-")[0];
+      if (Object.keys(finalObj).includes(k)) {
+        finalObj[k] = finalObj[k] + obj2[y[z]];
+      }
+    }
     console.log(option);
+    console.log("obj", obj, obj2, finalObj);
+    setAllocatedObj(obj);
+    setAllocated(obj2);
+    setFinalAllocated(finalObj);
     setOptions(option);
     handleShow();
   };
@@ -290,17 +333,26 @@ function Landing() {
 
   let changeAllocationQty = (id, invID, e) => {
     let children = [];
+    let al = 0;
+    let key = "";
+    let obj = {};
+    let x = {};
     const { value } = e.target;
+
+    obj = allocated;
     options.map((option) =>
       option["inv_uid"] === invID ? children.push(option["child_pn"]) : ""
     );
 
     setSelectedChildrenID(children);
-    console.log("selected children", children);
+    console.log("selected children", children, obj);
 
-    for (let x = 0; x <= options.length; x++) {
+    for (let x = 0; x < options.length; x++) {
       console.log(
         "prevvalue",
+        children,
+        options[x]["child_pn"],
+        selectedChildrenID.includes(options[x]["child_pn"]),
         options[x]["inv_uid"],
         value,
         options[x]["original_allocate"],
@@ -308,6 +360,9 @@ function Landing() {
         allocationQty
       );
       if (id === x) {
+        console.log(obj);
+        key = options[x]["child_pn"];
+        console.log(key);
         if (
           options[x]["original_allocate"] < options[x]["allocate"] ||
           parseInt(value) > options[x]["allocate"]
@@ -323,12 +378,29 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
-            console.log("prevValue here if if", value, options[x]);
+            console.log("prevValue here if if", value, options[x], al);
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
             console.log(
@@ -345,12 +417,29 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
-            console.log("prevValue here if else if", options[x]);
+
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log(al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           } else {
             console.log(
@@ -367,12 +456,30 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
-            console.log("prevValue here if else", options[x]);
+
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+
+                console.log(al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           }
         } else if (
@@ -395,12 +502,29 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
             console.log(" prevValue here else if if", options[x]);
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
             console.log(
@@ -417,11 +541,28 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           } else {
             console.log("prevValue here else if else");
@@ -434,11 +575,28 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           }
         } else if (parseInt(options[x]["allocate"]) === 0) {
@@ -461,12 +619,29 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
             console.log("prevValue here else if if", value, options[x]);
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
             console.log(
@@ -483,12 +658,29 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
             console.log("prevValue here else if else if", options[x]);
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           } else {
             console.log(
@@ -505,12 +697,29 @@ function Landing() {
                   ? {
                       ...list,
                       allocate: value,
-                      allocated: value * list["Qty_per"],
+                      allocated: value * list["RequiredQty"],
                     }
                   : list
               )
             );
             console.log("prevValue here else if else", options[x]);
+            for (let j = 0; j < options.length; j++) {
+              if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                al = value * options[j]["RequiredQty"];
+                key =
+                  options[j]["child_pn"] +
+                  "-" +
+                  options[j]["child_lft"] +
+                  "-" +
+                  j;
+                if (Object.keys(obj).includes(key)) {
+                  obj[key] = al;
+                }
+                console.log("prevValue here if if", obj, al);
+                setAllocated(obj);
+              }
+            }
+
             setSelectedPrevInvUID(options[x]["inv_uid"]);
           }
         } else {
@@ -530,12 +739,29 @@ function Landing() {
                     ? {
                         ...list,
                         allocate: value,
-                        allocated: value * list["Qty_per"],
+                        allocated: value * list["RequiredQty"],
                       }
                     : list
                 )
               );
               console.log(" prevValue here if if", options[x]);
+              for (let j = 0; j < options.length; j++) {
+                if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                  al = value * options[j]["RequiredQty"];
+                  key =
+                    options[j]["child_pn"] +
+                    "-" +
+                    options[j]["child_lft"] +
+                    "-" +
+                    j;
+                  if (Object.keys(obj).includes(key)) {
+                    obj[key] = al;
+                  }
+                  console.log("prevValue here if if", obj, al);
+                  setAllocated(obj);
+                }
+              }
+
               setSelectedPrevInvUID(options[x]["inv_uid"]);
             } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
               console.log(
@@ -552,11 +778,28 @@ function Landing() {
                     ? {
                         ...list,
                         allocate: value,
-                        allocated: value * list["Qty_per"],
+                        allocated: value * list["RequiredQty"],
                       }
                     : list
                 )
               );
+              for (let j = 0; j < options.length; j++) {
+                if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                  al = value * options[j]["RequiredQty"];
+                  key =
+                    options[j]["child_pn"] +
+                    "-" +
+                    options[j]["child_lft"] +
+                    "-" +
+                    j;
+                  if (Object.keys(obj).includes(key)) {
+                    obj[key] = al;
+                  }
+                  console.log("prevValue here if if", obj, al);
+                  setAllocated(obj);
+                }
+              }
+
               setSelectedPrevInvUID(options[x]["inv_uid"]);
             } else {
               console.log("prevValue here if else");
@@ -569,11 +812,28 @@ function Landing() {
                     ? {
                         ...list,
                         allocate: value,
-                        allocated: value * list["Qty_per"],
+                        allocated: value * list["RequiredQty"],
                       }
                     : list
                 )
               );
+              for (let j = 0; j < options.length; j++) {
+                if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                  al = value * options[j]["RequiredQty"];
+                  key =
+                    options[j]["child_pn"] +
+                    "-" +
+                    options[j]["child_lft"] +
+                    "-" +
+                    j;
+                  if (Object.keys(obj).includes(key)) {
+                    obj[key] = al;
+                  }
+                  console.log("prevValue here if if", obj, al);
+                  setAllocated(obj);
+                }
+              }
+
               setSelectedPrevInvUID(options[x]["inv_uid"]);
             }
           } else {
@@ -592,12 +852,29 @@ function Landing() {
                     ? {
                         ...list,
                         allocate: value,
-                        allocated: value * list["Qty_per"],
+                        allocated: value * list["RequiredQty"],
                       }
                     : list
                 )
               );
               console.log(" prevValue here else if if", options[x]);
+              for (let j = 0; j < options.length; j++) {
+                if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                  al = value * options[j]["RequiredQty"];
+                  key =
+                    options[j]["child_pn"] +
+                    "-" +
+                    options[j]["child_lft"] +
+                    "-" +
+                    j;
+                  if (Object.keys(obj).includes(key)) {
+                    obj[key] = al;
+                  }
+                  console.log("prevValue here if if", obj, al);
+                  setAllocated(obj);
+                }
+              }
+
               setSelectedPrevInvUID(options[x]["inv_uid"]);
             } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
               console.log(
@@ -614,11 +891,28 @@ function Landing() {
                     ? {
                         ...list,
                         allocate: value,
-                        allocated: value * list["Qty_per"],
+                        allocated: value * list["RequiredQty"],
                       }
                     : list
                 )
               );
+              for (let j = 0; j < options.length; j++) {
+                if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                  al = value * options[j]["RequiredQty"];
+                  key =
+                    options[j]["child_pn"] +
+                    "-" +
+                    options[j]["child_lft"] +
+                    "-" +
+                    j;
+                  if (Object.keys(obj).includes(key)) {
+                    obj[key] = al;
+                  }
+                  console.log("prevValue here if if", obj, al);
+                  setAllocated(obj);
+                }
+              }
+
               setSelectedPrevInvUID(options[x]["inv_uid"]);
             } else {
               console.log("prevValue here else if else");
@@ -631,29 +925,54 @@ function Landing() {
                     ? {
                         ...list,
                         allocate: value,
-                        allocated: value * list["Qty_per"],
+                        allocated: value * list["RequiredQty"],
                       }
                     : list
                 )
               );
+              for (let j = 0; j < options.length; j++) {
+                if (options[x]["inv_uid"] === options[j]["inv_uid"]) {
+                  al = value * options[j]["RequiredQty"];
+                  key =
+                    options[j]["child_pn"] +
+                    "-" +
+                    options[j]["child_lft"] +
+                    "-" +
+                    j;
+                  if (Object.keys(obj).includes(key)) {
+                    obj[key] = al;
+                  }
+                  console.log("prevValue here if if", obj, al);
+                  setAllocated(obj);
+                }
+              }
+
               setSelectedPrevInvUID(options[x]["inv_uid"]);
             }
           }
         }
       }
+
+      console.log("allocated", allocated);
     }
-    // console.log(options);
-    // for (let i = 0; i < options.length; i++) {
-    //   for (let j = 0; j < options.length; j++) {
-    //     if (options[i]["child_pn"] === options[j]["child_pn"]) {
-    //       options[i]["updatedOrder"] =
-    //         options[i]["updatedOrder"] -
-    //         options[j]["allocate"] * options[j]["Qty_per"];
-    //     }
-    //   }
-    // }
-    // var result = options;
-    // console.log(result);
+
+    let y = Object.keys(obj);
+    let k2 = "";
+    let finalObj = {};
+    for (let i = 0; i < options.length; i++) {
+      k2 = options[i]["child_pn"];
+      //  finalObj[k2] = 0;
+      finalObj[k2] = 0;
+    }
+    let k = "";
+    for (let z = 0; z < y.length; z++) {
+      k = y[z].split("-")[0];
+      if (Object.keys(finalObj).includes(k)) {
+        finalObj[k] = finalObj[k] + allocated[y[z]];
+      }
+    }
+    console.log("outside for loop", allocated, finalObj);
+    setFinalAllocated(finalObj);
   };
 
   let changeDesired_Date = (e) => {
@@ -761,7 +1080,7 @@ function Landing() {
                 }
                 delta2_qty = order_Qty - allocated;
                 final_order_qty = delta2_qty;
-                console.log(allocated, delta2_qty, final_order_qty);
+
                 for (let j in allParts) {
                   if (allParts[j].PN === data[i].child_pn) {
                     unitCost = allParts[j].Unit_Cost;
@@ -1114,9 +1433,10 @@ function Landing() {
                 )}
               </td>
               <td>{option.child_pn}</td>
-              <td>{option.Qty_per}</td>
+              <td>{option.RequiredQty}</td>
               <td>{option.allocated}</td>
-              {console.log(
+              {/* {console.log(
+                i,
                 "option.inv_uid,",
                 option.inv_uid,
                 " selectedInvUID,",
@@ -1132,12 +1452,22 @@ function Landing() {
                 allocationQty,
                 "option.order,",
                 option.order
-              )}
+              )} */}
+
+              {/* <td>{subtract(allocatedObj, allocated, option.child_pn)}</td> */}
+              {/* <td>
+                {Object.keys(allocatedObj).reduce((a, k) => {
+                  a[k] = allocatedObj[k] - allocated[k];
+                  return a;
+                }, {})}
+              </td> */}
 
               <td>
-                {selectedChildrenID.some((item) => option["child_pn"] === item)
-                  ? option.order - allocationQty * option.Qty_per
-                  : option.order}
+                {Object.keys(allocatedObj).includes(option.child_pn)
+                  ? allocatedObj[option.child_pn] -
+                    finalAllocated[option.child_pn]
+                  : allocatedObj[option.child_pn] -
+                    finalAllocated[option.child_pn]}
               </td>
             </tr>
           ))}
