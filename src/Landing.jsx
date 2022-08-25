@@ -72,20 +72,15 @@ function Landing() {
   const [selectedPrevInvUID, setSelectedPrevInvUID] = useState("");
   const [selectedChildrenID, setSelectedChildrenID] = useState([]);
   const [allocationQty, setAllocationQty] = useState(0);
-
-  const [allocatedQty, setAllocatedQty] = useState(0);
-  const [prevValue, setPrevValue] = useState(0);
   const [allocationObject, setAllocationObject] = useState([]);
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     setAllocationQty(0);
-    setPrevValue(0);
     setSelectedPrevInvUID("");
     setSelectedInvUID([]);
     setSelectedChildrenID([]);
-    setAllocatedQty(0);
   };
   const handleShow = () => setShow(true);
 
@@ -104,7 +99,9 @@ function Landing() {
             inv_uid: option["inv_uid"],
             assembly: option["parent_pn"],
             assy_lft: option["gp_lft"],
-            allocated: parseInt(option["allocate"]),
+            allocated:
+              parseInt(option["allocate"]) -
+              parseInt(option["original_allocate"]),
           }
         : option.child_pn === selectedPartID.split("-")[0] &&
           option["allocate"] !== 0 &&
@@ -130,18 +127,8 @@ function Landing() {
     console.log(payload);
     const postURL =
       "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Allocation";
-    // const payload = allocationObject;
     axios.post(postURL, payload).then((res) => {
       console.log(res);
-      // axios
-      //   .get(
-      //     `https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/GetAllocation/${productId}`
-      //   )
-      //   .then((response) => {
-      //     console.log(response);
-
-      //     setAllocationObject(response.data);
-      //   });
     });
     setShow(false);
     setAllocationQty(0);
@@ -175,9 +162,6 @@ function Landing() {
     return wordArray;
   }
   const getAllocate = (part) => {
-    // console.log(part);
-    // console.log(Desired_Date);
-    // console.log(allocate);
     let option = [];
     for (let i in allocate) {
       if (
@@ -220,8 +204,6 @@ function Landing() {
                   allocate[i]["Qty_per"];
               }
             }
-
-            // allocate[i]["updatedOrder"] = Rows[j]["order_qty"];
           }
         }
         option.push(allocate[i]);
@@ -315,71 +297,348 @@ function Landing() {
 
     setSelectedChildrenID(children);
     console.log("selected children", children);
-    console.log("prevvalue", value);
+
     for (let x = 0; x <= options.length; x++) {
+      console.log(
+        "prevvalue",
+        options[x]["inv_uid"],
+        value,
+        options[x]["original_allocate"],
+        options[x]["allocate"],
+        allocationQty
+      );
       if (id === x) {
-        if (selectedPrevInvUID === "") {
-          console.log("prevValue here if else", value, options[x]["allocate"]);
-          setAllocationQty(parseInt(value) - options[x]["allocate"]);
-          setAllocatedQty(parseInt(value) * options[x]["Qty_per"]);
-          setSelectedInvUID(options[x]["inv_uid"]);
-          console.log(options[x]["inv_uid"], children);
-          setOptions((option) =>
-            option?.map((list, index) =>
-              index === id || list["inv_uid"] === invID
-                ? {
-                    ...list,
-                    allocate: value,
-                    allocated: value * list["Qty_per"],
-                  }
-                : list
-            )
-          );
-          console.log(" prevValue here if else", options[x]);
-          setSelectedPrevInvUID(options[x]["inv_uid"]);
-          setPrevValue(value);
-        } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
-          console.log(
-            "prevValue here else if else",
-            value,
-            options[x]["allocate"]
-          );
-          setAllocationQty(allocationQty + 1);
-          setAllocatedQty(allocationQty + 1 * options[x]["Qty_per"]);
-          setSelectedInvUID(options[x]["inv_uid"]);
-          console.log(options[x]["inv_uid"]);
-          setOptions((option) =>
-            option?.map((list, index) =>
-              index === id || list["inv_uid"] === invID
-                ? {
-                    ...list,
-                    allocate: value,
-                    allocated: value * list["Qty_per"],
-                  }
-                : list
-            )
-          );
-          setSelectedPrevInvUID(options[x]["inv_uid"]);
-          setPrevValue(value);
+        if (
+          options[x]["original_allocate"] < options[x]["allocate"] ||
+          parseInt(value) > options[x]["allocate"]
+        ) {
+          if (selectedPrevInvUID === "") {
+            console.log("prevValue here if if", value, options[x]["allocate"]);
+            setAllocationQty(parseInt(value) - options[x]["allocate"]);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"], children);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log("prevValue here if if", value, options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
+            console.log(
+              "prevValue here if else if",
+              value,
+              options[x]["allocate"]
+            );
+            setAllocationQty(allocationQty + 1);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"]);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log("prevValue here if else if", options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          } else {
+            console.log(
+              "prevValue here if else",
+              value,
+              options[x]["allocate"]
+            );
+            setAllocationQty(allocationQty + 1);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"]);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log("prevValue here if else", options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          }
+        } else if (
+          options[x]["allocate"] <= options[x]["original_allocate"] &&
+          parseInt(value) < options[x]["allocate"] &&
+          options[x]["allocate"] > 0
+        ) {
+          if (selectedPrevInvUID === "") {
+            console.log(
+              "prevValue here else if if",
+              value,
+              options[x]["allocate"]
+            );
+            setAllocationQty(parseInt(value) - options[x]["allocate"]);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"], children);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log(" prevValue here else if if", options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
+            console.log(
+              "prevValue here else if else if",
+              value,
+              options[x]["allocate"]
+            );
+            setAllocationQty(allocationQty - 1);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"]);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          } else {
+            console.log("prevValue here else if else");
+            setAllocationQty(allocationQty - 1);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"]);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          }
+        } else if (parseInt(options[x]["allocate"]) === 0) {
+          setAllocationQty(0);
+          let ac = 0;
+          console.log("here if options 0");
+          if (selectedPrevInvUID === "") {
+            console.log(
+              "prevValue here else if if",
+              value,
+              options[x]["allocate"],
+              allocationQty
+            );
+            setAllocationQty(parseInt(value) - options[x]["allocate"]);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"], children);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log("prevValue here else if if", value, options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
+            console.log(
+              "prevValue here else if else if",
+              value,
+              options[x]["allocate"]
+            );
+            setAllocationQty(allocationQty + 1);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"]);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log("prevValue here else if else if", options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          } else {
+            console.log(
+              "prevValue here else if else",
+              value,
+              options[x]["allocate"]
+            );
+            setAllocationQty(allocationQty + 1);
+            setSelectedInvUID(options[x]["inv_uid"]);
+            console.log(options[x]["inv_uid"]);
+            setOptions((option) =>
+              option?.map((list, index) =>
+                index === id || list["inv_uid"] === invID
+                  ? {
+                      ...list,
+                      allocate: value,
+                      allocated: value * list["Qty_per"],
+                    }
+                  : list
+              )
+            );
+            console.log("prevValue here else if else", options[x]);
+            setSelectedPrevInvUID(options[x]["inv_uid"]);
+          }
         } else {
-          console.log("prevValue here else else");
-          setAllocationQty(allocationQty + 1);
-          setAllocatedQty((allocationQty + 1) * options[x]["Qty_per"]);
-          setSelectedInvUID(options[x]["inv_uid"]);
-          console.log(options[x]["inv_uid"]);
-          setOptions((option) =>
-            option?.map((list, index) =>
-              index === id || list["inv_uid"] === invID
-                ? {
-                    ...list,
-                    allocate: value,
-                    allocated: value * list["Qty_per"],
-                  }
-                : list
-            )
-          );
-          setSelectedPrevInvUID(options[x]["inv_uid"]);
-          setPrevValue(value);
+          if (allocationQty >= 0) {
+            if (selectedPrevInvUID === "") {
+              console.log(
+                "prevValue here else if if",
+                value,
+                options[x]["allocate"]
+              );
+              setAllocationQty(parseInt(value) - options[x]["allocate"]);
+              setSelectedInvUID(options[x]["inv_uid"]);
+              console.log(options[x]["inv_uid"], children);
+              setOptions((option) =>
+                option?.map((list, index) =>
+                  index === id || list["inv_uid"] === invID
+                    ? {
+                        ...list,
+                        allocate: value,
+                        allocated: value * list["Qty_per"],
+                      }
+                    : list
+                )
+              );
+              console.log(" prevValue here if if", options[x]);
+              setSelectedPrevInvUID(options[x]["inv_uid"]);
+            } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
+              console.log(
+                "prevValue here if else if",
+                value,
+                options[x]["allocate"]
+              );
+              setAllocationQty(allocationQty + 1);
+              setSelectedInvUID(options[x]["inv_uid"]);
+              console.log(options[x]["inv_uid"]);
+              setOptions((option) =>
+                option?.map((list, index) =>
+                  index === id || list["inv_uid"] === invID
+                    ? {
+                        ...list,
+                        allocate: value,
+                        allocated: value * list["Qty_per"],
+                      }
+                    : list
+                )
+              );
+              setSelectedPrevInvUID(options[x]["inv_uid"]);
+            } else {
+              console.log("prevValue here if else");
+              setAllocationQty(allocationQty + 1);
+              setSelectedInvUID(options[x]["inv_uid"]);
+              console.log(options[x]["inv_uid"]);
+              setOptions((option) =>
+                option?.map((list, index) =>
+                  index === id || list["inv_uid"] === invID
+                    ? {
+                        ...list,
+                        allocate: value,
+                        allocated: value * list["Qty_per"],
+                      }
+                    : list
+                )
+              );
+              setSelectedPrevInvUID(options[x]["inv_uid"]);
+            }
+          } else {
+            if (selectedPrevInvUID === "") {
+              console.log(
+                "prevValue here else if if",
+                value,
+                options[x]["allocate"]
+              );
+              setAllocationQty(parseInt(value) - options[x]["allocate"] - 1);
+              setSelectedInvUID(options[x]["inv_uid"]);
+              console.log(options[x]["inv_uid"], children);
+              setOptions((option) =>
+                option?.map((list, index) =>
+                  index === id || list["inv_uid"] === invID
+                    ? {
+                        ...list,
+                        allocate: value,
+                        allocated: value * list["Qty_per"],
+                      }
+                    : list
+                )
+              );
+              console.log(" prevValue here else if if", options[x]);
+              setSelectedPrevInvUID(options[x]["inv_uid"]);
+            } else if (selectedPrevInvUID === options[x]["inv_uid"]) {
+              console.log(
+                "prevValue here else if else if",
+                value,
+                options[x]["allocate"]
+              );
+              setAllocationQty(allocationQty - 1);
+              setSelectedInvUID(options[x]["inv_uid"]);
+              console.log(options[x]["inv_uid"]);
+              setOptions((option) =>
+                option?.map((list, index) =>
+                  index === id || list["inv_uid"] === invID
+                    ? {
+                        ...list,
+                        allocate: value,
+                        allocated: value * list["Qty_per"],
+                      }
+                    : list
+                )
+              );
+              setSelectedPrevInvUID(options[x]["inv_uid"]);
+            } else {
+              console.log("prevValue here else if else");
+              setAllocationQty(allocationQty - 1);
+              setSelectedInvUID(options[x]["inv_uid"]);
+              console.log(options[x]["inv_uid"]);
+              setOptions((option) =>
+                option?.map((list, index) =>
+                  index === id || list["inv_uid"] === invID
+                    ? {
+                        ...list,
+                        allocate: value,
+                        allocated: value * list["Qty_per"],
+                      }
+                    : list
+                )
+              );
+              setSelectedPrevInvUID(options[x]["inv_uid"]);
+            }
+          }
         }
       }
     }
@@ -485,9 +744,6 @@ function Landing() {
                   if (
                     allocate[j].child_pn === data[i].child_pn &&
                     allocate[j].child_lft === data[i].child_lft &&
-                    // allocate[j].inv_loc == country &&
-                    // allocate[j].gp_lft < data[i].child_lft &&
-                    // data[i].child_lft < allocate[j].gp_rgt &&
                     allocate[j].inv_available_date < Desired_Date
                   ) {
                     allocatable += allocate[j].SubAssyQty;
@@ -511,10 +767,6 @@ function Landing() {
                     unitCost = allParts[j].Unit_Cost;
                   }
                 }
-                // order_Qty =
-                //   data[i].RequiredQty - data[i].subAssemblyQty - data[i].rawInv;
-
-                // console.log(data[i].child_pn, String(data[i].child_lft));
                 var allocate_input = 0;
                 var avaiInv = 0;
                 var row = new RowData(
@@ -797,26 +1049,8 @@ function Landing() {
             >
               {row.allocatable_qty}
             </td>
-            <td>
-              {/* {allocationObject.length > 0
-                ? allocationObject.map((allocate) =>
-                    allocate.child_pn + "-" + allocate.child_lft === row.part
-                      ? allocate.allocated_qty
-                      : null
-                  )
-                : 0} */}
-              {row.allocated_qty}
-            </td>
-            <td>
-              {/* {allocationObject.length > 0
-                ? allocationObject.map((allocate) =>
-                    allocate.child_pn + "-" + allocate.child_lft === row.part
-                      ? row.delta_qty - allocate.allocated_qty
-                      : null
-                  )
-                : 0} */}
-              {row.delta2_qty}
-            </td>
+            <td>{row.allocated_qty}</td>
+            <td>{row.delta2_qty}</td>
             <td>{row.inventory}</td>
             <td>{row.available_inv}</td>
             <td>
@@ -852,7 +1086,6 @@ function Landing() {
             <th style={{ width: "10%" }}>Qty Per Assembly</th>
             <th style={{ width: "10%" }}>Allocated</th>
             <th style={{ width: "10%" }}>Order Qty</th>
-            {/* <th style={{ width: "5%" }}>Set Value</th> */}
           </tr>
 
           {options.map((option, i) => (
@@ -889,11 +1122,6 @@ function Landing() {
                 " selectedInvUID,",
                 selectedInvUID,
                 "option.child_pn,",
-                option.child_pn,
-                "prevValue > option.allocate,",
-                prevValue > option.allocate,
-                "prevValue,",
-                prevValue,
                 " option.original_allocate,",
                 option.original_allocate,
                 " option.allocate,",
@@ -902,8 +1130,6 @@ function Landing() {
                 option.allocated,
                 "allocationQty,",
                 allocationQty,
-                "allocatedQty,",
-                allocatedQty,
                 "option.order,",
                 option.order
               )}
@@ -913,43 +1139,6 @@ function Landing() {
                   ? option.order - allocationQty * option.Qty_per
                   : option.order}
               </td>
-              {/* <td>
-                {option.original_allocate < option.allocate
-                  ? selectedChildrenID.some(
-                      (item) => option["child_pn"] === item
-                    )
-                    ? option.order - allocationQty * option.Qty_per
-                    : option.order
-                  : option.original_allocate > option.allocate
-                  ? selectedChildrenID.some(
-                      (item) => option["child_pn"] === item
-                    )
-                    ? option.order - allocationQty * option.Qty_per
-                    : option.order
-                  : option.order}
-              </td> */}
-
-              {/* <td>
-                {prevValue > option.allocate &&
-                selectedChildrenID.some(
-                  (item) => option["child_pn"] === item
-                ) &&
-                option.inv_uid === selectedInvUID
-                  ? option.order + allocationQty * option.Qty_per
-                  : prevValue > option.allocate &&
-                    selectedChildrenID.some(
-                      (item) => option["child_pn"] === item
-                    ) &&
-                    option.inv_uid !== selectedInvUID
-                  ? option.order - allocationQty * option.Qty_per
-                  : prevValue <= option.allocate &&
-                    selectedChildrenID.some(
-                      (item) => option["child_pn"] === item
-                    )
-                  ? option.order - allocationQty * option.Qty_per
-                  : option.order - option.allocate * option.Qty_per}
-              </td> */}
-              {/* <td>{option.order}</td> */}
             </tr>
           ))}
         </Modal.Body>
