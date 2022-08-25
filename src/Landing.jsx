@@ -239,7 +239,7 @@ function Landing() {
       key2 = option[i]["child_pn"] + "-" + option[i]["child_lft"] + "-" + i;
       obj2[key2] = option[i]["allocate"] * option[i]["RequiredQty"];
 
-      k2 = options[i]["child_pn"];
+      k2 = option[i]["child_pn"];
       //  finalObj[k2] = 0;
       finalObj[k2] = 0;
     }
