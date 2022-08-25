@@ -1410,9 +1410,7 @@ function Landing() {
           {options.map((option, i) => (
             <tr key={i}>
               <td>{option.inv_uid}</td>
-              <td>
-                {option.parent_pn}-{option.gp_lft}
-              </td>
+              <td>{option.parent_pn}</td>
               <td>{option.inv_available_date}</td>
               <td>{option.inv_qty}</td>
               <td>
@@ -1432,7 +1430,9 @@ function Landing() {
                   ""
                 )}
               </td>
-              <td>{option.child_pn}</td>
+              <td>
+                {option.child_pn}-{option.child_lft}
+              </td>
               <td>{option.RequiredQty}</td>
               <td>{option.allocated}</td>
               {/* {console.log(
