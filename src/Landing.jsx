@@ -202,15 +202,20 @@ function Landing() {
                 : Rows[j]["delta_qty"];
             allocate[i]["allocate"] = 0;
             allocate[i]["original_allocate"] = 0;
+            allocate[i]["previously_allocated"] = 0;
+            allocate[i]["allocatable"] = 0;
             allocate[i]["allocated"] =
               allocate[i]["allocate"] * allocate[i]["RequiredQty"];
             for (let k in allocationObject) {
               if (
                 allocationObject[k]["Allocation_inventory_uid"] ===
                   allocate[i]["inv_uid"] &&
-                allocate[i]["child_pn"] === allocationObject[k]["child_pn"] &&
-                allocate[i]["child_lft"] === allocationObject[k]["child_lft"]
+                allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
               ) {
+                allocate[i]["previously_allocated"] +=
+                  allocationObject[k]["sum(Allocation_allocated_qty)"];
+                allocate[i]["allocatable"] =
+                  allocate[i]["inv_qty"] - allocate[i]["previously_allocated"];
                 allocate[i]["original_allocate"] +=
                   allocationObject[k]["sum(Allocation_allocated_qty)"];
                 allocate[i]["allocate"] +=
@@ -1400,6 +1405,8 @@ function Landing() {
             <th style={{ width: "5%" }}>Assembly</th>
             <th style={{ width: "12%" }}>Date Available</th>
             <th style={{ width: "10%" }}>Inventory Qty</th>
+            <th style={{ width: "10%" }}>Previously Allocated</th>
+            <th style={{ width: "10%" }}>Allocatable</th>
             <th style={{ width: "10%" }}>Allocate</th>
             <th style={{ width: "10%" }}>Child</th>
             <th style={{ width: "10%" }}>Qty Per Assembly</th>
@@ -1413,6 +1420,8 @@ function Landing() {
               <td>{option.parent_pn}</td>
               <td>{option.inv_available_date}</td>
               <td>{option.inv_qty}</td>
+              <td>{option.previously_allocated}</td>
+              <td>{option.allocatable}</td>
               <td>
                 {option.child_pn === selectedPartID.split("-")[0] ? (
                   <input
