@@ -260,12 +260,13 @@ function Landing() {
               if (
                 allocationObject[k]["Allocation_inventory_uid"] ===
                   allocate[i]["inv_uid"] &&
-                allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
+                allocate[i]["child_pn"] === allocationObject[k]["child_pn"] &&
+                allocate[i]["child_lft"] === allocationObject[k]["child_lft"]
               ) {
-                allocate[i]["previously_allocated"] +=
-                  allocationObject[k]["sum(Allocation_allocated_qty)"];
-                allocate[i]["allocatable"] =
-                  allocate[i]["inv_qty"] - allocate[i]["previously_allocated"];
+                // allocate[i]["previously_allocated"] +=
+                //   allocationObject[k]["sum(Allocation_allocated_qty)"];
+                // allocate[i]["allocatable"] =
+                //   allocate[i]["inv_qty"] - allocate[i]["previously_allocated"];
                 allocate[i]["original_allocate"] +=
                   allocationObject[k]["sum(Allocation_allocated_qty)"];
                 allocate[i]["allocate"] +=
@@ -274,6 +275,26 @@ function Landing() {
                 allocate[i]["allocated"] +=
                   allocationObject[k]["sum(Allocation_allocated_qty)"] *
                   allocate[i]["RequiredQty"];
+              }
+            }
+            for (let k in allocationObject) {
+              if (
+                allocationObject[k]["Allocation_inventory_uid"] ===
+                  allocate[i]["inv_uid"] &&
+                allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
+              ) {
+                allocate[i]["previously_allocated"] +=
+                  allocationObject[k]["sum(Allocation_allocated_qty)"];
+                allocate[i]["allocatable"] =
+                  allocate[i]["inv_qty"] - allocate[i]["previously_allocated"];
+                // allocate[i]["original_allocate"] +=
+                //   allocationObject[k]["sum(Allocation_allocated_qty)"];
+                // allocate[i]["allocate"] +=
+                //   allocationObject[k]["sum(Allocation_allocated_qty)"];
+
+                // allocate[i]["allocated"] +=
+                //   allocationObject[k]["sum(Allocation_allocated_qty)"] *
+                //   allocate[i]["RequiredQty"];
               }
             }
           }
@@ -1941,7 +1962,7 @@ function Landing() {
                     type="number"
                     min="0"
                     name={option.inv_uid}
-                    max={option.inv_qty}
+                    max={option.allocatable}
                     value={option.allocate}
                     onChange={(val) => {
                       changeAllocationQty(i, option.inv_uid, val);
