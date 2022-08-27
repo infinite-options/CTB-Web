@@ -1863,7 +1863,7 @@ function Landing() {
           <th>Required Qty</th>
           <th>Sub Assembly Qty</th>
           <th>Delta Qty</th>
-          <th>Allocatable Sub Assy Qty</th>
+          <th>Max Allocatable Sub Assy Qty</th>
           <th>Allocated Sub Assy Qty</th>
           <th>Delta2 Qty</th>
           <th>Raw Inventory</th>
