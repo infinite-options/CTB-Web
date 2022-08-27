@@ -256,46 +256,43 @@ function Landing() {
             allocate[i]["allocatable"] = 0;
             allocate[i]["allocated"] =
               allocate[i]["allocate"] * allocate[i]["RequiredQty"];
-            for (let k in allocationObject) {
-              if (
-                allocationObject[k]["Allocation_inventory_uid"] ===
-                  allocate[i]["inv_uid"] &&
-                allocate[i]["child_pn"] === allocationObject[k]["child_pn"] &&
-                allocate[i]["child_lft"] === allocationObject[k]["child_lft"]
-              ) {
-                // allocate[i]["previously_allocated"] +=
-                //   allocationObject[k]["sum(Allocation_allocated_qty)"];
-                // allocate[i]["allocatable"] =
-                //   allocate[i]["inv_qty"] - allocate[i]["previously_allocated"];
-                allocate[i]["original_allocate"] +=
-                  allocationObject[k]["sum(Allocation_allocated_qty)"];
-                allocate[i]["allocate"] +=
-                  allocationObject[k]["sum(Allocation_allocated_qty)"];
+            if (allocationObject.length !== 0) {
+              for (let k in allocationObject) {
+                if (
+                  allocationObject[k]["Allocation_inventory_uid"] ===
+                    allocate[i]["inv_uid"] &&
+                  allocate[i]["child_pn"] === allocationObject[k]["child_pn"] &&
+                  allocate[i]["child_lft"] === allocationObject[k]["child_lft"]
+                ) {
+                  allocate[i]["original_allocate"] +=
+                    allocationObject[k]["sum(Allocation_allocated_qty)"];
+                  allocate[i]["allocate"] +=
+                    allocationObject[k]["sum(Allocation_allocated_qty)"];
 
-                allocate[i]["allocated"] +=
-                  allocationObject[k]["sum(Allocation_allocated_qty)"] *
-                  allocate[i]["RequiredQty"];
+                  allocate[i]["allocated"] +=
+                    allocationObject[k]["sum(Allocation_allocated_qty)"] *
+                    allocate[i]["RequiredQty"];
+                }
+                if (
+                  allocationObject[k]["Allocation_inventory_uid"] ===
+                    allocate[i]["inv_uid"] &&
+                  allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
+                ) {
+                  allocate[i]["previously_allocated"] +=
+                    allocationObject[k]["sum(Allocation_allocated_qty)"];
+                  allocate[i]["allocatable"] =
+                    allocate[i]["inv_qty"] -
+                    allocate[i]["previously_allocated"];
+                }
               }
-            }
-            for (let k in allocationObject) {
-              if (
-                allocationObject[k]["Allocation_inventory_uid"] ===
-                  allocate[i]["inv_uid"] &&
-                allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
-              ) {
-                allocate[i]["previously_allocated"] +=
-                  allocationObject[k]["sum(Allocation_allocated_qty)"];
-                allocate[i]["allocatable"] =
-                  allocate[i]["inv_qty"] - allocate[i]["previously_allocated"];
-                // allocate[i]["original_allocate"] +=
-                //   allocationObject[k]["sum(Allocation_allocated_qty)"];
-                // allocate[i]["allocate"] +=
-                //   allocationObject[k]["sum(Allocation_allocated_qty)"];
+            } else {
+              allocate[i]["original_allocate"] = 0;
+              allocate[i]["allocate"] = 0;
 
-                // allocate[i]["allocated"] +=
-                //   allocationObject[k]["sum(Allocation_allocated_qty)"] *
-                //   allocate[i]["RequiredQty"];
-              }
+              allocate[i]["allocated"] = 0;
+
+              allocate[i]["previously_allocated"] = 0;
+              allocate[i]["allocatable"] = allocate[i]["inv_qty"];
             }
           }
           key = allocate[i]["child_pn"];
@@ -305,6 +302,7 @@ function Landing() {
           // finalObj[key] = allocate[i]["allocate"];
           // finalObj[key] = 0;
         }
+
         option.push(allocate[i]);
       }
     }
@@ -418,19 +416,8 @@ function Landing() {
     obj = allocated;
 
     for (let x = 0; x < options.length; x++) {
-      console.log(
-        "prevvalue",
-        options[x]["child_pn"],
-        options[x]["inv_uid"],
-        value,
-        options[x]["original_allocate"],
-        options[x]["allocate"],
-        allocationQty
-      );
       if (id === x) {
-        console.log(obj);
         key = options[x]["child_pn"];
-        console.log(key);
         if (
           options[x]["original_allocate"] < options[x]["allocate"] ||
           parseInt(value) > options[x]["allocate"]
@@ -447,6 +434,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] - 1,
                     }
                   : list
               )
@@ -485,6 +473,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] - 1,
                     }
                   : list
               )
@@ -523,6 +512,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] - 1,
                     }
                   : list
               )
@@ -568,6 +558,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] + 1,
                     }
                   : list
               )
@@ -606,6 +597,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] + 1,
                     }
                   : list
               )
@@ -639,6 +631,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] + 1,
                     }
                   : list
               )
@@ -682,6 +675,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] - 1,
                     }
                   : list
               )
@@ -720,6 +714,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] - 1,
                     }
                   : list
               )
@@ -758,6 +753,7 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
+                      allocatable: list["allocatable"] - 1,
                     }
                   : list
               )
@@ -800,6 +796,7 @@ function Landing() {
                         ...list,
                         allocate: value,
                         allocated: value * list["RequiredQty"],
+                        allocatable: list["allocatable"] - 1,
                       }
                     : list
                 )
@@ -839,6 +836,7 @@ function Landing() {
                         ...list,
                         allocate: value,
                         allocated: value * list["RequiredQty"],
+                        allocatable: list["allocatable"] - 1,
                       }
                     : list
                 )
@@ -873,6 +871,7 @@ function Landing() {
                         ...list,
                         allocate: value,
                         allocated: value * list["RequiredQty"],
+                        allocatable: list["allocatable"] - 1,
                       }
                     : list
                 )
@@ -913,6 +912,7 @@ function Landing() {
                         ...list,
                         allocate: value,
                         allocated: value * list["RequiredQty"],
+                        allocatable: list["allocatable"] + 1,
                       }
                     : list
                 )
@@ -952,6 +952,7 @@ function Landing() {
                         ...list,
                         allocate: value,
                         allocated: value * list["RequiredQty"],
+                        allocatable: list["allocatable"] + 1,
                       }
                     : list
                 )
@@ -986,6 +987,7 @@ function Landing() {
                         ...list,
                         allocate: value,
                         allocated: value * list["RequiredQty"],
+                        allocatable: list["allocatable"] + 1,
                       }
                     : list
                 )
@@ -1040,15 +1042,6 @@ function Landing() {
     const { value } = e.target;
 
     for (let x = 0; x < Rows.length; x++) {
-      console.log(
-        "prevvalue",
-        id,
-        invID,
-        selectedPrevInvUID,
-        value,
-        Rows[x]["allocate_input"],
-        allocationQty
-      );
       if (id === x) {
         if (parseInt(value) > Rows[x]["allocate_input"]) {
           if (selectedPrevInvUID === "") {
@@ -1139,15 +1132,6 @@ function Landing() {
             )
           );
         }
-        console.log(
-          "prevvalue",
-          id,
-          invID,
-          selectedPrevInvUID,
-          value,
-          Rows[x]["allocate_input"],
-          allocationQty
-        );
 
         if (parseInt(value) > Rows[x]["allocate_input"]) {
           if (selectedPrevInvUID === "") {
@@ -1600,7 +1584,7 @@ function Landing() {
                     unitCost = allParts[j].Unit_Cost;
                   }
                 }
-                console.log(tempUID, allocate_input, total_allocate);
+
                 var avaiInv = 0;
                 avaiInv = tempInv - total_allocate;
                 final_order_qty = delta2_qty - allocate_input;
@@ -1962,7 +1946,7 @@ function Landing() {
                     type="number"
                     min="0"
                     name={option.inv_uid}
-                    max={option.allocatable}
+                    max={option.allocatable + option.allocate}
                     value={option.allocate}
                     onChange={(val) => {
                       changeAllocationQty(i, option.inv_uid, val);
