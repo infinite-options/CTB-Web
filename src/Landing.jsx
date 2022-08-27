@@ -283,6 +283,9 @@ function Landing() {
                   allocate[i]["allocatable"] =
                     allocate[i]["inv_qty"] -
                     allocate[i]["previously_allocated"];
+                } else {
+                  allocate[i]["previously_allocated"] = 0;
+                  allocate[i]["allocatable"] = allocate[i]["inv_qty"];
                 }
               }
             } else {
