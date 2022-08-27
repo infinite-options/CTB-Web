@@ -276,25 +276,34 @@ function Landing() {
                 if (
                   allocationObject[k]["Allocation_inventory_uid"] ===
                     allocate[i]["inv_uid"] &&
-                  allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
+                  allocate[i]["child_pn"] === allocationObject[k]["child_pn"] &&
+                  allocate[i]["child_lft"] !== allocationObject[k]["child_lft"]
                 ) {
                   allocate[i]["previously_allocated"] +=
                     allocationObject[k]["sum(Allocation_allocated_qty)"];
+                }
+                if (
+                  allocationObject[k]["Allocation_inventory_uid"] ===
+                    allocate[i]["inv_uid"] &&
+                  allocate[i]["child_pn"] === allocationObject[k]["child_pn"]
+                ) {
                   allocate[i]["allocatable"] =
                     allocate[i]["inv_qty"] -
-                    allocate[i]["previously_allocated"];
+                    allocate[i]["previously_allocated"] -
+                    allocate[i]["allocate"];
                 } else {
-                  allocate[i]["allocatable"] = allocate[i]["inv_qty"];
+                  allocate[i]["allocatable"] =
+                    allocate[i]["inv_qty"] -
+                    allocate[i]["previously_allocated"] -
+                    allocate[i]["allocate"];
                 }
               }
             } else {
               allocate[i]["original_allocate"] = 0;
               allocate[i]["allocate"] = 0;
-
               allocate[i]["allocated"] = 0;
-
               allocate[i]["previously_allocated"] = 0;
-              allocate[i]["allocatable"] = allocate[i]["inv_qty"];
+              // allocate[i]["allocatable"] = allocate[i]["inv_qty"];
             }
           }
           key = allocate[i]["child_pn"];
@@ -436,7 +445,10 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
-                      allocatable: list["allocatable"] - 1,
+                      allocatable:
+                        list["inv_qty"] -
+                        list["previously_allocated"] -
+                        parseInt(value),
                     }
                   : list
               )
@@ -475,7 +487,10 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
-                      allocatable: list["allocatable"] - 1,
+                      allocatable:
+                        list["inv_qty"] -
+                        list["previously_allocated"] -
+                        parseInt(value),
                     }
                   : list
               )
@@ -514,7 +529,10 @@ function Landing() {
                       ...list,
                       allocate: value,
                       allocated: value * list["RequiredQty"],
-                      allocatable: list["allocatable"] - 1,
+                      allocatable:
+                        list["inv_qty"] -
+                        list["previously_allocated"] -
+                        parseInt(value),
                     }
                   : list
               )
@@ -1924,7 +1942,7 @@ function Landing() {
             <th style={{ width: "5%" }}>Assembly</th>
             <th style={{ width: "12%" }}>Date Available</th>
             <th style={{ width: "10%" }}>Inventory Qty</th>
-            <th style={{ width: "10%" }}>Previously Allocated</th>
+            <th style={{ width: "10%" }}>Allocated Elsewhere</th>
             <th style={{ width: "10%" }}>Allocatable</th>
             <th style={{ width: "10%" }}>Allocate</th>
             <th style={{ width: "10%" }}>Child</th>
@@ -1963,7 +1981,7 @@ function Landing() {
               </td>
               <td>{option.RequiredQty}</td>
               <td>{option.allocated}</td>
-              {/* {console.log(
+              {console.log(
                 i,
                 "option.inv_uid,",
                 option.inv_uid,
@@ -1977,8 +1995,14 @@ function Landing() {
                 "allocationQty,",
                 allocationQty,
                 "option.order,",
-                option.order
-              )} */}
+                option.order,
+                "option.allocatable,",
+                option.allocatable,
+                "option.previously_allocated,",
+                option.previously_allocated,
+                "option.inv_qty,",
+                option.inv_qty
+              )}
 
               {/* <td>{subtract(allocatedObj, allocated, option.child_pn)}</td> */}
               {/* <td>
