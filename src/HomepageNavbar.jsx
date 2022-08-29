@@ -21,7 +21,7 @@ export default function HomepageNavbar() {
   };
 
   return (
-    <nav class="headerNav">
+    <nav className="headerNav">
       <div
         style={{
           display: "flex",
@@ -37,7 +37,7 @@ export default function HomepageNavbar() {
             width: "100%",
           }}
         >
-          <Link to="/" class="logo" onClick={closeMenu}>
+          <Link to="/" className="logo" onClick={closeMenu}>
             BUILD SUCCESS
           </Link>
         </div>
@@ -64,16 +64,16 @@ export default function HomepageNavbar() {
           <Link to="/" class="navButtons" onClick={closeMenuProjects}>
             Technology
           </Link>
-          <Link to="/buyparts" class="navButtons" onClick={closeMenuProjects}>
+          <Link to="/buyparts" className="navButtons" onClick={closeMenuProjects}>
             CTB
           </Link>
-          <Link to="/addparts" class="navButtons" onClick={closeMenuProjects}>
+          <Link to="/addparts" className="navButtons" onClick={closeMenuProjects}>
             Add Parts
           </Link>
-          <Link to="/inventory" class="navButtons" onClick={closeMenuProjects}>
+          <Link to="/inventory" className="navButtons" onClick={closeMenuProjects}>
             Inventory
           </Link>
-          <Link to="/editpart" class="navButtons" onClick={closeMenuProjects}>
+          <Link to="/editpart" className="navButtons" onClick={closeMenuProjects}>
             Edit Parts
           </Link>
         </div>

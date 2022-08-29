@@ -99,7 +99,7 @@ const Inventory = () => {
                                 <td>{status(row.inv_available_date)}</td>
                                 <td>{row.inv_loc}</td>
                                 <td>{row.inv_qty}</td>
-                                <td><button class="big-button" onClick={routeChange} id={index}>Adjust</button></td>
+                                <td><button className="big-button" onClick={routeChange} id={index}>Adjust</button></td>
                             </tr>
 
                         ))
@@ -128,9 +128,9 @@ const Inventory = () => {
                                 <td>{status(SamePart[num].inv_available_date)}</td>
                                 <td>{SamePart[num].inv_loc}</td>
                                 <td>{SamePart[num].inv_qty}</td>
-                                <td><input id={num} onChange={changeNewQty} class="input-field" type="text" placeholder="New Qty" required /></td>
-                                <td><input id={num}  class="input-field" type="text" placeholder="New Location" required /></td>
-                                <td><input id={num}  class="input-field" type="text" placeholder="Transportation Time" required /></td>
+                                <td><input id={num} onChange={changeNewQty} className="input-field" type="text" placeholder="New Qty" required /></td>
+                                <td><input id={num}  className="input-field" type="text" placeholder="New Location" required /></td>
+                                <td><input id={num}  className="input-field" type="text" placeholder="Transportation Time" required /></td>
                                 <td><button id={num} onClick={changeQty}>Save</button></td>
                             </tr>
                         ))
@@ -138,12 +138,12 @@ const Inventory = () => {
     
                     <tr>
                         <td>{SamePart[0].inv_pn}</td>
-                        <td><input class="input-field" id="available_date" type="text" placeholder="Available Date"
+                        <td><input className="input-field" id="available_date" type="text" placeholder="Available Date"
                             onChange={e => setAvailable_time(e.target.value)} required /></td>
-                        <td><input class="input-field" id="originLocation" type="text" placeholder="Origin Locatons"
+                        <td><input className="input-field" id="originLocation" type="text" placeholder="Origin Locatons"
                             onChange={e => setoriginLocation(e.target.value)} required /></td>
                         <td></td>
-                        <td><input class="input-field" id="inventory" type="text" placeholder="Current Inventory"
+                        <td><input className="input-field" id="inventory" type="text" placeholder="Current Inventory"
                             onChange={e => setCurrentInventory(e.target.value)} required /></td>
                         <td></td>
                         <td></td>
@@ -212,7 +212,7 @@ const Inventory = () => {
 
 
     return (
-        <div class="box">
+        <div className="box">
             <h1>Inventory</h1>
             <NavBar></NavBar>
             <br></br>

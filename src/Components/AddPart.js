@@ -68,7 +68,7 @@ const AddPart = (useEffect) => {
   }
 
   return (
-    <div class="box">
+    <div className="box">
       <h1>Add Parts</h1>
       <nav
         style={{
@@ -85,9 +85,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Part Number</div>
+      <div className="text">Part Number</div>
       <input
-        class="input-field"
+        className="input-field"
         id="partNumber"
         type="text"
         placeholder="Part Number"
@@ -97,9 +97,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Description</div>
+      <div className="text">Description</div>
       <input
-        class="input-field"
+        className="input-field"
         id="description"
         type="text"
         placeholder="Description"
@@ -109,9 +109,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Unit Cost</div>
+      <div className="text">Unit Cost</div>
       <input
-        class="input-field"
+        className="input-field"
         id="unitCost"
         type="text"
         placeholder="Unit Cost"
@@ -121,9 +121,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Cost Unit</div>
+      <div className="text">Cost Unit</div>
       <input
-        class="input-field"
+        className="input-field"
         id="costUnit"
         type="text"
         placeholder="Cost Unit"
@@ -133,9 +133,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Weight</div>
+      <div className="text">Weight</div>
       <input
-        class="input-field"
+        className="input-field"
         id="Weight"
         type="text"
         placeholder="Weight"
@@ -145,9 +145,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Weight Unit</div>
+      <div className="text">Weight Unit</div>
       <input
-        class="input-field"
+        className="input-field"
         id="Weight_Unit"
         type="text"
         placeholder="Weight_Unit"
@@ -157,9 +157,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Material</div>
+      <div className="text">Material</div>
       <input
-        class="input-field"
+        className="input-field"
         id="Material"
         type="text"
         placeholder="Material"
@@ -169,9 +169,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Vendor</div>
+      <div className="text">Vendor</div>
       <input
-        class="input-field"
+        className="input-field"
         id="vendor"
         type="text"
         placeholder="Vendor"
@@ -181,9 +181,9 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <div class="text">Origin Locatons</div>
+      <div className="text">Origin Locatons</div>
       <input
-        class="input-field"
+        className="input-field"
         id="originLocation"
         type="text"
         placeholder="Origin Locatons"
@@ -193,7 +193,7 @@ const AddPart = (useEffect) => {
       <br />
       <br />
       <br />
-      <button class="big-button" id="submit" onClick={sendJSON}>
+      <button className="big-button" id="submit" onClick={sendJSON}>
         Submit
       </button>
       <br />

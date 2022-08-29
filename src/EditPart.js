@@ -101,7 +101,7 @@ const EditPart = (useEffect) => {
     return(
 
 
-        <div class="box">
+        <div className="box">
         
         <h1>Edit Parts</h1>
         <div></div>
@@ -111,73 +111,73 @@ const EditPart = (useEffect) => {
             <br/>
             <br/>
             <br/>
-            <div class="text">Part Number</div>
-            <input  class="input-field" id="partNumber" type="text" placeholder="Part Number" 
+            <div className="text">Part Number</div>
+            <input  className="input-field" id="partNumber" type="text" placeholder="Part Number" 
             onChange={e => setpartNumber(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Description</div>
-            <input  class="input-field" id="description" type="text" placeholder="Description" 
+            <div className="text">Description</div>
+            <input  className="input-field" id="description" type="text" placeholder="Description" 
             onChange={e => setdescription(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Unit Cost</div>
-            <input  class="input-field" id="unitCost" type="text" placeholder="Unit Cost" 
+            <div className="text">Unit Cost</div>
+            <input  className="input-field" id="unitCost" type="text" placeholder="Unit Cost" 
             onChange={e => setunitCost(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Cost Unit</div>
-            <input  class="input-field" id="costUnit" type="text" placeholder="Cost Unit" 
+            <div className="text">Cost Unit</div>
+            <input  className="input-field" id="costUnit" type="text" placeholder="Cost Unit" 
             onChange={e => setcostUnit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Weight</div>
-            <input  class="input-field" id="Weight" type="text" placeholder="Weight" 
+            <div className="text">Weight</div>
+            <input  className="input-field" id="Weight" type="text" placeholder="Weight" 
             onChange={e => setWeight(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Weight Unit</div>
-            <input  class="input-field" id="Weight_Unit" type="text" placeholder="Weight_Unit" 
+            <div className="text">Weight Unit</div>
+            <input  className="input-field" id="Weight_Unit" type="text" placeholder="Weight_Unit" 
             onChange={e => setWeight_Unit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Material</div>
-            <input  class="input-field" id="Material" type="text" placeholder="Material" 
+            <div className="text">Material</div>
+            <input  className="input-field" id="Material" type="text" placeholder="Material" 
             onChange={e => setMaterial(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Vendor</div>
-            <input  class="input-field" id="vendor"  type="text" placeholder="Vendor" 
+            <div className="text">Vendor</div>
+            <input  className="input-field" id="vendor"  type="text" placeholder="Vendor" 
             onChange={e => setvendor(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Origin Locatons</div>
-            <input  class="input-field" id="originLocation" type="text" placeholder="Origin Locatons" 
+            <div className="text">Origin Locatons</div>
+            <input  className="input-field" id="originLocation" type="text" placeholder="Origin Locatons" 
             onChange={e => setoriginLocation(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Current Inventory</div>
-            <input  class="input-field" id="inventory" type="text" placeholder="Current Inventory" 
+            <div className="text">Current Inventory</div>
+            <input  className="input-field" id="inventory" type="text" placeholder="Current Inventory" 
             onChange={e => setCurrentInventory(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <div class="text">Inventory Unit</div>
-            <input  class="input-field" id="inventory" type="text" placeholder="Inventory Unit" 
+            <div className="text">Inventory Unit</div>
+            <input  className="input-field" id="inventory" type="text" placeholder="Inventory Unit" 
             onChange={e => setInventoryUnit(e.target.value)} required/>
             <br/>
             <br/>
             <br/>
-            <button class="big-button" id="submit" onClick={sendJSON}>Submit</button>
+            <button className="big-button" id="submit" onClick={sendJSON}>Submit</button>
             <br/>
             <br/>
             <br/>

@@ -228,16 +228,16 @@ class DisplayProductsComponent extends React.Component {
         <div class="box">
           <h1>Clear to Build</h1>
           <br />
-          <div class="text">Upload Your BOM</div>
-          <button class="big-button">Upload Your BOM</button>
+          <div className="text">Upload Your BOM</div>
+          <button className="big-button">Upload Your BOM</button>
           <br />
           <br />
           <br />
           <form action="#">
-            <div class="text">Enter Product ID</div>
-            <button class="small-button">Save</button>
+            <div className="text">Enter Product ID</div>
+            <button className="small-button">Save</button>
             <input
-              class="input-field"
+              className="input-field"
               type="text"
               placeholder="Product ID"
               required
@@ -247,8 +247,8 @@ class DisplayProductsComponent extends React.Component {
           <br />
           <br />
           <form action="#">
-            <div class="text">Run Clear To Build</div>
-            <button class="big-button" onClick={this.updateTable()}>
+            <div className="text">Run Clear To Build</div>
+            <button className="big-button" onClick={this.updateTable()}>
               Run Clear To Build
             </button>
           </form>
@@ -256,12 +256,12 @@ class DisplayProductsComponent extends React.Component {
           <br />
           <br />
           <form action="#">
-            <div class="text">Enter Top Level Assy</div>
-            <button class="small-button">Save</button>
+            <div className="text">Enter Top Level Assy</div>
+            <button className="small-button">Save</button>
             <input
               value={this.state.Top_Level}
               onChange={this.changeTop_Level()}
-              class="input-field"
+              className="input-field"
               type="text"
               placeholder="Top Level Assy"
               required
@@ -271,12 +271,12 @@ class DisplayProductsComponent extends React.Component {
           <br />
           <br />
           <form action="#">
-            <div class="text">Enter Desired Qty</div>
-            <button class="small-button">Save</button>
+            <div className="text">Enter Desired Qty</div>
+            <button className="small-button">Save</button>
             <input
               value={this.state.Desired_Qty}
               onChange={this.changeDesired_Qty()}
-              class="input-field"
+              className="input-field"
               type="text"
               placeholder="Desired Qty"
               required
@@ -288,7 +288,7 @@ class DisplayProductsComponent extends React.Component {
           <br />
 
           <table>
-            <caption class="table-title">
+            <caption className="table-title">
               Product {this.state.Top_Level} Qty {this.state.Desired_Qty}
             </caption>
             <tr>

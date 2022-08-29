@@ -181,7 +181,7 @@ class TempProducts extends React.Component {
                     }}/>
                     <button onClick={() => this.getJSONobject()}>Submit</button>
                     <input type="file" onChange={this.onFileChange} />
-                    <button type="button" class="btn btn-primary" onClick={this.onFileUpload}>
+                    <button type="button" className="btn btn-primary" onClick={this.onFileUpload}>
                         Upload!
                     </button>
                     <h6>{this.state.productId}</h6>

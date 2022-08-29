@@ -1765,10 +1765,10 @@ function Landing() {
       <NavBar></NavBar>
 
       <br />
-      <div class="text">Upload Your BOM</div>
+      <div className="text">Upload Your BOM</div>
       <br />
       <input type="file" onChange={onFileChange} />
-      <button type="button" class="big-button" onClick={onFileUpload}>
+      <button type="button" className="big-button" onClick={onFileUpload}>
         Upload BOM
       </button>
       <br />
@@ -1805,12 +1805,12 @@ function Landing() {
       <br />
 
       <form action="#">
-        <div class="text">Enter Desired Qty</div>
-        {/* <button class="small-button">Save</button> */}
+        <div className="text">Enter Desired Qty</div>
+        {/* <button className="small-button">Save</button> */}
         <input
           value={Desired_Qty}
           onChange={changeDesired_Qty}
-          class="input-field"
+          className="input-field"
           type="text"
           placeholder="Desired Qty"
           required
@@ -1820,12 +1820,12 @@ function Landing() {
       <br />
       <br />
       <form action="#">
-        <div class="text">Enter Desired Date</div>
-        {/* <button class="small-button">Save</button> */}
+        <div className="text">Enter Desired Date</div>
+        {/* <button className="small-button">Save</button> */}
         <input
           value={Desired_Date}
           onChange={changeDesired_Date}
-          class="input-field"
+          className="input-field"
           type="date"
           placeholder="Desired Qty"
           required
@@ -1844,8 +1844,8 @@ function Landing() {
       <br />
       <br />
 
-      <div class="text">Run Clear To Build</div>
-      <button class="big-button" onClick={updateTable}>
+      <div className="text">Run Clear To Build</div>
+      <button className="big-button" onClick={updateTable}>
         Run Clear To Build
       </button>
 
