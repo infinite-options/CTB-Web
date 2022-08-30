@@ -1,10 +1,9 @@
 #video {
-    width: 100%;
-    min-height: 100%;
+    width: 110vw;
+    min-height: 135vh;
     position: relative;
     z-index: -2;
     box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9);
-
 }
 .img-blur {
     position: relative;
@@ -17,7 +16,8 @@
     display: flex;
     box-shadow: 0px 0px 10px 10px #000000;
     min-width: 100%;
-    padding: 0
+    padding: 0;
+    
 }
 .whtBg {
     display: flex;
@@ -26,11 +26,15 @@
     min-width: 100%;
     padding: 0
 }
-
+.left-text{
+    margin-left: 5rem;
+    border-left: white solid;
+    padding-left: 10%;
+}
 #colImg{
     justify-content: flex-end;
     width: 100%;
-    min-height: 100%;
+    min-height: 130vh;
     position: relative;
 }
 
@@ -113,26 +117,36 @@
     margin-top: 2rem;
 }
 .font28 {
-    font: normal normal normal 28px Montserrat-Medium;
+    font: normal normal normal 28px Montserrat-Regular;
+    letter-spacing: 0.2rem;
     margin-bottom: 2rem;
+    
+    line-height: 2.5rem;
+
 }
 .font30 {
-    font: normal normal normal 30px Montserrat-Medium;
+    font: normal normal normal 24px Montserrat-Regular;
     margin-top: 2rem;
     margin-bottom: 2rem;
+    max-width: 33vw;
+    letter-spacing: 0.2rem;
+    line-height: 2.5rem;
 }
 .font34 {
-    font: normal normal normal 34px Montserrat-Medium;
+    font: normal normal normal 34px Montserrat-Regular;
     margin-top: 1rem;
 }
 .font44{
-    font:normal normal normal 44px Montserrat-Medium;
+    font:normal normal normal 44px Montserrat-Regular;
     line-height: 2;  
     margin-top: 2rem;
 }
 .font80 {
-    margin-top: 2rem;
-    font: normal normal normal 80px Montserrat-Medium;}
+    margin-top:3rem;
+    font: normal normal normal 64px Montserrat-Regular;
+    letter-spacing: 0.3rem;
+    margin-bottom: 2rem;
+}
 
 .nav-links{
     display:flex;

@@ -12,7 +12,7 @@ import "./home.css";
 import HomepageNavbar from "./HomepageNavbar";
 
 export default function Home() {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <div
@@ -54,13 +54,13 @@ export default function Home() {
         </Row>
         <Row className="blkBg">
           <Col xs={12} sm={12} md={12} lg={4} xl={6} className="colStyle">
-            <div className="font28">VISION</div>
+            <div className="font22 left-text">VISION</div>
 
-            <div className="font30">
+            <div className="font30 left-text ">
               We’re Changing the Way the World Thinks About Manufacturing{" "}
             </div>
 
-            <div className="font22">
+            <div className="font22 left-text">
               Planning a build doesn't need to be complicated or time consuming.
               We simplified the process so you can find out what you need to
               order is seconds and track progress throughout the build cycle.
@@ -72,16 +72,16 @@ export default function Home() {
         </Row>
         <Row className="whtBg">
           <Col xs={12} sm={12} md={12} lg={4} xl={6} className="colStyle">
-            <div className="font28">SERVICES </div>
+            <div className="font28 left-text">SERVICES </div>
 
-            <div className="font28">
+            <div className="font28 left-text">
               We Deliver Exceptional Web-Based Software Products and Services
               Around the World
             </div>
 
-            <div className="font44">BUILD PLANNING</div>
+            <div className="font44 left-text">BUILD PLANNING</div>
 
-            <div className="font22">
+            <div className="font22 left-text">
               Save time and money by ordering only what you need given existing
               inventory and current orders. Use simulations to identify problem
               areas, order buffer stock, and mitigate risks.
@@ -106,9 +106,9 @@ export default function Home() {
         </Row>
         <Row className="whtBg">
           <Col xs={12} sm={12} md={12} lg={4} xl={6} className="colStyle">
-            <div className="font44">INTEGRATED QUALITY</div>
+            <div className="font44 left-text">INTEGRATED QUALITY</div>
 
-            <div className="font22">
+            <div className="font22 left-text">
               Put Quality First by integrating inspection results and quality
               checks throughout the ordering and manufacturing process.
               Integrate with vendor QA reports and enable visibility across your
