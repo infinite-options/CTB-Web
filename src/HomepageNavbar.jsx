@@ -61,7 +61,7 @@ export default function HomepageNavbar() {
           )}
         </div>
         <div className={open ? "nav-links active" : "nav-links"}>
-          <Link to="/" class="navButtons" onClick={closeMenuProjects}>
+          <Link to="/technology" class="navButtons" onClick={closeMenuProjects}>
             Technology
           </Link>
           <Link to="/buyparts" className="navButtons" onClick={closeMenuProjects}>

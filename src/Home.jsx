@@ -12,7 +12,7 @@ import "./home.css";
 import HomepageNavbar from "./HomepageNavbar";
 
 export default function Home() {
-  useEffect(() => { }, []);
+  useEffect(() => { }, []); //why useEffect here?
 
   return (
     <div
@@ -45,7 +45,7 @@ export default function Home() {
               justifyContent: "center",
             }}
           >
-            <div className="font80"> THE FUTURE OF MANUFACTURING PLANNING</div>
+            <div className="font80"> THE FUTURE OF <br /> MANUFACTURING PLANNING</div>
             <div className="font28">
               SIMPLIFYING BUILD READINESS <br /> ORGANIZING QUALITY DATA
               <br /> PROVIDING REAL TIME METRICS

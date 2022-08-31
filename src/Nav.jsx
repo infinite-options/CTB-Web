@@ -6,7 +6,7 @@ import AddPart from "./AddPart";
 import Inventory from "./Inventory";
 import EditPart from "./EditPart";
 import Home from "./Home";
-
+import Technology from "./technology"// viha added this to create technology page
 //import temp1 from "./Temp";
 
 //import Ably from 'ably/promises';
@@ -33,6 +33,7 @@ export default function Nav() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/technology" element={<Technology />} />
         <Route path="/buyparts" element={<Landing />} />
         <Route path="/addparts" element={<AddPart />} />
         <Route path="/inventory" element={<Inventory />} />

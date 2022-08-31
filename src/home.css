@@ -1,7 +1,9 @@
 #video {
-    width: 110vw;
-    min-height: 135vh;
+    width: 100vw;
+    min-height: 100vh;
     position: relative;
+    min-height: 100%;
+    min-width: 100%;
     z-index: -2;
     box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9);
 }
@@ -34,7 +36,7 @@
 #colImg{
     justify-content: flex-end;
     width: 100%;
-    min-height: 130vh;
+    min-height: 100vh;
     position: relative;
 }
 
@@ -117,11 +119,11 @@
     margin-top: 2rem;
 }
 .font28 {
-    font: normal normal normal 28px Montserrat-Regular;
-    letter-spacing: 0.2rem;
-    margin-bottom: 2rem;
+    font: normal normal normal 18px Montserrat-Regular;
+    letter-spacing: 0.2em;
+    margin-bottom: 2em;
     
-    line-height: 2.5rem;
+    line-height: 2em;
 
 }
 .font30 {
@@ -135,6 +137,7 @@
 .font34 {
     font: normal normal normal 34px Montserrat-Regular;
     margin-top: 1rem;
+    
 }
 .font44{
     font:normal normal normal 44px Montserrat-Regular;
@@ -143,9 +146,10 @@
 }
 .font80 {
     margin-top:3rem;
-    font: normal normal normal 64px Montserrat-Regular;
+    font: normal normal normal 50px Montserrat-Regular;
+    
     letter-spacing: 0.3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.4rem;
 }
 
 .nav-links{

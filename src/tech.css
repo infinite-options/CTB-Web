@@ -1,0 +1,34 @@
+.techImg1{
+    position: relative;
+}
+.title{
+    position: absolute;
+    top: 20%;
+    font: normal normal normal 4rem Montserrat-Regular;
+}
+/* .leftCol{
+    position: absolute;
+    
+} */
+.bomPage1{
+    position: relative;
+    background-color: black;
+    width: 100vw;
+    height: 1000px;
+}
+.col1{
+    color:white;
+    overflow-x: hidden;
+    max-width: 40%;
+    font-size: 48px;
+}
+.col2{
+    color:white;
+    font-size: 48px;
+    max-width: 40%;
+}
+.right-picture-col{
+    width: 474px;
+    height:630px;
+    margin-top: 0px;
+}
