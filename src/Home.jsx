@@ -34,6 +34,7 @@ export default function Home() {
             position: "relative",
           }}
         >
+          
           <HomepageNavbar />
 
           <img src={Landing1} id="video" />

@@ -8,8 +8,7 @@ import techImg2 from "./Images/techImg2.webp"
 import bomImg1 from "./Images/bom1imgWithArrow.PNG"
 import bomImg2 from "./Images/bom2ImgWithArrow.PNG"
 import bomImg3 from "./Images/updatedSizeBom3.webp"
-import rightArrow2 from "./Images/rightArrow2.PNG"
-import rightArrow1 from "./Images/rightArrow1.PNG"
+
 
 import "./tech.css"
 export default function Technology(){
