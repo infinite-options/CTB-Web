@@ -5,8 +5,8 @@ import Home from "./Home";
 import HomepageNavbar from "./HomepageNavbar";
 import techImg1another from "./Images/techImg1.webp"
 import techImg2 from "./Images/techImg2.webp"
-import bomImg1 from "./Images/updatedSizeBom1.webp"
-import bomImg2 from "./Images/updatedSizeBom2.webp"
+import bomImg1 from "./Images/bom1imgWithArrow.PNG"
+import bomImg2 from "./Images/bom2ImgWithArrow.PNG"
 import bomImg3 from "./Images/updatedSizeBom3.webp"
 import rightArrow2 from "./Images/rightArrow2.PNG"
 import rightArrow1 from "./Images/rightArrow1.PNG"
@@ -40,13 +40,14 @@ export default function Technology(){
                         <div className = "font34 col1 top"> Upload your BOM</div>
                         <div className = "font34 col2 top">And instantly see your Order List</div>
                         <div className="left">
-                            <img width="592px" height="337px"src ={bomImg1} className = "bom1"></img>
-                            <img src ={rightArrow1} className = "arrow1"></img>
+                            <img width="615px" height="450px"src ={bomImg1} className = "bom1"></img>
+                            {/* <img width="48vw" height="78vh "src ={bomImg1} className = "bom1"></img> */}
+                            {/* <img src ={rightArrow1} className = "arrow1"></img> */}
                         </div>
                         
                         <div className = "mid">
-                            <img width="240px" height="823px" src ={bomImg2} className = "bom2"></img>
-                            <img src ={rightArrow2} id = "arrow2"></img>
+                            <img width="380px" height="826px" src ={bomImg2} className = "bom2"></img>
+                            {/* <img src ={rightArrow2} id = "arrow2"></img> */}
                         </div>
                         
                         <img width="675px" height="288px" src ={bomImg3} id = "bom3"></img>

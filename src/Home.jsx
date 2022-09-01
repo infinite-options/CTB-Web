@@ -25,6 +25,7 @@ export default function Home() {
         margin: 0,
         padding: 0,
         overflowX: "hidden",
+        
       }}
     >
       <Container fluid>
@@ -46,7 +47,7 @@ export default function Home() {
             }}
           >
             <div className="font80"> THE FUTURE OF <br /> MANUFACTURING PLANNING</div>
-            <div className="font28">
+            <div className="font28" style={{marginTop:"7vh"}}>
               SIMPLIFYING BUILD READINESS <br /> ORGANIZING QUALITY DATA
               <br /> PROVIDING REAL TIME METRICS
             </div>

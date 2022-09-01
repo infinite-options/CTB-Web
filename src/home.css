@@ -1,12 +1,18 @@
 #video {
-    width: 100vw;
-    min-height: 100vh;
+    /* width: 100vw; */
+    /* min-height: 100vh; */
     position: relative;
-    min-height: 100%;
-    min-width: 100%;
+    /* min-height: 100%;
+    min-width: 100%; */
+    /* width: 2687px;
+    height: 1312px; */
     z-index: -2;
+    min-width: 2500px;
+    object-fit: fill;
     box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9);
+
 }
+
 .img-blur {
     position: relative;
     display: inline-block;
@@ -119,7 +125,7 @@
     margin-top: 2rem;
 }
 .font28 {
-    font: normal normal normal 18px Montserrat-Regular;
+    font: normal normal normal 28px Montserrat-Regular;
     letter-spacing: 0.2em;
     margin-bottom: 2em;
     
@@ -146,7 +152,7 @@
 }
 .font80 {
     margin-top:3rem;
-    font: normal normal normal 50px Montserrat-Regular;
+    font: normal normal normal 80px Montserrat-Regular;
     
     letter-spacing: 0.3rem;
     margin-bottom: 0.4rem;
