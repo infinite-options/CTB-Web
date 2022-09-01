@@ -1,6 +1,13 @@
 
 .techImg1{
     position: relative;
+    width: 2687px;
+    height: 1312px;
+    object-fit: cover;
+    z-index: -2;
+    background-position: center;
+    box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9); 
+
 }
 .title{
     position: absolute;
