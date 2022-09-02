@@ -1,8 +1,8 @@
 
-.techImg1{
+#techImg1{
     position: relative;
-    width: 2687px;
-    height: 1312px;
+    width: 2527px;
+    height: 1060px;
     object-fit: cover;
     z-index: -2;
     background-position: center;
@@ -12,7 +12,7 @@
 .title{
     position: absolute;
     top: 8vh;
-    font: normal normal normal 3vw Montserrat-Regular;
+    font: normal normal normal 5vh Montserrat-Regular;
 }
 /* .leftCol{
     position: absolute;
