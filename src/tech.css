@@ -95,6 +95,10 @@
 .bom1{
     position: relative;
 }
+#bomImgFull{
+    width: 220%;
+    height: auto;
+}
 .button{
     width: 12vw;
     background: black;

@@ -9,11 +9,11 @@
     height: 1312px;
     z-index: -2; 
     /* min-width: 2500px; kinda works */
-    object-fit: cover; 
+    object-fit: cover; /*makes background in the center*/
 
     /* justify-content: center; */
     box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9); 
-    background-position: center;
+    background-position: center; /*makes background in the center*/
 }
 /* .page1-container{
     background-image: ;
@@ -30,7 +30,9 @@
     display: flex;
     box-shadow: 0px 0px 10px 10px #000000;
     min-width: 100%;
+    min-height: 80vh;
     padding: 0;
+    align-items: center;
     
 }
 .whtBg {
@@ -38,19 +40,100 @@
     background-color: #fff;
     color: #000;
     min-width: 100%;
-    padding: 0
+    padding: 0;
+    align-items: center;
+    /* justify-content: center; */
 }
 .left-text{
     margin-left: 5rem;
-    border-left: white solid;
-    padding-left: 10%;
+    
+    /*padding-left: 10%; */
+    min-width: 25rem;
+    /* margin-bottom: 2rem; */
+    max-width: 25rem;
+
 }
+.container-vision{
+    margin-left: 10vw;
+    border-left: white solid 1px;
+    z-index: 3;
+}
+.container-part3{
+    margin-top: 20rem;
+    margin-bottom: 15rem;
+    margin-left: 10vw;
+    border-left: black solid 1px;
+    z-index: 3;
+}
+.container-part4{
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+    margin-left: 10vw;
+    /* border-left: black solid 1px; */
+    z-index: 3;
+}
+.container-part5{
+    width: 25rem;
+}
+.landing4-styles{
+    margin-left: 10vw;
+    width: 80%;
+    height: auto;
+}
+.landing5-styles{
+    width: 200%;
+    height: auto;
+}
+.thickerBorder{
+    /* border: white solid; */
+    /* s
+    omehow make the "We're chaning" part thicker */
+}
+
+
 #colImg{
     justify-content: flex-end;
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
+    
+    max-width: 100%;
+    height: auto;
+    z-index: 0;
+    margin-right: 0px;
 }
+@media screen and (max-width: 1400px){
+    .container-vision{
+        margin-left: 10px;
+        border-left: white solid;
+        z-index: 3;
+    }
+    .container-part3{
+        margin-top: 5rem;
+        margin-left: 10px;
+        border-left: black solid 1px;
+        z-index: 3;
+    }
+    #colImg{
+        justify-content: flex-end;
+        /* width: 100%;
+        min-height: 100vh; */
+        /* max-width: 965px;
+        max-height: 788px; */
+        
+        /* object-fit: scale-down;
+        position: relative; */
+        max-width: 75%;
+        height: auto;
+        z-index: 0;
+        float: right;
+    }
+    .container-part4{
+        margin-top: 10rem;
+        margin-bottom: 10rem;
+        margin-left: 10px;
+        /* border-left: black solid 1px; */
+        z-index: 3;
+    }
+    
+} 
 
 #colImgLeft {
     justify-content: left;
@@ -65,7 +148,7 @@
     background-image: url("./Images/Landing6.png");
     position: relative;
     /* Set a specific height */
-    min-height: 600px;
+    min-height: 800px;
     width:100%;
 
     /* Create the parallax scrolling effect */
@@ -80,9 +163,14 @@
     top:15%;
     border-radius: 10px;
     padding: 20px;
-    width: 35%;
     background-color: black;
     color: #fff;
+    width: 32rem;
+    height: 55vh;
+    
+    /* margin-top: 20vh;
+    
+    margin-bottom: 20vh; */
 }
 
 .header-on-image {
@@ -123,12 +211,13 @@
     flex-direction: column;
     justify-content: center;
     vertical-align: middle;
+    align-items: center;
     
 }
-.font22{
-    font: normal normal normal 22px Montserrat-Regular;
+.font20{
+    font: normal normal normal 20px Montserrat-Regular;
     line-height: 1.6;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
 }
 .font28 {
     font: normal normal normal 28px Montserrat-Regular;
@@ -138,13 +227,26 @@
     line-height: 2em;
 
 }
+.font28-less-spaced {
+    font: normal normal normal 28px Montserrat-Regular;
+    /* letter-spacing: 0.2em;   */
+    line-height: 1.5em;
+}
 .font30 {
-    font: normal normal normal 24px Montserrat-Regular;
+    font: normal normal normal 30px Montserrat-Regular;
     margin-top: 2rem;
     margin-bottom: 2rem;
     max-width: 33vw;
     letter-spacing: 0.2rem;
     line-height: 2.5rem;
+}
+.font30-less-spaced{
+    font: normal normal normal 30px Montserrat-Regular;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width: 33vw;
+    letter-spacing: 0.1rem;
+    line-height: 3rem;
 }
 .font34 {
     font: normal normal normal 34px Montserrat-Regular;
@@ -154,7 +256,20 @@
 .font44{
     font:normal normal normal 44px Montserrat-Regular;
     line-height: 2;  
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
+}
+.font44-less-space{
+    font:normal normal normal 44px Montserrat-Regular;
+    line-height: 1.5;  
+    margin-bottom: 3rem;
+    /* margin-top: 2rem; */
+}
+.font44-space{
+    font:normal normal normal 44px Montserrat-Regular;
+    line-height: 1.5;  
+    /* margin-top: 2rem; */
+    letter-spacing: 0.1em;
+    margin-bottom: 3rem;
 }
 .font80 {
     margin-top:3rem;
@@ -258,6 +373,7 @@
         width: 55%;
         background-color: black;
         color: #fff;
+        
     }
 }
       
