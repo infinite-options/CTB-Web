@@ -13,24 +13,24 @@
 @font-face {
   font-family: "Montserrat-Bold";
   src: local("Montserrat-Bold"),
-    url(./fonts/Montserrat-Bold.otf) format("truetype");
+    url(../Assets/Fonts/Montserrat-Bold.otf) format("truetype");
 }
 
 @font-face {
   font-family: "Montserrat-Regular";
   src: local("Montserrat-Regular"),
-    url(./fonts/Montserrat-Regular.otf) format("truetype");
+    url(../Assets//Fonts/Montserrat-Regular.otf) format("truetype");
 }
 
 @font-face {
   font-family: "Montserrat-Thin";
   src: local("Montserrat-Thin"),
-    url(./fonts/Montserrat-Thin.otf) format("truetype");
+    url(../Assets//Fonts/Montserrat-Thin.otf) format("truetype");
 }
 @font-face {
   font-family: "Montserrat-Medium";
   src: local("Montserrat-Medium"),
-    url(./fonts/Montserrat-Medium.otf) format("truetype");
+    url(../Assets//Fonts/Montserrat-Medium.otf) format("truetype");
 }
 
 .text{

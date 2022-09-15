@@ -145,7 +145,7 @@
 
 #parallax {
     /* The image used */
-    background-image: url("./Images/Landing6.png");
+    background-image: url("../Assets/Images/Landing6.png");
     position: relative;
     /* Set a specific height */
     min-height: 800px;

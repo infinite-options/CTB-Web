@@ -1,15 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 // import landingVideo from "./Images/Landing1Video.mov";
-import Landing1 from "./Images/Landing1.png";
-import Landing2 from "./Images/croppedLanding2.PNG";
-import Landing3 from "./Images/Landing3.png";
-import Landing4 from "./Images/Landing4.png";
-import Landing5 from "./Images/Landing5.png";
-import Landing6 from "./Images/Landing6.png";
-import Landing7 from "./Images/Landing7.png";
-import "./home.css";
-import HomepageNavbar from "./HomepageNavbar";
+import Landing1 from "../Assets/Images/Landing1.png";
+import Landing2 from "../Assets/Images/croppedLanding2.PNG";
+import Landing3 from "../Assets/Images/Landing3.png";
+import Landing4 from "../Assets/Images/Landing4.png";
+import Landing5 from "../Assets/Images/Landing5.png";
+import Landing6 from "../Assets/Images/Landing6.png";
+import Landing7 from "../Assets/Images/Landing7.png";
+import "../Styles/home.css";
+import HomepageNavbar from "../Components/HomepageNavbar";
 import { Link } from "react-router-dom"; //for linking button on part4 to technology page
 
 export default function Home() {

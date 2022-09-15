@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import NavBar from "./NavBar";
-import "./App.css";
-import "./home.css";
+import NavBar from "../Components/NavBar";
+import "../Styles/App.css";
+import "../Styles/home.css";
 import { FormText } from "react-bootstrap";
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";

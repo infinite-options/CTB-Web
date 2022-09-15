@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col, Container } from "react-bootstrap";
-import MenuIcon from "./Images/MenuIcon.svg";
-import "./home.css";
+import MenuIcon from "../Assets/Images/MenuIcon.svg";
+import "../Styles/home.css";
 
 export default function HomepageNavbar() {
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ export default function HomepageNavbar() {
           <Link to="/technology" className="navButtons" onClick={closeMenuProjects}>
             Technology
           </Link>
-          <Link to="/buyparts" className="navButtons" onClick={closeMenuProjects}>
+          <Link to="/cleartobuild" className="navButtons" onClick={closeMenuProjects}>
             CTB
           </Link>
           <Link to="/addparts" className="navButtons" onClick={closeMenuProjects}>

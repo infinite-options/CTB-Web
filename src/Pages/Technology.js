@@ -2,15 +2,15 @@ import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import Home from "./Home";
-import HomepageNavbar from "./HomepageNavbar";
-import techImg1another from "./Images/techImg1.webp"
-import techImg2 from "./Images/techImg2.webp"
-import bomImg1 from "./Images/bom1imgWithArrow.PNG"
-import bomImg2 from "./Images/bom2ImgWithArrow.PNG"
-import bomImg3 from "./Images/updatedSizeBom3.webp"
+import HomepageNavbar from "../Components/HomepageNavbar";
+import techImg1another from "../Assets/Images/techImg1.webp"
+import techImg2 from "../Assets/Images/techImg2.webp"
+import bomImg1 from "../Assets/Images/bom1imgWithArrow.PNG"
+import bomImg2 from "../Assets/Images/bom2ImgWithArrow.PNG"
+import bomImg3 from "../Assets/Images/updatedSizeBom3.webp"
+import bomfull from "../Assets/Images/bomPg2Full.PNG"
+import "../Styles/tech.css"
 
-import bomfull from "./Images/bomPg2Full.PNG"
-import "./tech.css"
 export default function Technology(){
     return(
         <div className = "technology-div" style={{overflowX:"hidden",overflowY:"hidden"}}>

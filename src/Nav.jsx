@@ -1,12 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
-import Landing from "./Landing";
-import AddPart from "./AddPart";
-import Inventory from "./Inventory";
-import EditPart from "./EditPart";
-import Home from "./Home";
-import Technology from "./technology"// viha added this to create technology page
+import Landing from "./Pages/BuyParts.jsx";
+import AddPart from "./Pages/AddPart.js";
+import Inventory from "./Pages/Inventory";
+import EditPart from "./Pages/EditPart";
+import Home from "./Pages/Home";
+import Technology from "./Pages/Technology"
+import ClearToBuild from "./Pages/ClearToBuild"
+import AddParts from "./Pages/AddParts.jsx";
 //import temp1 from "./Temp";
 
 //import Ably from 'ably/promises';
@@ -35,10 +37,11 @@ export default function Nav() {
         <Route path="/" element={<Home />} />
         <Route path="/technology" element={<Technology />} />
         <Route path="/buyparts" element={<Landing />} />
-        <Route path="/addparts" element={<AddPart />} />
+        <Route path="/addpart" element={<AddPart />} />
         <Route path="/inventory" element={<Inventory />} />
-
         <Route path="/EditPart" element={<EditPart />} />
+        <Route path="/cleartobuild" element={<ClearToBuild />} />
+        <Route path="/addparts"  element={<AddParts />} />
       </Routes>
     </Router>
   );
