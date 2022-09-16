@@ -358,7 +358,12 @@ const ClearToBuild = () => {
 
         let parents = Info.map((a) => a.product_parents);
         setParent(parents[document.getElementById("box1").selectedIndex]);
-        setTop_Level("A");
+        // setTop_Level("A");
+        setTop_Level(splitString(parents[document.getElementById("box1").selectedIndex])[0])
+        // console.log("Parent 2", splitString(parent)[0])
+        // console.log("Parent 2.1", splitString(parents[0])[0])
+
+
         // setIndex(document.getElementById('box1').selectedIndex);
 
         // useEffect(() => console.log("re-render because x changed:", index), []);
@@ -386,8 +391,10 @@ const ClearToBuild = () => {
         setParent(parents[document.getElementById("box1").selectedIndex]);
         let string3 =
         '"this is a question"random omitted "answer one" text between quotes "answer two" zzz "answer three"';
-        console.log(splitString(parents[0]));
-        setTop_Level("A");
+        // setTop_Level("A");
+        setTop_Level(splitString(parents[document.getElementById("box1").selectedIndex])[0])
+        // console.log("Parent 3", splitString(parent)[0])
+        // console.log("Parent 3.1", splitString(parents[0])[0])
     };
 
     useEffect(() => {
@@ -398,6 +405,7 @@ const ClearToBuild = () => {
         //   console.log(parents);
         setParent(parents[0]);
         setTop_Level("A");
+        // setTop_Level(splitString(parent)[0])
         });
         axios.get(inventoryURL).then((response) => {
         setInventory(response.data);
@@ -1483,6 +1491,14 @@ const ClearToBuild = () => {
     };
 
     function updateTable() {
+        if(Desired_Qty === null || Desired_Qty === undefined || Desired_Qty === "") {
+            alert("Please enter a desired quantity before proceeding")
+            return
+        }
+        if(Desired_Date === null || Desired_Date === undefined) {
+            alert("Please enter a desired date before proceeding")
+            return
+        }
         // event.preventDefault();
         let x = 0;
         let sum = 0;
@@ -1720,7 +1736,11 @@ const ClearToBuild = () => {
 
             let parents = response.data.map((a) => a.product_parents);
             setParent(parents[document.getElementById("box1").selectedIndex]);
-            setTop_Level("A");
+            // setTop_Level("A");
+            setTop_Level(splitString(parent)[0])
+            console.log("parent 1", splitString(parent)[0])
+            console.log("Parent 1.1", splitString(parents[0])[0])
+
 
             //let parents = Info.map(a => a.product_parents);
             //setParent(parents[document.getElementById('box1').selectedIndex]);
@@ -1762,29 +1782,34 @@ const ClearToBuild = () => {
         let summary = {}
         for(let i = 0; i < Rows.length; i++) {
             console.log("Rows", i, "quantity: ", Rows[i])
+            // console.log("partuid", Rows[i].part)
+            // split
+            const lastIndex = Rows[i].part.lastIndexOf('-')
+            const part_id = Rows[i].part.slice(0, lastIndex)
+            console.log("Part_id", part_id)
 
-            if(!summary.hasOwnProperty(Rows[i].part_uid)){
+            if(!summary.hasOwnProperty(part_id)){
                 console.log("New entry in summary:", Rows[i].part_uid)
-                summary[Rows[i].part_uid] = {
-                    part_uid: Rows[i].part_uid,
+                summary[part_id] = {
+                    part_uid: part_id,
                     quantity: Rows[i].final_order_qty,
                     total_price: Rows[i].total_price
                 }
             } else {
                 console.log("Adding to existing entry in summary:", Rows[i].part_uid)
-                let existing_qty = summary[Rows[i].part_uid].quantity
-                let existing_price = summary[Rows[i].part_uid].total_price
+                let existing_qty = summary[part_id].quantity
+                let existing_price = parseFloat(summary[part_id].total_price)
 
                 console.log("Existing Qty:", existing_qty, "Existing_Price:", existing_price)
 
                 let new_qty = existing_qty + Rows[i].final_order_qty
-                let new_price = existing_price + Rows[i].total_price
+                let new_price = existing_price + parseFloat(Rows[i].total_price)
 
                 console.log("New Qty:", new_qty, "New Price:", new_price)
-                summary[Rows[i].part_uid] = {
-                    part_uid: Rows[i].part_uid,
+                summary[part_id] = {
+                    part_uid: part_id,
                     quantity: new_qty,
-                    total_price: existing_price
+                    total_price: new_price.toFixed(2).toString()
                 }
             }
                 
@@ -1799,10 +1824,6 @@ const ClearToBuild = () => {
         console.log("Table", summaryTable)
         setOrderSummary(summaryTable)
     }
-
-    // const summaryTable = () => {
-    //     orderSummary.
-    // }
 
 
     // useEffect(() => {
@@ -1948,8 +1969,14 @@ const ClearToBuild = () => {
                                     <tbody>
                                         {Rows.map((row, i) => (
                                             <tr>
-                                                <td>{row.part_uid}</td>
-                                                <td>{row.part}</td>
+                                                {/* <td>{row.part_uid}</td> */}
+                                                <td>
+                                                    {row.part.slice(0, row.part.lastIndexOf('-'))}
+                                                </td>
+                                                {/* <td>{row.part}</td> */}
+                                                <td>
+                                                    {row.part}
+                                                </td>
                                                 <td>{row.qty_per}</td>
                                                 <td>{row.need_qty}</td>
                                                 <td>{row.sub_qty}</td>
