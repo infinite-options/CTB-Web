@@ -4,7 +4,8 @@
 }
 
 .bom-btn {
-    margin-left: 30px;
+    margin-left: 6em;
+
 }
 
 .form-item {
@@ -13,7 +14,7 @@
 
 .form-box {
     width: 60%;
-    margin: 50px auto;
+    margin: 80px auto;
 }
 
 .table {

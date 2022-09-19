@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../Styles/App.css';
 import { useState, useEffect, Component } from 'react';
 import axios from 'axios';
-import NavBar from '../Components/NavBar';
+import NavBar from './NavBar';
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
 
-const Inventory = () => {
+const Inventory2 = () => {
     class RowData {
         constructor(inv_pn, inv_loc, inv_qty) {
             this.inv_pn = inv_pn;
@@ -228,4 +228,4 @@ const Inventory = () => {
 
 }
 
-export default Inventory;
+export default Inventory2;

@@ -73,7 +73,7 @@ export default function HomepageNavbar() {
           <Link to="/inventory" className="navButtons" onClick={closeMenuProjects}>
             Inventory
           </Link>
-          <Link to="/editpart" className="navButtons" onClick={closeMenuProjects}>
+          <Link to="/editparts" className="navButtons" onClick={closeMenuProjects}>
             Edit Parts
           </Link>
         </div>

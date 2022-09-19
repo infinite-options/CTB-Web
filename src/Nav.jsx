@@ -1,14 +1,17 @@
 import React, { useContext, useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
-import Landing from "./Pages/BuyParts.jsx";
-import AddPart from "./Pages/AddPart.js";
-import Inventory from "./Pages/Inventory";
-import EditPart from "./Pages/EditPart";
+import Landing from "./OldPages/BuyParts.jsx";
+import AddPart from "./OldPages/AddPart.js";
+import Inventory2 from "./Components/Inventory";
+import EditPart from "./OldPages/EditPart";
 import Home from "./Pages/Home";
 import Technology from "./Pages/Technology"
 import ClearToBuild from "./Pages/ClearToBuild"
 import AddParts from "./Pages/AddParts.jsx";
+import EditParts from "./Pages/EditParts.jsx";
+import Inventory from "./Pages/Inventory.jsx";
+
 //import temp1 from "./Temp";
 
 //import Ably from 'ably/promises';
@@ -38,10 +41,13 @@ export default function Nav() {
         <Route path="/technology" element={<Technology />} />
         <Route path="/buyparts" element={<Landing />} />
         <Route path="/addpart" element={<AddPart />} />
-        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/inventory2" element={<Inventory2 />} />
         <Route path="/EditPart" element={<EditPart />} />
         <Route path="/cleartobuild" element={<ClearToBuild />} />
         <Route path="/addparts"  element={<AddParts />} />
+        <Route path="/editparts"  element={<EditParts />} />
+        <Route path="/inventory" element={<Inventory />} />
+
       </Routes>
     </Router>
   );

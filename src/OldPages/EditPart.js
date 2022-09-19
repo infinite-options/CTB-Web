@@ -8,62 +8,80 @@ const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev
 
 const EditPart = (useEffect) => {
 
-        //get references for text input and button fields
-    // var partNumber = document.getElementById("partNumber");
-    // var description = document.getElementById("description");
-    var submit = document.getElementById("submit");
+  //get references for text input and button fields
+  // var partNumber = document.getElementById("partNumber");
+  // var description = document.getElementById("description");
+  var submit = document.getElementById("submit");
 
-    const [jsonText, setjsonText] = useState();
-    const [response, setResponse] = useState();
+  const [jsonText, setjsonText] = useState();
+  const [response, setResponse] = useState();
 
-    const [partNumber, setpartNumber] = useState('');
-    const [description, setdescription] = useState('');
-    const [unitCost, setunitCost] = useState('');
-    const [costUnit, setcostUnit] = useState('');
-    const [Weight, setWeight] = useState('');
-    const [Weight_Unit, setWeight_Unit] = useState('');
-    const [Material, setMaterial] = useState('');
-    const [vendor, setvendor] = useState('');
-    const [originLocation, setoriginLocation] = useState('');
-    const [CurrentInventory, setCurrentInventory] = useState('');
-    const [InventoryUnit, setInventoryUnit] = useState('');
-
-
+  const [partNumber, setpartNumber] = useState('');
+  const [description, setdescription] = useState('');
+  const [unitCost, setunitCost] = useState('');
+  const [costUnit, setcostUnit] = useState('');
+  const [Weight, setWeight] = useState('');
+  const [Weight_Unit, setWeight_Unit] = useState('');
+  const [Material, setMaterial] = useState('');
+  const [vendor, setvendor] = useState('');
+  const [originLocation, setoriginLocation] = useState('');
+  const [CurrentInventory, setCurrentInventory] = useState('');
+  const [InventoryUnit, setInventoryUnit] = useState('');
 
 
 
-    async function sendJSON(){
-      
 
 
-        // var data = {
-        //     "PN":partNumber,
-        //     "Description":description,
-        //     "Unit_Cost":unitCost,
-        //     "Cost_Unit":costUnit,
-        //     "Weight": Weight,
-        //     "Weight_Unit": Weight_Unit,
-        //     "Material": Material,
-        //     "Vendor":vendor,
-        //     "Country_of_Origin":originLocation,
-        //     "Lead_Time": 2,
-        //     "Lead_Time_Units": "days"
-        // };
-        // setjsonText(JSON.stringify(data));
-        // console.log(jsonText);
+  async function sendJSON(){
+    
 
-        await axios.post("https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AddParts", {
+
+      // var data = {
+      //     "PN":partNumber,
+      //     "Description":description,
+      //     "Unit_Cost":unitCost,
+      //     "Cost_Unit":costUnit,
+      //     "Weight": Weight,
+      //     "Weight_Unit": Weight_Unit,
+      //     "Material": Material,
+      //     "Vendor":vendor,
+      //     "Country_of_Origin":originLocation,
+      //     "Lead_Time": 2,
+      //     "Lead_Time_Units": "days"
+      // };
+      // setjsonText(JSON.stringify(data));
+      // console.log(jsonText);
+
+      await axios.post("https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AddParts", {
+        "PN":partNumber,
+        "Description":description,
+        "Unit_Cost":unitCost,
+        "Cost_Unit":costUnit,
+        "Weight": Weight,
+        "Weight_Unit": Weight_Unit,
+        "Material": Material,
+        "Vendor":vendor,
+        "Country_of_Origin":originLocation,
+        "Lead_Time": 2,
+        "Lead_Time_Units": "days"
+    })
+        .then((response) => {
+          console.log(response.data);
+          setResponse("Successfully committed SQL command");
+        })
+        .catch(function (error) {
+          console.log("error");
+          setResponse("Request failed with status code 400");
+
+        });
+
+
+
+        await axios.post(inventoryURL, {
           "PN":partNumber,
-          "Description":description,
-          "Unit_Cost":unitCost,
-          "Cost_Unit":costUnit,
-          "Weight": Weight,
-          "Weight_Unit": Weight_Unit,
-          "Material": Material,
-          "Vendor":vendor,
           "Country_of_Origin":originLocation,
-          "Lead_Time": 2,
-          "Lead_Time_Units": "days"
+          "Current_Inventory": CurrentInventory,
+          "Current_Inventory_Unit": InventoryUnit
       })
           .then((response) => {
             console.log(response.data);
@@ -74,25 +92,7 @@ const EditPart = (useEffect) => {
             setResponse("Request failed with status code 400");
 
           });
-
-
-
-          await axios.post(inventoryURL, {
-            "PN":partNumber,
-            "Country_of_Origin":originLocation,
-            "Current_Inventory": CurrentInventory,
-            "Current_Inventory_Unit": InventoryUnit
-        })
-            .then((response) => {
-              console.log(response.data);
-              setResponse("Successfully committed SQL command");
-            })
-            .catch(function (error) {
-              console.log("error");
-              setResponse("Request failed with status code 400");
-  
-            });
-    }
+  }
 
 
 
