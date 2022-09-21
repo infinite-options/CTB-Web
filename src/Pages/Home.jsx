@@ -9,7 +9,7 @@ import Landing5 from "../Assets/Images/Landing5.png";
 import Landing6 from "../Assets/Images/Landing6.png";
 import Landing7 from "../Assets/Images/Landing7.png";
 import "../Styles/home.css";
-import HomepageNavbar from "../Components/HomepageNavbar";
+import HomepageNavbar from "../components/HomepageNavbar";
 import { Link } from "react-router-dom"; //for linking button on part4 to technology page
 
 export default function Home() {

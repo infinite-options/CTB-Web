@@ -1,7 +1,7 @@
 import { findByLabelText } from "@testing-library/react";
 import {useState, useRef, useEffect} from "react";
 import { Row, Col, Container, Form, Button, Table, Modal } from "react-bootstrap";
-import HomepageNavbar from "../Components/HomepageNavbar";
+import HomepageNavbar from "../components/HomepageNavbar";
 import axios from "axios";
 import "../Styles/tech.css"
 import "../Styles/ClearToBuild.css"

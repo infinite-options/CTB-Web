@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import HomepageNavbar from "../Components/HomepageNavbar";
+import HomepageNavbar from "../components/HomepageNavbar";
 import { Row, Col, Container, Form, Button, Table, Modal, FormGroup } from "react-bootstrap";
 import "../Styles/ClearToBuild.css"
 

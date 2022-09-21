@@ -2,7 +2,7 @@ import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import Home from "./Home";
-import HomepageNavbar from "../Components/HomepageNavbar";
+import HomepageNavbar from "../components/HomepageNavbar";
 import techImg1another from "../Assets/Images/techImg1.webp"
 import techImg2 from "../Assets/Images/techImg2.webp"
 import bomImg1 from "../Assets/Images/bom1imgWithArrow.PNG"

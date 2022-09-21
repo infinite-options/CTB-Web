@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios';
 import { Table, Row, Container, Button } from 'react-bootstrap';
-import HomepageNavbar from "../Components/HomepageNavbar";
+import HomepageNavbar from "../components/HomepageNavbar";
 
 
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
