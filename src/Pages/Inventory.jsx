@@ -113,46 +113,51 @@ const Inventory = () => {
         //Edit Inventory
         } else {
             return (
-                <table >
-                    <tr>
-                        <th>Part</th>
-                        <th>Status</th>
-                        <th>Location</th>
-                        <th>Qty</th>
-                        <th>New Qty</th>
-                        <th>New Location</th>
-                        <th>Transportation Time</th>
-                        <th></th>
-                    </tr>
-                    {
-                        SamePart.map((row, num) => (
-                            <tr>
-                                <td>{SamePart[num].inv_pn}</td>
-                                <td>{status(SamePart[num].inv_available_date)}</td>
-                                <td>{SamePart[num].inv_loc}</td>
-                                <td>{SamePart[num].inv_qty}</td>
-                                <td><input id={num} onChange={changeNewQty} className="input-field" type="text" placeholder="New Qty" required /></td>
-                                <td><input id={num}  className="input-field" type="text" placeholder="New Location" required /></td>
-                                <td><input id={num}  className="input-field" type="text" placeholder="Transportation Time" required /></td>
-                                <td><button id={num} onClick={changeQty}>Save</button></td>
-                            </tr>
-                        ))
-                    }
-    
-                    <tr>
-                        <td>{SamePart[0].inv_pn}</td>
-                        <td><input className="input-field" id="available_date" type="text" placeholder="Available Date"
-                            onChange={e => setAvailable_time(e.target.value)} required /></td>
-                        <td><input className="input-field" id="originLocation" type="text" placeholder="Origin Locatons"
-                            onChange={e => setoriginLocation(e.target.value)} required /></td>
-                        <td></td>
-                        <td><input className="input-field" id="inventory" type="text" placeholder="Current Inventory"
-                            onChange={e => setCurrentInventory(e.target.value)} required /></td>
-                        <td></td>
-                        <td></td>
-                        <td><button onClick={addNewInventory}>Save</button></td>
-                    </tr>
-                </table>
+                <Table striped bordered hover className="table">
+                    <thead>
+                        <tr>
+                            <th>Part</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>Qty</th>
+                            <th>New Qty</th>
+                            <th>New Location</th>
+                            <th>Transportation Time</th>
+                            <th></th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        {
+                            SamePart.map((row, num) => (
+                                <tr>
+                                    <td>{SamePart[num].inv_pn}</td>
+                                    <td>{status(SamePart[num].inv_available_date)}</td>
+                                    <td>{SamePart[num].inv_loc}</td>
+                                    <td>{SamePart[num].inv_qty}</td>
+                                    <td><input id={num} onChange={changeNewQty} className="input-field" type="text" placeholder="New Qty" required /></td>
+                                    <td><input id={num}  className="input-field" type="text" placeholder="New Location" required /></td>
+                                    <td><input id={num}  className="input-field" type="text" placeholder="Transportation Time" required /></td>
+                                    <td><Button variant="secondary" id={num} onClick={changeQty}>Save</Button></td>
+                                </tr>
+                            ))
+                        }
+        
+                        <tr>
+                            <td>{SamePart[0].inv_pn}</td>
+                            <td><input className="input-field" id="available_date" type="text" placeholder="Available Date"
+                                onChange={e => setAvailable_time(e.target.value)} required /></td>
+                            <td><input className="input-field" id="originLocation" type="text" placeholder="Origin Locations"
+                                onChange={e => setoriginLocation(e.target.value)} required /></td>
+                            <td></td>
+                            <td><input className="input-field" id="inventory" type="text" placeholder="Current Inventory"
+                                onChange={e => setCurrentInventory(e.target.value)} required /></td>
+                            <td></td>
+                            <td></td>
+                            <td><Button variant="secondary" onClick={addNewInventory}>Save</Button></td>
+                        </tr>    
+                    </tbody>
+                    
+                </Table>
             );
 
         }

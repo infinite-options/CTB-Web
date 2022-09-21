@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import HomepageNavbar from "../Components/HomepageNavbar";
 import { Row, Col, Container, Form, Button, Table, Modal, FormGroup } from "react-bootstrap";
-import "../Styles/AddParts.css"
+import "../Styles/ClearToBuild.css"
 
 
 const inventoryURL = "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Inventory";
@@ -27,6 +27,10 @@ const EditParts = () => {
   const [originLocation, setoriginLocation] = useState('');
   const [CurrentInventory, setCurrentInventory] = useState('');
   const [InventoryUnit, setInventoryUnit] = useState('');
+  const [leadTime, setLeadTime] = useState('')
+  const [leadTimeUnits, setLeadTimeUnits] = useState('')
+
+
 
 
   async function sendJSON(){
@@ -56,8 +60,8 @@ const EditParts = () => {
     "Material": Material,
     "Vendor":vendor,
     "Country_of_Origin":originLocation,
-    "Lead_Time": 2,
-    "Lead_Time_Units": "days"
+    "Lead_Time": leadTime,
+    "Lead_Time_Units": leadTimeUnits
 })
     .then((response) => {
         console.log(response.data);
@@ -204,18 +208,6 @@ const EditParts = () => {
                 <Row>
                     <Col>
                         <Form.Group controlId="formQuantity" className="form-item">
-                            <Form.Label>Origin Locations</Form.Label>
-                            <Form.Control 
-                                type="quantity" 
-                                id="originLocation"
-                                placeholder="Origin Locations"
-                                onChange={e => setoriginLocation(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="formQuantity" className="form-item">
                             <Form.Label>Current Inventory</Form.Label>
                             <Form.Control 
                                 type="quantity" 
@@ -226,15 +218,8 @@ const EditParts = () => {
                             />
                         </Form.Group>
                     </Col> 
-                </Row>
-                <Row>
                     <Col>
-                        <Form.Group controlId="formQuantity"
-                        className="form-item" 
-                        style={{
-                            width: "50%", 
-                            float: "left"
-                        }}>
+                        <Form.Group controlId="formQuantity" className="form-item">
                             <Form.Label>Inventory Unit</Form.Label>
                             <Form.Control 
                                 type="quantity" 
@@ -247,7 +232,46 @@ const EditParts = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Button variant="secondary" size="lg" onClick={sendJSON} className="bom-btn">
+                    <Col>
+                        <Form.Group controlId="formQuantity" className="form-item">
+                            <Form.Label>Lead Time</Form.Label>
+                            <Form.Control 
+                                type="quantity" 
+                                placeholder="Lead Time"
+                                onChange={e => setLeadTime(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group controlId="formQuantity" className="form-item">
+                            <Form.Label>Lead Time Units</Form.Label>
+                            <Form.Control 
+                                type="quantity" 
+                                placeholder="Lead Time Units"
+                                onChange={e => setLeadTimeUnits(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Form.Group controlId="formQuantity" className="form-item" style={{ width: "49%", float: "left" }}>
+                            <Form.Label>Origin Locations</Form.Label>
+                            <Form.Control 
+                                type="quantity" 
+                                id="originLocation"
+                                placeholder="Origin Locations"
+                                onChange={e => setoriginLocation(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    
+                </Row>
+                <Row>
+                    <Button variant="secondary" size="lg" onClick={sendJSON}  className="form-btn">
                         Submit
                     </Button>{' '}
                 </Row>

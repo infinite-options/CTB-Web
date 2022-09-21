@@ -1848,18 +1848,20 @@ const ClearToBuild = () => {
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Group controlId="formFile" className="mb-3 form-item bom-upload" >  
+                            <Form.Group controlId="formFile"  >  
                                 <Form.Label>Bill of Materials (BOM)</Form.Label>
                                 <Form.Control type="file" onChange={onFileChange}/>
                             </Form.Group>
-                            <Button variant="secondary" onClick={onFileUpload} className="bom-btn">
+                        </ Col>
+                        <Col className={"d-flex flex-column text-center"}>
+                            <Button variant="secondary" onClick={onFileUpload} className={"mt-auto"} style={{width: "10em"}}>
                                 Upload BOM
                             </Button>{' '}
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <Form.Group className="form-item">
+                            <Form.Group className="form-item" >
                                 <Form.Label>Select Product ID</Form.Label>
                                 <Form.Select aria-label="Select Product ID" id="box1" onChange={changeBox2}>
                                     {Info.map((info) => (

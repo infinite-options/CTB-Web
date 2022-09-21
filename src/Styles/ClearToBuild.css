@@ -1,12 +1,13 @@
 .bom-upload, .bom-btn {
     display: inline-block;
     margin: 5px;
+    margin-bottom: 0px;
 }
 
 .bom-btn {
     margin-left: 6em;
 
-}
+} 
 
 .form-item {
     margin: 25px auto;
