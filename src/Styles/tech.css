@@ -1,0 +1,116 @@
+
+#techImg1{
+    position: relative;
+    width: 2527px;
+    height: 1060px;
+    object-fit: cover;
+    z-index: -2;
+    background-position: center;
+    box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9); 
+
+}
+.title{
+    position: absolute;
+    top: 8vh;
+    font: normal normal normal 5vh Montserrat-Regular;
+}
+/* .leftCol{
+    position: absolute;
+    
+} */
+.subTitle{
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    line-height: 1.8em;
+}
+
+.bomPage1{
+    position: relative;
+    background-color: black;
+    width: 100vw;
+    
+}
+
+.right-picture-col{
+    width: 474px;
+    height:630px;
+    margin-top: 0px;
+}
+/* .page2{
+    display: grid;
+    grid-template-columns: 3 1fr;
+    grid-template-rows: 2fr;
+    row-gap: 2rem;
+    
+}
+
+.arrow2{
+    grid-column:3;
+} */
+.page2{
+    display: grid;
+    grid-template-columns: fit-content(33vw) fit-content(33vw) fit-content(33vw);
+    grid-template-rows: fit-content(100px) fit-content(20vh) fit-content(20vh);
+    align-items: center;
+    margin-left: 15vw;
+    column-gap: 20px;
+}
+.col1{
+    color:white;
+    font-size: 48px;
+    text-align: center;
+}
+.col2{
+    color:white;
+    font-size: 48px;
+    grid-column: 3;
+    text-align: center;
+    
+}
+
+#bom3{
+    grid-row: 2;
+}
+.mid{
+    grid-row: 2;
+}
+.arrow2{
+    max-height: 100px;
+}
+.left{
+    grid-row: 2;
+    margin-right: 5rem;
+}
+.arrow1{
+    grid-row: 3;
+    float: right;
+    position: absolute;
+    top: 660px;
+    left: 900px;
+}
+.bom1{
+    position: relative;
+}
+#bomImgFull{
+    width: 220%;
+    height: auto;
+}
+.button{
+    width: 12vw;
+    background: black;
+    color: white;
+    
+    font: normal normal normal 24px Montserrat-Regular;
+    padding-bottom: 2rem;
+    padding-left: 0px;
+    margin-left: 15vw;
+    
+}
+.button:hover{
+    transition-duration: 0.5s;
+    border-bottom: white solid;
+}

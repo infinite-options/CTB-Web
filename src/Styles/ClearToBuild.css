@@ -1,0 +1,56 @@
+.bom-upload, .bom-btn {
+    display: inline-block;
+    margin: 5px;
+    margin-bottom: 0px;
+}
+
+.bom-btn {
+    margin-left: 6em;
+
+} 
+
+.form-item {
+    margin: 25px auto;
+}
+
+.form-box {
+    width: 60%;
+    margin: 80px auto;
+}
+
+.table {
+    width: 80%;
+    margin: 40px auto;
+}
+
+.save-button-box {
+    width: 45%;
+    margin: 50px auto 20px;
+}
+
+.form-btn {
+    margin: 25px auto;
+    width: 12em;
+}
+
+.upload-bom-btn {
+    margin: 2em auto 0
+}
+
+th {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+
+/* .font30 {
+    font: normal normal normal 30px Montserrat-Regular;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width: 33vw;
+    letter-spacing: 0.2rem;
+    line-height: 2.5rem;
+} */

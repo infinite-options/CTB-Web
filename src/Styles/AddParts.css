@@ -1,0 +1,28 @@
+.form-item {
+    margin: 25px auto;
+}
+
+.form-box {
+    width: 60%;
+    margin: 80px auto;
+}
+
+.bom-upload, .bom-btn {
+    display: inline-block;
+    margin: 5px;
+}
+
+.bom-btn {
+    margin: 20px auto;
+    width: 8em;
+    height: 3em;
+    float: left;
+}
+
+.bom-btn {
+    margin-left: 6em;
+}
+
+.form-item {
+    margin: 25px auto;
+}

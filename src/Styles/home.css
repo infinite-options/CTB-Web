@@ -1,0 +1,380 @@
+/* home page car css */
+#video { 
+    /* width: 100vw; */
+    /* min-height: 100vh; */
+    position: relative;  
+    /* min-height: 100%;
+    min-width: 100%; */
+    width: 2687px;
+    height: 1312px;
+    z-index: -2; 
+    /* min-width: 2500px; kinda works */
+    object-fit: cover; /*makes background in the center*/
+
+    /* justify-content: center; */
+    box-shadow: inset 0px 0px 30px 30px rgba(0, 0, 0, 0.9); 
+    background-position: center; /*makes background in the center*/
+}
+/* .page1-container{
+    background-image: ;
+} */
+
+.img-blur {
+    position: relative;
+    display: inline-block;
+}
+
+.blkBg{
+    background-color: black;
+    color: #fff;
+    display: flex;
+    box-shadow: 0px 0px 10px 10px #000000;
+    min-width: 100%;
+    min-height: 80vh;
+    padding: 0;
+    align-items: center;
+    
+}
+.whtBg {
+    display: flex;
+    background-color: #fff;
+    color: #000;
+    min-width: 100%;
+    padding: 0;
+    align-items: center;
+    /* justify-content: center; */
+}
+.left-text{
+    margin-left: 5rem;
+    
+    /*padding-left: 10%; */
+    min-width: 25rem;
+    /* margin-bottom: 2rem; */
+    max-width: 25rem;
+
+}
+.container-vision{
+    margin-left: 10vw;
+    border-left: white solid 1px;
+    z-index: 3;
+}
+.container-part3{
+    margin-top: 20rem;
+    margin-bottom: 15rem;
+    margin-left: 10vw;
+    border-left: black solid 1px;
+    z-index: 3;
+}
+.container-part4{
+    margin-top: 10rem;
+    margin-bottom: 10rem;
+    margin-left: 10vw;
+    /* border-left: black solid 1px; */
+    z-index: 3;
+}
+.container-part5{
+    width: 25rem;
+}
+.landing4-styles{
+    margin-left: 10vw;
+    width: 80%;
+    height: auto;
+}
+.landing5-styles{
+    width: 200%;
+    height: auto;
+}
+.thickerBorder{
+    /* border: white solid; */
+    /* s
+    omehow make the "We're chaning" part thicker */
+}
+
+
+#colImg{
+    justify-content: flex-end;
+    
+    max-width: 100%;
+    height: auto;
+    z-index: 0;
+    margin-right: 0px;
+}
+@media screen and (max-width: 1400px){
+    .container-vision{
+        margin-left: 10px;
+        border-left: white solid;
+        z-index: 3;
+    }
+    .container-part3{
+        margin-top: 5rem;
+        margin-left: 10px;
+        border-left: black solid 1px;
+        z-index: 3;
+    }
+    #colImg{
+        justify-content: flex-end;
+        /* width: 100%;
+        min-height: 100vh; */
+        /* max-width: 965px;
+        max-height: 788px; */
+        
+        /* object-fit: scale-down;
+        position: relative; */
+        max-width: 75%;
+        height: auto;
+        z-index: 0;
+        float: right;
+    }
+    .container-part4{
+        margin-top: 10rem;
+        margin-bottom: 10rem;
+        margin-left: 10px;
+        /* border-left: black solid 1px; */
+        z-index: 3;
+    }
+    
+} 
+
+#colImgLeft {
+    justify-content: left;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+}
+
+#parallax {
+    /* The image used */
+    background-image: url("../Assets/Images/Landing6.png");
+    position: relative;
+    /* Set a specific height */
+    min-height: 800px;
+    width:100%;
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.text-on-image {
+    position: absolute;
+    right: 60%;
+    top:15%;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: black;
+    color: #fff;
+    width: 32rem;
+    height: 55vh;
+    
+    /* margin-top: 20vh;
+    
+    margin-bottom: 20vh; */
+}
+
+.header-on-image {
+    position: absolute;
+    top:5%;
+    color: #000;
+    text-align: center;
+    
+}
+
+.headerNav {
+    position: absolute;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+    background: none;
+    margin-left: 2rem;
+    width: 95%;
+
+}
+
+.navButtons{
+    padding: 20px;
+    color: #000;
+    text-decoration: none;
+    font: normal normal normal 20px Montserrat-Regular;
+}
+
+.logo {
+    padding: 20px;
+    color: #000;
+    text-decoration: none;
+    font: normal normal normal 20px Montserrat-Bold;
+    letter-spacing: 10px
+}
+.colStyle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    vertical-align: middle;
+    align-items: center;
+    
+}
+.font20{
+    font: normal normal normal 20px Montserrat-Regular;
+    line-height: 1.6;
+    /* margin-top: 2rem; */
+}
+.font28 {
+    font: normal normal normal 28px Montserrat-Regular;
+    letter-spacing: 0.2em;
+    margin-bottom: 2em;
+    
+    line-height: 2em;
+
+}
+.font28-less-spaced {
+    font: normal normal normal 28px Montserrat-Regular;
+    /* letter-spacing: 0.2em;   */
+    line-height: 1.5em;
+}
+.font30 {
+    font: normal normal normal 30px Montserrat-Regular;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width: 33vw;
+    letter-spacing: 0.2rem;
+    line-height: 2.5rem;
+}
+.font30-less-spaced{
+    font: normal normal normal 30px Montserrat-Regular;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width: 33vw;
+    letter-spacing: 0.1rem;
+    line-height: 3rem;
+}
+.font34 {
+    font: normal normal normal 34px Montserrat-Regular;
+    margin-top: 1rem;
+    
+}
+.font44{
+    font:normal normal normal 44px Montserrat-Regular;
+    line-height: 2;  
+    /* margin-top: 2rem; */
+}
+.font44-less-space{
+    font:normal normal normal 44px Montserrat-Regular;
+    line-height: 1.5;  
+    margin-bottom: 3rem;
+    /* margin-top: 2rem; */
+}
+.font44-space{
+    font:normal normal normal 44px Montserrat-Regular;
+    line-height: 1.5;  
+    /* margin-top: 2rem; */
+    letter-spacing: 0.1em;
+    margin-bottom: 3rem;
+}
+.font80 {
+    margin-top:3rem;
+    font: normal normal normal 80px Montserrat-Regular;
+    
+    letter-spacing: 0.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.nav-links{
+    display:flex;
+    flex-direction:row;
+    width:100%;
+    justify-content:flex-end;
+}
+.nav-icon {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+}
+.modalSize{
+    min-width:1200px !important
+}
+
+@media screen and (min-width: 500px) and (max-width: 900px) {
+    .colStyle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        vertical-align: middle;
+
+    }
+    .font22 {
+        font: normal normal normal 14px Montserrat-Regular;
+        line-height: 1.6;
+        margin-top: 1rem;
+    }
+    .font28 {
+        font: normal normal normal 16px Montserrat-Medium;
+        margin-bottom: 1rem;
+    }
+
+    .font30 {
+        font: normal normal normal 16px Montserrat-Medium;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .font34 {
+        font: normal normal normal 18px Montserrat-Medium;
+        line-height: 1.2;
+        margin-top: 1rem;
+    }
+    .font44 {
+        font: normal normal normal 22px Montserrat-Medium;
+        line-height: 2;
+        margin-top: 1rem;
+    }
+    .font80 {
+        margin-top: 1rem;
+        font: normal normal normal 24px Montserrat-Medium;
+    }
+    .navButtons {
+        padding: 10px;
+        color: #000;
+        text-decoration: none;
+        font: normal normal normal 16px Montserrat-Regular;
+    }
+    .logo {
+        padding: 10px;
+        color: #000;
+        text-decoration: none;
+        font: normal normal normal 16px Montserrat-Bold;
+        letter-spacing: 10px
+    }
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        top: 13vh;
+        left: -150%;
+        transition: 0.2s all;
+    }
+
+    .nav-links.active {
+        background: white;
+        left: 0%;
+        z-index: 1000;
+    }
+    .nav-icon {
+        display: flex;
+    }
+
+    .text-on-image {
+        position: absolute;
+        right: 40%;
+        top: 15%;
+        border-radius: 10px;
+        padding: 20px;
+        width: 55%;
+        background-color: black;
+        color: #fff;
+        
+    }
+}
+      
+
