@@ -1616,7 +1616,8 @@ const ClearToBuild = () => {
                     delta2_qty = order_Qty - allocated;
 
                     for (let j in allParts) {
-                    if (allParts[j].PN === data[i].child_pn) {
+                        //console.log("Data XXX", data[i]);
+                    if (allParts[j].PN === data[i].child_pn + "-" + String(data[i].child_lft)) {                
                         unitCost = allParts[j].Unit_Cost;
                     }
                     }
@@ -1793,6 +1794,7 @@ const ClearToBuild = () => {
                 summary[part_id] = {
                     part_uid: part_id,
                     quantity: Rows[i].final_order_qty,
+                    unit_price: Rows[i].unit_price,
                     total_price: Rows[i].total_price
                 }
             } else {
@@ -1809,6 +1811,7 @@ const ClearToBuild = () => {
                 summary[part_id] = {
                     part_uid: part_id,
                     quantity: new_qty,
+                    unit_price: Rows[i].unit_price,
                     total_price: new_price.toFixed(2).toString()
                 }
             }
@@ -2039,6 +2042,7 @@ const ClearToBuild = () => {
                                     <tr>
                                         <th>Part ID</th>
                                         <th>Order Qty</th>
+                                        <th>unit Price</th>
                                         <th>Total Price</th>
                                     </tr>
                                     
@@ -2049,6 +2053,7 @@ const ClearToBuild = () => {
                                             <tr>
                                                 <td>{row.part_uid}</td>
                                                 <td>{row.quantity}</td>
+                                                <td>{row.unit_price}</td>
                                                 <td>{row.total_price}</td>
                                             </tr>  
                                         )
