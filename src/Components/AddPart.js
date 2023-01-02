@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../Styles/App.css";
 import { useState, useEffect, Component } from "react";
-import axios from "axios";
+import axios from "axios"; 
 
 const AddPart = (useEffect) => {
   //get references for text input and button fields

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col, Container } from "react-bootstrap";
 import MenuIcon from "../Assets/Images/MenuIcon.svg";
-import "../Styles/home.css";
+import "../Styles/home.css"; 
 
 export default function HomepageNavbar() {
   const [open, setOpen] = useState(false);
