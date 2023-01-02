@@ -8,6 +8,7 @@ import ClearToBuild from "./Pages/ClearToBuild"
 import AddParts from "./Pages/AddParts.jsx";
 import EditParts from "./Pages/EditParts.jsx";
 import Inventory from "./Pages/Inventory.jsx";
+import DisplayTable from "./Pages/DisplayTable";
 
 //import temp1 from "./Temp";
 
@@ -44,6 +45,7 @@ export default function Nav() {
         <Route path="/addparts"  element={<AddParts />} />
         <Route path="/editparts"  element={<EditParts />} />
         <Route path="/inventory" element={<Inventory />} />
+        <Route path="/DisplayTable/:productid" element={<DisplayTable />} />
 
       </Routes>
     </Router>

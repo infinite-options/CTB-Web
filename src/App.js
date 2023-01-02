@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 import Nav from "./Nav";
+import DisplayTable from "./Pages/DisplayTable";
 
 
 const baseURL =
@@ -18,6 +19,7 @@ function App() {
   return (
     <div className="App">
       <Nav />
+      {/* <DisplayTable /> */}
     </div>
   );
 }

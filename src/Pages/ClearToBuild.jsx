@@ -1,10 +1,11 @@
 import { findByLabelText } from "@testing-library/react";
-import {useState, useRef, useEffect} from "react";
+import {useState, useRef, useEffect, useHistory} from "react";
 import { Row, Col, Container, Form, Button, Table, Modal } from "react-bootstrap";
 import HomepageNavbar from "../components/HomepageNavbar";
 import axios from "axios";
 import "../Styles/tech.css"
 import "../Styles/ClearToBuild.css"
+import { useNavigate } from "react-router-dom";
 
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
@@ -1829,6 +1830,17 @@ const ClearToBuild = () => {
     }
 
 
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+      let path = `/DisplayTable`; 
+      navigate(path);
+    }
+
+    const openInNewTab = () => {
+        let path = `/DisplayTable`;
+        window.open(path+"/"+productId, '_blank', 'noreferrer');
+      };
+
     // useEffect(() => {
     //     trackTable.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' }) 
     // }, [showTable])
@@ -1882,6 +1894,13 @@ const ClearToBuild = () => {
                                     ))}
                                 </Form.Select>
                             </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className={"d-flex flex-column text-center"}>
+                            <Button variant="secondary" onClick={() => openInNewTab()} className={"mt-auto"} style={{width: "10em"}}>
+                                BOM Details
+                            </Button>{' '}
                         </Col>
                     </Row>
                     <Row>
