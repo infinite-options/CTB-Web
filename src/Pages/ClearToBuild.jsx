@@ -1874,6 +1874,20 @@ const ClearToBuild = () => {
                             </Button>{' '}
                         </Col>
                     </Row>
+                    <br/>
+                    <Row>
+                        <Col>
+                            <Form.Group controlId="formFile"  >
+                                <Form.Label>Build Image</Form.Label>
+                                <Form.Control type="file" onChange={onFileChange}/>
+                            </Form.Group>
+                        </ Col>
+                        <Col className={"d-flex flex-column text-center"}>
+                            <Button variant="secondary" onClick={onFileUpload} className={"mt-auto"} style={{width: "10em"}}>
+                                Upload Image
+                            </Button>{' '}
+                        </Col>
+                    </Row>
                     <Row>
                         <Col>
                             <Form.Group className="form-item" >
