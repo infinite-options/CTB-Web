@@ -3,13 +3,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import Inventory2 from "./components/Inventory";
 import Home from "./Pages/Home";
-import Technology from "./Pages/Technology"
-import ClearToBuild from "./Pages/ClearToBuild"
+import Technology from "./Pages/Technology";
+import ClearToBuild from "./Pages/ClearToBuild";
 import AddParts from "./Pages/AddParts.jsx";
 import EditParts from "./Pages/EditParts.jsx";
 import Inventory from "./Pages/Inventory.jsx";
 import DisplayTable from "./Pages/DisplayTable";
-
+import Account from "./Login/Account";
 //import temp1 from "./Temp";
 
 //import Ably from 'ably/promises';
@@ -42,11 +42,11 @@ export default function Nav() {
         {/* <Route path="/inventory2" element={<Inventory2 />} /> */}
         {/* <Route path="/EditPart" element={<EditPart />} /> */}
         <Route path="/cleartobuild" element={<ClearToBuild />} />
-        <Route path="/addparts"  element={<AddParts />} />
-        <Route path="/editparts"  element={<EditParts />} />
+        <Route path="/addparts" element={<AddParts />} />
+        <Route path="/editparts" element={<EditParts />} />
         <Route path="/inventory" element={<Inventory />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/DisplayTable/:productid" element={<DisplayTable />} />
-
       </Routes>
     </Router>
   );
