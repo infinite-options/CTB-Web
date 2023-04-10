@@ -1,5 +1,5 @@
 import {useState, useRef, useEffect} from "react";
-import { Row, Col, Container, Form, Button, Table, Modal } from "react-bootstrap";
+import { Row, Col, Container, Form, Button, Table, Modal, Toast, ToastContainer } from "react-bootstrap";
 import HomepageNavbar from "../components/HomepageNavbar";
 import axios from "axios";
 import '../Styles/ClearToBuild.css'
@@ -25,6 +25,10 @@ const AddParts = () => {
     const [leadTime, setLeadTime] = useState('')
     const [leadTimeUnits, setLeadTimeUnits] = useState('')
     const [partsFile, setPartsFile] = useState();
+    const [isAddPartByModelNoLoading, setAddPartByModelNoLoading] = useState(false);
+    const [modelNo, setModelNo] = useState('');
+    const [addPartByModelNoMsg, setAddPartByModelNoMsg] = useState('');
+    const [showToast, setShowToast] = useState(false);
 
     async function sendJSON(){
         // var data = {
@@ -114,12 +118,46 @@ const AddParts = () => {
         })
     }
 
+    useEffect(() => {
+        if(isAddPartByModelNoLoading) {
+            new Promise((resolve => setTimeout(resolve, 2000)))
+                .then(() => {
+                    setAddPartByModelNoMsg('Success!');
+                    setModelNo('');
+                    setAddPartByModelNoLoading(false);
+                    setShowToast(true);
+                })
+                .catch(() => {
+                    setAddPartByModelNoMsg('Some error occured!')
+                    setAddPartByModelNoLoading(false);
+                    setShowToast(true);
+                });
+        }
+    }, [isAddPartByModelNoLoading]);
+
+    const handleAddPartByModelNo = (e) => {
+        e.preventDefault();
+        setAddPartByModelNoMsg('');
+        setAddPartByModelNoLoading(true);
+        setShowToast(false);
+    };
+
     return (
         <div>
             <Container fluid >
                 <Row>
                     <HomepageNavbar/>
                 </Row>
+                <div className="position-relative">
+                    <ToastContainer className="p-3" position='top-end'>
+                        <Toast show={showToast} onClose={() => setShowToast(false)} delay={10000} autohide>
+                            <Toast.Header><strong className="me-auto">Status</strong></Toast.Header>
+                            <Toast.Body>
+                                <strong className="me-auto">{addPartByModelNoMsg}</strong>
+                            </Toast.Body>
+                        </Toast>
+                    </ToastContainer>
+                </div>
                 <Form className="form-box">
                     <Row>
                         <h1 className="font30 form-item">Add Parts in Bulk</h1>
@@ -138,6 +176,24 @@ const AddParts = () => {
                             <Button variant="secondary" onClick={onFileUpload} className={"mt-auto"} style={{width: "8em"}}>
                                 Upload .csv
                             </Button>{' '}
+                        </Col>
+                    </Row>
+                </Form>
+                <Form className="form-box" onSubmit={handleAddPartByModelNo}>
+                    <Row>
+                        <h1 className="font30 form-item">Add Part by model number</h1>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group controlId="formModelNumber" >  
+                                <Form.Label>Model Number</Form.Label>
+                                <Form.Control type="text" placeholder="Enter model number here..." value={modelNo} onChange={e => setModelNo(e.target.value)} required />
+                            </Form.Group>
+                        </Col>
+                        <Col className="d-flex flex-column">
+                            <Button type="submit" variant="secondary" className="mt-auto" style={{width: "10em"}} disabled={isAddPartByModelNoLoading}>
+                                {isAddPartByModelNoLoading? 'Adding...': 'Click to add Part'}
+                            </Button>
                         </Col>
                     </Row>
                 </Form>
