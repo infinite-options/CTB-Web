@@ -26,9 +26,10 @@ const AddParts = () => {
     const [leadTimeUnits, setLeadTimeUnits] = useState('')
     const [partsFile, setPartsFile] = useState();
     const [isAddPartByModelNoLoading, setAddPartByModelNoLoading] = useState(false);
-    const [modelNo, setModelNo] = useState('');
-    const [addPartByModelNoMsg, setAddPartByModelNoMsg] = useState('');
     const [showToast, setShowToast] = useState(false);
+
+    const modelNo = useRef('');
+    const addPartByModelNoMsg = useRef('');
 
     async function sendJSON(){
         // var data = {
@@ -120,15 +121,17 @@ const AddParts = () => {
 
     useEffect(() => {
         if(isAddPartByModelNoLoading) {
-            new Promise((resolve => setTimeout(resolve, 2000)))
-                .then(() => {
-                    setAddPartByModelNoMsg('Success!');
-                    setModelNo('');
+            axios.post('https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Insertparts', 
+                { model: [modelNo.current] })
+                .then((res) => {
+                    console.log(res);
+                    addPartByModelNoMsg.current = 'Success!';
+                    modelNo.current = '';
                     setAddPartByModelNoLoading(false);
                     setShowToast(true);
                 })
-                .catch(() => {
-                    setAddPartByModelNoMsg('Some error occured!')
+                .catch((err) => {
+                    addPartByModelNoMsg.current = err.message;
                     setAddPartByModelNoLoading(false);
                     setShowToast(true);
                 });
@@ -137,7 +140,7 @@ const AddParts = () => {
 
     const handleAddPartByModelNo = (e) => {
         e.preventDefault();
-        setAddPartByModelNoMsg('');
+        addPartByModelNoMsg.current = '';
         setAddPartByModelNoLoading(true);
         setShowToast(false);
     };
@@ -148,16 +151,14 @@ const AddParts = () => {
                 <Row>
                     <HomepageNavbar/>
                 </Row>
-                <div className="position-relative">
-                    <ToastContainer className="p-3" position='top-end'>
-                        <Toast show={showToast} onClose={() => setShowToast(false)} delay={10000} autohide>
-                            <Toast.Header><strong className="me-auto">Status</strong></Toast.Header>
-                            <Toast.Body>
-                                <strong className="me-auto">{addPartByModelNoMsg}</strong>
-                            </Toast.Body>
-                        </Toast>
-                    </ToastContainer>
-                </div>
+                <ToastContainer position="top-end" className="p-3" containerPosition="fixed">
+                    <Toast show={showToast} onClose={() => setShowToast(false)} delay={5000} autohide>
+                        <Toast.Header><strong className="me-auto">Status</strong></Toast.Header>
+                        <Toast.Body>
+                            <strong className="me-auto">{addPartByModelNoMsg.current}</strong>
+                        </Toast.Body>
+                    </Toast>
+                </ToastContainer>
                 <Form className="form-box">
                     <Row>
                         <h1 className="font30 form-item">Add Parts in Bulk</h1>
@@ -187,7 +188,7 @@ const AddParts = () => {
                         <Col>
                             <Form.Group controlId="formModelNumber" >  
                                 <Form.Label>Model Number</Form.Label>
-                                <Form.Control type="text" placeholder="Enter model number here..." value={modelNo} onChange={e => setModelNo(e.target.value)} required />
+                                <Form.Control type="text" placeholder="Enter model number here..." onChange={e => modelNo.current = e.target.value} required />
                             </Form.Group>
                         </Col>
                         <Col className="d-flex flex-column">
