@@ -5,7 +5,7 @@ import HomepageNavbar from "../components/HomepageNavbar";
 import axios from "axios";
 import "../Styles/tech.css"
 import "../Styles/ClearToBuild.css"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const baseURL =
   "https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/AllProducts";
@@ -1898,9 +1898,11 @@ const ClearToBuild = () => {
                     </Row>
                     <Row>
                         <Col className={"d-flex flex-column text-center"}>
-                            <Button variant="secondary" onClick={() => openInNewTab()} className={"mt-auto"} style={{width: "10em"}}>
-                                BOM Details
-                            </Button>{' '}
+                            <Link to={`/DisplayTable/${productId}`} target="_blank">
+                                <Button variant="secondary" className={"mt-auto"} style={{width: "10em"}}>
+                                    BOM Details
+                                </Button>
+                            </Link>{' '}
                         </Col>
                     </Row>
                     <Row>
