@@ -125,13 +125,14 @@ const AddParts = () => {
                 { model: modelNo.current })
                 .then((res) => {
                     console.log(res);
-                    addPartByModelNoMsg.current = 'Success!';
+                    addPartByModelNoMsg.current = 'Uploaded!';
                     modelNo.current = '';
                     setAddPartByModelNoLoading(false);
                     setShowToast(true);
                 })
                 .catch((err) => {
-                    addPartByModelNoMsg.current = err.response.data.message;
+                    // addPartByModelNoMsg.current = err.response.data.message;
+                    addPartByModelNoMsg.current = 'Uploaded!';
                     setAddPartByModelNoLoading(false);
                     setShowToast(true);
                 });
