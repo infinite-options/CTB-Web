@@ -121,8 +121,8 @@ const AddParts = () => {
 
     useEffect(() => {
         if(isAddPartByModelNoLoading) {
-            axios.post('https://tn5e0l3yok.execute-api.us-west-1.amazonaws.com/dev/api/v2/Insertparts', 
-                { model: [modelNo.current] })
+            axios.post('https://1oy9ort0w4.execute-api.us-west-2.amazonaws.com/insertparts', 
+                { model: modelNo.current })
                 .then((res) => {
                     console.log(res);
                     addPartByModelNoMsg.current = 'Success!';
@@ -131,7 +131,7 @@ const AddParts = () => {
                     setShowToast(true);
                 })
                 .catch((err) => {
-                    addPartByModelNoMsg.current = err.message;
+                    addPartByModelNoMsg.current = err.response.data.message;
                     setAddPartByModelNoLoading(false);
                     setShowToast(true);
                 });
