@@ -121,21 +121,22 @@ const AddParts = () => {
 
     useEffect(() => {
         if(isAddPartByModelNoLoading) {
-            axios.post('https://1oy9ort0w4.execute-api.us-west-2.amazonaws.com/insertparts', 
-                { model: modelNo.current })
-                .then((res) => {
-                    console.log(res);
-                    addPartByModelNoMsg.current = 'Uploaded!';
-                    modelNo.current = '';
-                    setAddPartByModelNoLoading(false);
-                    setShowToast(true);
-                })
-                .catch((err) => {
-                    // addPartByModelNoMsg.current = err.response.data.message;
-                    addPartByModelNoMsg.current = 'Uploaded!';
-                    setAddPartByModelNoLoading(false);
-                    setShowToast(true);
-                });
+            axios.post('https://wanrucwrdg.execute-api.us-west-2.amazonaws.com/v1/insertparts', {
+                model: modelNo.current 
+            }, {
+                headers: { 'InvocationType': 'Event' }
+            }).then((res) => {
+                addPartByModelNoMsg.current = 'Uploaded!';
+                modelNo.current = '';
+                setAddPartByModelNoLoading(false);
+                setShowToast(true);
+            })
+            .catch((err) => {
+                // addPartByModelNoMsg.current = err.response.data.message;
+                addPartByModelNoMsg.current = 'Uploaded!';
+                setAddPartByModelNoLoading(false);
+                setShowToast(true);
+            });
         }
     }, [isAddPartByModelNoLoading]);
 
