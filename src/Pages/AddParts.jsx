@@ -121,7 +121,7 @@ const AddParts = () => {
 
     useEffect(() => {
         if(isAddPartByModelNoLoading) {
-            axios.post('https://wanrucwrdg.execute-api.us-west-2.amazonaws.com/v1/insertparts', {
+            axios.post('https://m99tbbdg4f.execute-api.us-west-2.amazonaws.com/v1/insertparts', {
                 model: modelNo.current 
             }, {
                 headers: { 'InvocationType': 'Event' }
